@@ -190,7 +190,7 @@ No team allocation. No presale. Pure fair launch.
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/zent-launchpad.git
+git clone https://github.com/zentspy/zent-launchpad.git
 cd zent-launchpad
 
 # Install dependencies
@@ -507,7 +507,7 @@ curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 # Clone and setup
-git clone https://github.com/yourusername/zent-launchpad.git
+git clone https://github.com/zentspy/zent-launchpad.git
 cd zent-launchpad
 npm install
 
