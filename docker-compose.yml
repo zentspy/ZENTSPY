@@ -1,0 +1,45 @@
+# ===========================================
+# ZENT LAUNCHPAD - DOCKER COMPOSE
+# ===========================================
+#
+# Usage:
+#   1. Copy .env.example to .env and fill in values
+#   2. Run: docker-compose up -d
+#   3. Access: http://localhost:3000
+#
+# ===========================================
+
+version: '3.8'
+
+services:
+  zent-launchpad:
+    build: .
+    container_name: zent-launchpad
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+      - ./vanity:/app/vanity
+      - ./uploads:/app/uploads
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+# Optional: Add a reverse proxy
+#   nginx:
+#     image: nginx:alpine
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#     volumes:
+#       - ./nginx.conf:/etc/nginx/nginx.conf
+#     depends_on:
+#       - zent-launchpad

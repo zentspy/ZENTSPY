@@ -1,0 +1,41 @@
+# ===========================================
+# ZENT LAUNCHPAD - RENDER.COM DEPLOYMENT
+# ===========================================
+# 
+# This file configures automatic deployment to Render.com
+# 
+# Setup:
+# 1. Push this repo to GitHub
+# 2. Connect to Render.com
+# 3. Create a new Blueprint and select this repo
+# 4. Set environment variables in Render dashboard
+# 5. Deploy!
+#
+# ===========================================
+
+services:
+  - type: web
+    name: zent-launchpad
+    env: node
+    region: oregon
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: RENDER
+        value: true
+      - key: PORT
+        value: 3000
+      # Add these in the Render dashboard (not here for security):
+      # - WALLET_SECRET
+      # - PINATA_JWT
+      # - ANTHROPIC_API_KEY
+      # - ADMIN_WALLET
+      # - ALLOWED_LAUNCHER_WALLET
+    disk:
+      name: zent-data
+      mountPath: /data
+      sizeGB: 1

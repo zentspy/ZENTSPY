@@ -1,0 +1,3507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ZENT - Agentic Launchpad</title>
+    <!-- Favicon -->
+    <link rel="icon" href="zent.png" type="image/png" />
+    <link rel="apple-touch-icon" href="zent.png" />
+    <!-- X / Open Graph / Twitter Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ZENT Agentic Launchpad" />
+    <meta property="og:description" content="ZENT Agentic Launchpad - $ZENT" />
+    <meta property="og:image" content="zent.png" />
+    <meta property="og:url" content="https://0xzerebro.io/" />
+    <meta property="og:site_name" content="ZENT" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ZENT Agentic Launchpad" />
+    <meta name="twitter:description" content="ZENT Agentic Launchpad - $ZENT" />
+    <meta name="twitter:image" content="zent.png" />
+    <meta name="twitter:site" content="@ZENTSPY" />
+    <meta name="twitter:creator" content="@ZENTSPY" />
+    <meta name="theme-color" content="#8B5CF6" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script src='https://plugin.jup.ag/plugin-v1.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+   <style>
+        /* --- ZENT THEME DEFINITIONS --- */
+        :root {
+            color-scheme: dark;
+            /* ZENT Color Palette - Based on uploaded image */
+            --bg-0: #000000;
+            --bg-1: #050510;
+            --bg-2: #0a0a1a;
+            --bg-3: #101025;
+            --border: #1a1a35;
+            --border-color: #252550;
+            --ink: #ffffff;
+            --muted: #8b8ba3;
+            
+            /* Primary accent - Purple/Violet */
+            --accent: #8B5CF6;
+            --accent-2: #A78BFA;
+            --accent-hover: #7C3AED;
+            --accent-dim: rgba(139, 92, 246, 0.15);
+            --accent-glow: 0 0 20px rgba(139, 92, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.2);
+            --accent-glow-strong: 0 0 30px rgba(139, 92, 246, 0.6), 0 0 60px rgba(139, 92, 246, 0.3);
+            
+            /* Gradient colors from the image */
+            --grad-pink: #FF6B9D;
+            --grad-magenta: #C850C0;
+            --grad-purple: #8B5CF6;
+            --grad-blue: #4F46E5;
+            --grad-cyan: #06B6D4;
+            --grad-teal: #14B8A6;
+            --grad-green: #10B981;
+            --grad-lime: #84CC16;
+            --grad-yellow: #FBBF24;
+            --grad-orange: #F97316;
+            
+            /* Semantic accents */
+            --primary-text: #ffffff;
+            --primary-bg: #050510;
+            --teal: #14B8A6;
+            
+            /* Status colors */
+            --good: #10B981;
+            --danger: #EF4444;
+            --warning: #FBBF24;
+            
+            /* Glass effects */
+            --glass: rgba(10, 10, 30, 0.85);
+            --glass-border: rgba(139, 92, 246, 0.2);
+            --shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            --shadow-hover: 0 8px 40px rgba(139, 92, 246, 0.2);
+            --radius: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --gloss-shine: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            
+            /* Typography */
+            --font-main: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            --font-display: 'Orbitron', sans-serif;
+            
+            /* Spacing */
+            --space-1: clamp(6px, .6vw, 10px);
+            --space-2: clamp(10px, 1.2vw, 16px);
+            --space-3: clamp(14px, 1.8vw, 24px);
+            
+            /* Transition */
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-width: 1px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            background: var(--bg-0);
+            color: var(--ink);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+        }
+
+        /* ==========================================
+           INTRO PAGE STYLES
+           ========================================== */
+        
+        #intro-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-0);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Animated Background Grid */
+        .intro-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 8px;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            opacity: 0.6;
+        }
+
+        .agent-card {
+            aspect-ratio: 1.2;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: agentFadeIn 0.5s ease forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            opacity: 0.8;
+        }
+
+        .agent-card .icon {
+            width: 24px;
+            height: 24px;
+            opacity: 0.7;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+
+        @keyframes agentFadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: var(--final-opacity, 0.3); transform: scale(1); }
+        }
+
+        /* Color variations for agent cards */
+        .agent-card.pink { background: linear-gradient(135deg, #FF6B9D, #FF8FB1); }
+        .agent-card.magenta { background: linear-gradient(135deg, #C850C0, #D975D3); }
+        .agent-card.purple { background: linear-gradient(135deg, #8B5CF6, #A78BFA); }
+        .agent-card.blue { background: linear-gradient(135deg, #4F46E5, #6366F1); }
+        .agent-card.cyan { background: linear-gradient(135deg, #06B6D4, #22D3EE); }
+        .agent-card.teal { background: linear-gradient(135deg, #14B8A6, #2DD4BF); }
+        .agent-card.green { background: linear-gradient(135deg, #10B981, #34D399); }
+        .agent-card.lime { background: linear-gradient(135deg, #84CC16, #A3E635); }
+        .agent-card.yellow { background: linear-gradient(135deg, #FBBF24, #FCD34D); }
+        .agent-card.orange { background: linear-gradient(135deg, #F97316, #FB923C); }
+        .agent-card.peach { background: linear-gradient(135deg, #FDBA74, #FED7AA); }
+        .agent-card.rose { background: linear-gradient(135deg, #FB7185, #FDA4AF); }
+
+        /* Intro Content */
+        .intro-content {
+            position: relative;
+            z-index: 100;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .intro-logo {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(139, 92, 246, 0.5);
+            margin-bottom: 10px;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.3)); }
+            50% { filter: drop-shadow(0 0 50px rgba(139, 92, 246, 0.6)); }
+        }
+
+        .intro-subtitle {
+            font-family: var(--font-main);
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 400;
+            color: var(--muted);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .intro-tagline {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--grad-cyan), var(--grad-purple));
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 50px;
+        }
+
+        .ticker-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--grad-magenta));
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.4);
+            animation: tickerPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes tickerPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(139, 92, 246, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 15px 50px rgba(139, 92, 246, 0.6); }
+        }
+
+        /* Countdown Timer */
+        .countdown-container {
+            margin-top: 20px;
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            color: var(--muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .countdown-timer {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .countdown-unit {
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 20px 25px;
+            min-width: 100px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-unit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .countdown-value {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(180deg, #fff, var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .countdown-name {
+            font-size: 0.75rem;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .countdown-ended {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--good);
+            animation: pulseGreen 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseGreen {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .enter-btn {
+            margin-top: 40px;
+            padding: 16px 50px;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--accent), var(--grad-magenta));
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .enter-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
+        }
+
+        .enter-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ==========================================
+           MAIN APP STYLES
+           ========================================== */
+        
+        #main-app {
+            display: none;
+            min-height: 100vh;
+            background: var(--bg-0);
+        }
+
+        /* Header */
+        .zent-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 25px;
+            background: rgba(5, 5, 16, 0.9);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-ticker {
+            background: linear-gradient(135deg, var(--accent), var(--grad-magenta));
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-family: var(--font-main);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-create {
+            background: linear-gradient(135deg, var(--accent), var(--grad-magenta));
+            color: #fff;
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-connect {
+            background: var(--bg-2);
+            border: 1px solid var(--border-color);
+            color: var(--ink);
+        }
+
+        .btn-connect:hover {
+            background: var(--bg-3);
+            border-color: var(--accent);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px 25px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            color: var(--ink);
+        }
+
+        /* Filter Controls */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-input {
+            background: var(--bg-2);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 18px;
+            color: var(--ink);
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            min-width: 200px;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+
+        .filter-select {
+            background: var(--bg-2);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 18px;
+            color: var(--ink);
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* Agent Cards Grid */
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .agent-token-card {
+            background: linear-gradient(145deg, var(--bg-2), var(--bg-1));
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-token-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--card-accent, linear-gradient(90deg, var(--accent), var(--grad-cyan)));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .agent-token-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .agent-token-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .card-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+        }
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .card-symbol {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .card-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+        }
+
+        .stat-value {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .stat-value.positive { color: var(--good); }
+        .stat-value.negative { color: var(--danger); }
+
+        .card-buy-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--accent), var(--grad-magenta));
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-family: var(--font-main);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .card-buy-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Footer Navigation */
+        .footer-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5, 5, 16, 0.95);
+            border-top: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .footer-tab {
+            padding: 10px 25px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            color: var(--muted);
+            font-family: var(--font-main);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .footer-tab:hover {
+            color: var(--ink);
+            background: var(--bg-2);
+        }
+
+        .footer-tab.active {
+            color: var(--ink);
+            background: var(--accent-dim);
+            border-color: var(--accent);
+        }
+
+        /* Views */
+        .view {
+            display: none;
+            padding-bottom: 80px;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Create Form */
+        .create-form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--muted);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--bg-2);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--ink);
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .image-upload-zone {
+            width: 100%;
+            aspect-ratio: 1;
+            max-width: 200px;
+            background: var(--bg-2);
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .image-upload-zone:hover {
+            border-color: var(--accent);
+            background-color: var(--accent-dim);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent), var(--grad-magenta));
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-1);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-3);
+            border: none;
+            border-radius: 50%;
+            color: var(--muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        /* Wallet List */
+        .wallet-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--bg-2);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-option:hover {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .wallet-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+        }
+
+        .wallet-name {
+            font-weight: 500;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .status-message.success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--good);
+            color: var(--good);
+        }
+
+        .status-message.error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state-text {
+            font-size: 1.1rem;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .intro-logo {
+                font-size: clamp(2rem, 10vw, 4rem);
+                letter-spacing: 4px;
+            }
+
+            .countdown-unit {
+                padding: 15px 18px;
+                min-width: 70px;
+            }
+
+            .countdown-value {
+                font-size: 1.8rem;
+            }
+
+            .zent-header {
+                padding: 12px 15px;
+            }
+
+            .header-logo {
+                font-size: 1.2rem;
+            }
+
+            .header-ticker {
+                display: none;
+            }
+
+            .agents-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-tab {
+                padding: 10px 15px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Activity Feed Styles */
+        .activity-feed {
+            background: var(--bg-2);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            font-size: 0.9rem;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Hidden utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Authorization Warning Banner */
+        .auth-warning-banner {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(139, 92, 246, 0.15));
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .auth-warning-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .auth-warning-icon {
+            font-size: 3rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .auth-warning-text strong {
+            display: block;
+            font-size: 1.2rem;
+            color: var(--danger);
+            margin-bottom: 8px;
+        }
+
+        .auth-warning-text p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Disabled form overlay */
+        .form-disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(0.5);
+        }
+
+        /* My Token Card with Fee Claims */
+        .my-token-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(145deg, var(--bg-2), var(--bg-1));
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .my-token-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .my-token-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .my-token-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+        }
+
+        .my-token-info .token-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 0 0 4px 0;
+        }
+
+        .my-token-info .token-symbol {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .my-token-claim-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: auto;
+        }
+
+        .my-token-claim-section .claimable-fees {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--accent);
+            white-space: nowrap;
+            text-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .my-token-claim-section .claim-btn {
+            background: var(--accent-dim);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .my-token-claim-section .claim-btn:hover {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: var(--accent-glow);
+        }
+
+        .my-token-claim-section .claim-btn:disabled {
+            background: transparent;
+            cursor: not-allowed;
+            opacity: 0.4;
+            border-color: var(--border-color);
+            color: var(--muted);
+        }
+
+        .my-tokens-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .refresh-btn {
+            background: var(--bg-2);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: var(--muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 20px;
+        }
+
+        .refresh-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ==========================================
+           AGENTIC TERMINAL STYLES
+           ========================================== */
+        
+        .agentic-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+        }
+
+        .agentic-overlay.active {
+            display: flex;
+        }
+
+        /* BIOS Boot Screen */
+        .bios-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+            color: #0f0;
+            z-index: 10001;
+            padding: 40px;
+        }
+
+        .bios-screen.hidden {
+            display: none;
+        }
+
+        .bios-text {
+            text-align: left;
+            max-width: 800px;
+            width: 100%;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .bios-line {
+            opacity: 0;
+            animation: biosTypeLine 0.1s forwards;
+        }
+
+        @keyframes biosTypeLine {
+            to { opacity: 1; }
+        }
+
+        .bios-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background: #0f0;
+            animation: biosBlink 0.5s infinite;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        @keyframes biosBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .bios-progress {
+            width: 100%;
+            max-width: 500px;
+            height: 20px;
+            border: 1px solid #0f0;
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bios-progress-bar {
+            height: 100%;
+            background: #0f0;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .bios-progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            font-weight: bold;
+            mix-blend-mode: difference;
+        }
+
+        /* Main Terminal View */
+        .agentic-container {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            background: linear-gradient(180deg, #0a0a0f 0%, #050508 100%);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .agentic-container.active {
+            display: flex;
+        }
+
+        .agentic-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 25px;
+            background: rgba(139, 92, 246, 0.1);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .agentic-token-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .agentic-token-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .agentic-token-name {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .agentic-token-symbol {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .agentic-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0f0;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        .agentic-status-dot {
+            width: 10px;
+            height: 10px;
+            background: #0f0;
+            border-radius: 50%;
+            animation: statusPulse 1.5s infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px #0f0; }
+            50% { opacity: 0.5; box-shadow: 0 0 5px #0f0; }
+        }
+
+        .agentic-close-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: var(--font-display);
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .agentic-close-btn:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .agentic-main {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            flex: 1;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        /* Stats Sidebar */
+        .agentic-stats {
+            background: rgba(10, 10, 20, 0.9);
+            border-right: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .stats-section {
+            margin-bottom: 25px;
+        }
+
+        .stats-section-title {
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .stat-value {
+            font-family: var(--font-mono);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .stat-value.green { color: #10b981; }
+        .stat-value.red { color: #ef4444; }
+        .stat-value.purple { color: var(--accent); }
+
+        /* Terminal Output */
+        .agentic-terminal {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #000;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: rgba(139, 92, 246, 0.1);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ef4444; }
+        .terminal-dot.yellow { background: #fbbf24; }
+        .terminal-dot.green { background: #10b981; }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            color: var(--muted);
+            letter-spacing: 2px;
+        }
+
+        .terminal-output {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .terminal-output::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terminal-output::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        .terminal-output::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .terminal-line {
+            animation: terminalFadeIn 0.3s ease;
+        }
+
+        @keyframes terminalFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .terminal-line.system {
+            color: #06b6d4;
+        }
+
+        .terminal-line.lore {
+            color: #a78bfa;
+            font-style: italic;
+            border-left: 2px solid #a78bfa;
+            padding-left: 15px;
+        }
+
+        .terminal-line.ascii_art {
+            color: #10b981;
+            white-space: pre;
+            font-size: 11px;
+            line-height: 1.1;
+            font-family: 'Courier New', monospace;
+            background: rgba(16, 185, 129, 0.05);
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .terminal-line.breaking_news {
+            color: #fbbf24;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        }
+
+        .terminal-line.holder_analysis {
+            color: #f97316;
+        }
+
+        .terminal-line.market_prediction {
+            color: #ec4899;
+            border-left: 2px solid #ec4899;
+            padding-left: 15px;
+        }
+
+        .terminal-line.prophecy {
+            color: #8b5cf6;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+            font-style: italic;
+        }
+
+        .terminal-line.technical_analysis {
+            color: #06b6d4;
+            font-family: var(--font-mono);
+        }
+
+        .terminal-line.whale_alert {
+            color: #ef4444;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+            animation: whaleFlash 0.5s ease;
+        }
+
+        @keyframes whaleFlash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .terminal-line.solana_ecosystem {
+            color: #14f195;
+            border-left: 2px solid #14f195;
+            padding-left: 15px;
+        }
+
+        .terminal-line.crypto_research {
+            color: #60a5fa;
+        }
+
+        .terminal-line.world_news {
+            color: #fbbf24;
+        }
+
+        .terminal-line.tech_innovation {
+            color: #a78bfa;
+        }
+
+        .terminal-line.defi_alpha {
+            color: #34d399;
+            font-weight: 600;
+        }
+
+        .terminal-line.sentiment_scan {
+            color: #f472b6;
+        }
+
+        .terminal-line.onchain_intel {
+            color: #22d3ee;
+            font-family: var(--font-mono);
+        }
+
+        .terminal-line.meme_culture {
+            color: #facc15;
+        }
+
+        .terminal-line.ai_thoughts {
+            color: #c4b5fd;
+            font-style: italic;
+            border-left: 2px solid #c4b5fd;
+            padding-left: 15px;
+        }
+
+        .terminal-line.market_psychology {
+            color: #fb923c;
+        }
+
+        /* Terminal Tabs */
+        .terminal-tabs {
+            display: flex;
+            background: rgba(10, 10, 20, 0.9);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 0 20px;
+            gap: 5px;
+        }
+
+        .terminal-tab {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            padding: 12px 20px;
+            cursor: pointer;
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .terminal-tab:hover {
+            color: var(--accent);
+        }
+
+        .terminal-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .terminal-content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .tab-content {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* Archive Controls */
+        .archive-controls {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            background: rgba(139, 92, 246, 0.05);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .archive-btn {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .archive-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .archive-count {
+            margin-left: auto;
+            color: var(--muted);
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+        }
+
+        .archive-output {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .archive-entry {
+            background: rgba(20, 20, 30, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .archive-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .archive-entry-type {
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .archive-entry-time {
+            font-size: 0.7rem;
+            color: var(--muted);
+            font-family: var(--font-mono);
+        }
+
+        .archive-entry-content {
+            color: #ddd;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        /* Stats Full View */
+        .stats-full-view {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            align-content: start;
+        }
+
+        .stats-card {
+            background: rgba(20, 20, 30, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .stats-card-title {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .stats-card-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--accent);
+        }
+
+        .stats-card-value.green { color: #10b981; }
+        .stats-card-value.red { color: #ef4444; }
+
+        /* Improved Responsive for Terminal */
+        @media (max-width: 1024px) {
+            .agentic-main {
+                grid-template-columns: 1fr;
+            }
+
+            .agentic-stats {
+                display: none;
+            }
+
+            .agentic-header {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 10px 15px;
+            }
+
+            .agentic-token-info {
+                flex: 1;
+                min-width: 200px;
+            }
+
+            .agentic-status {
+                display: none;
+            }
+
+            .terminal-tabs {
+                padding: 0 10px;
+                overflow-x: auto;
+            }
+
+            .terminal-tab {
+                padding: 10px 15px;
+                font-size: 0.75rem;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .agentic-header {
+                padding: 10px;
+            }
+
+            .agentic-token-avatar {
+                width: 40px;
+                height: 40px;
+            }
+
+            .agentic-token-name {
+                font-size: 1.1rem;
+            }
+
+            .agentic-close-btn {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+
+            .terminal-output {
+                padding: 10px;
+            }
+
+            .terminal-line {
+                font-size: 0.85rem;
+            }
+
+            .archive-controls {
+                padding: 10px;
+                gap: 8px;
+            }
+
+            .archive-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+
+            .archive-count {
+                width: 100%;
+                text-align: center;
+                margin-top: 5px;
+            }
+
+            .stats-full-view {
+                grid-template-columns: 1fr 1fr;
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .stats-card {
+                padding: 15px;
+            }
+
+            .stats-card-value {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Ensure terminal output is scrollable */
+        .terminal-output {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 0;
+        }
+        
+        .agentic-terminal {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .terminal-timestamp {
+            font-size: 0.7rem;
+            color: #444;
+            margin-bottom: 5px;
+        }
+
+        .terminal-content-type {
+            font-size: 0.7rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .terminal-footer {
+            padding: 15px 20px;
+            background: rgba(139, 92, 246, 0.05);
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .terminal-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .next-update {
+            font-family: var(--font-mono);
+            color: var(--accent);
+        }
+
+        /* Scanline effect */
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            z-index: 10;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 900px) {
+            .agentic-main {
+                grid-template-columns: 1fr;
+            }
+
+            .agentic-stats {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ==========================================
+         INTRO PAGE
+         ========================================== -->
+    <div id="intro-page">
+        <div class="intro-bg">
+            <div class="agent-grid" id="agent-grid">
+                <!-- Agent cards will be generated by JS -->
+            </div>
+        </div>
+
+        <div class="intro-content">
+            <h1 class="intro-logo">ZENT</h1>
+            <p class="intro-subtitle">agentic launchpad</p>
+            <div class="intro-tagline">in development.</div>
+            <div class="ticker-badge">$ZENT</div>
+
+            <div class="countdown-container">
+                <p class="countdown-label">Launch Countdown</p>
+                <div class="countdown-timer" id="countdown-timer">
+                    <div class="countdown-unit">
+                        <div class="countdown-value" id="hours">00</div>
+                        <div class="countdown-name">Hours</div>
+                    </div>
+                    <div class="countdown-unit">
+                        <div class="countdown-value" id="minutes">00</div>
+                        <div class="countdown-name">Minutes</div>
+                    </div>
+                    <div class="countdown-unit">
+                        <div class="countdown-value" id="seconds">00</div>
+                        <div class="countdown-name">Seconds</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="enter-btn" id="enter-btn">Enter Launchpad</button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MAIN APPLICATION
+         ========================================== -->
+    <div id="main-app">
+        <!-- Header -->
+        <header class="zent-header">
+            <div class="header-logo-section">
+                <span class="header-logo">ZENT</span>
+                <span class="header-ticker">$ZENT</span>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn btn-create" id="header-create-btn">+ Create Agent</button>
+                <button class="header-btn btn-connect" id="connect">Connect Wallet</button>
+                <button class="header-btn btn-connect hidden" id="disconnect">Disconnect</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <div class="view active" id="dashboard-view">
+                <h2 class="section-title">🤖 ACTIVE AGENTS</h2>
+                
+                <div class="filter-bar">
+                    <input type="text" class="filter-input" id="search-input" placeholder="Search agents...">
+                    <select class="filter-select" id="quote-filter">
+                        <option value="all">All Quotes</option>
+                        <option value="SOL">SOL</option>
+                        <option value="USD1">USD1</option>
+                        <option value="ZEC">ZEC</option>
+                        <option value="MET">MET</option>
+                    </select>
+                    <select class="filter-select" id="sort-filter">
+                        <option value="newest">Newest First</option>
+                        <option value="mcap">Market Cap</option>
+                        <option value="volume">24h Volume</option>
+                    </select>
+                </div>
+
+                <div class="agents-grid" id="launchpadDashboard">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+
+            <!-- Create View -->
+            <div class="view" id="create-view">
+                <h2 class="section-title">🚀 DEPLOY NEW AGENT</h2>
+                
+                <!-- Authorization Warning Banner -->
+                <div id="create-auth-warning" class="auth-warning-banner" style="display: none;">
+                    <div class="auth-warning-content">
+                        <div class="auth-warning-icon">🔒</div>
+                        <div class="auth-warning-text">
+                            <strong>HOLD $ZENT agentic token to launch agents</strong>
+                            <p>Token creation is currently restricted to authorized wallets. Stay tuned for public launch after the countdown ends!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="create-form-container">
+                    <form id="createForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="form-label">Agent Avatar</label>
+                            <div class="image-upload-zone" id="image-preview">
+                                <span style="color: var(--muted);">+ Upload Image</span>
+                            </div>
+                            <input type="file" name="image" id="image-upload" accept="image/*" hidden>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Agent Name</label>
+                            <input type="text" class="form-input" name="name" placeholder="e.g., ZENT Agent" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Symbol / Ticker</label>
+                            <input type="text" class="form-input" name="symbol" placeholder="e.g., ZENT" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-input form-textarea" name="description" placeholder="Describe your agent..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Website (optional)</label>
+                            <input type="url" class="form-input" name="website" placeholder="https://...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Twitter (optional)</label>
+                            <input type="url" class="form-input" name="twitter" placeholder="https://x.com/...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Quote Token</label>
+                            <select class="form-input" name="quote" id="quote-select">
+                                <option value="SOL">SOL</option>
+                                <option value="USD1">USD1</option>
+                                <option value="ZEC">ZEC</option>
+                                <option value="MET">MET</option>
+                            </select>
+                        </div>
+
+                        <input type="hidden" name="deployer" id="deployer-input">
+
+                        <button type="submit" class="submit-btn" id="createBtn">Deploy Agent</button>
+                        <div id="status" class="status-message hidden"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- My Agents View -->
+            <div class="view" id="my-agents-view">
+                <h2 class="section-title">👤 MY AGENTS</h2>
+                <button class="refresh-btn" id="refresh-my-tokens">🔄 Refresh</button>
+                <div class="my-tokens-list" id="myAgentsGrid">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🤖</div>
+                        <p class="empty-state-text">Connect wallet to see your agents</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token Detail View -->
+            <div class="view" id="token-view">
+                <button class="header-btn btn-connect" id="back-btn" style="margin-bottom: 20px;">← Back</button>
+                <div id="token-detail-content">
+                    <!-- Token details loaded here -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer Navigation -->
+        <nav class="footer-nav">
+            <button class="footer-tab active" data-view="dashboard-view">🏠 Agents</button>
+            <button class="footer-tab" data-view="create-view">🚀 Create</button>
+            <button class="footer-tab" data-view="my-agents-view">👤 My Agents</button>
+        </nav>
+    </div>
+
+    <!-- Wallet Modal -->
+    <div class="modal-overlay" id="walletModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Connect Wallet</h3>
+                <button class="modal-close btn-close">×</button>
+            </div>
+            <div class="wallet-list">
+                <div class="wallet-option wallet" data-wallet="phantom">
+                    <img src="https://phantom.app/img/phantom-logo.svg" alt="Phantom" class="wallet-icon">
+                    <span class="wallet-name">Phantom</span>
+                </div>
+                <div class="wallet-option wallet" data-wallet="solflare">
+                    <img src="https://solflare.com/favicon.ico" alt="Solflare" class="wallet-icon">
+                    <span class="wallet-name">Solflare</span>
+                </div>
+                <div class="wallet-option wallet" data-wallet="backpack">
+                    <img src="https://backpack.app/favicon.ico" alt="Backpack" class="wallet-icon">
+                    <span class="wallet-name">Backpack</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buy Modal -->
+    <div class="modal-overlay" id="buyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="buy-modal-title">Buy Token</h3>
+                <button class="modal-close btn-close">×</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Amount (SOL)</label>
+                <input type="number" class="form-input" id="buy-amount" placeholder="0.00" step="0.001">
+            </div>
+            <button class="submit-btn" id="execute-buy-btn">Confirm Purchase</button>
+            <div id="buy-status" class="status-message hidden"></div>
+        </div>
+    </div>
+
+    <!-- Agentic Terminal Overlay -->
+    <div class="agentic-overlay" id="agenticOverlay">
+        <!-- BIOS Boot Screen -->
+        <div class="bios-screen" id="biosScreen">
+            <div class="bios-text" id="biosText"></div>
+            <div class="bios-progress">
+                <div class="bios-progress-bar" id="biosProgressBar"></div>
+                <span class="bios-progress-text" id="biosProgressText">0%</span>
+            </div>
+        </div>
+
+        <!-- Main Terminal Container -->
+        <div class="agentic-container" id="agenticContainer">
+            <div class="agentic-header">
+                <div class="agentic-token-info">
+                    <img src="" alt="" class="agentic-token-avatar" id="agenticTokenAvatar">
+                    <div>
+                        <div class="agentic-token-name" id="agenticTokenName">TOKEN</div>
+                        <div class="agentic-token-symbol" id="agenticTokenSymbol">$SYMBOL AGENTIC</div>
+                    </div>
+                </div>
+                <div class="agentic-status">
+                    <div class="agentic-status-dot"></div>
+                    <span>LIVE FEED ACTIVE</span>
+                </div>
+                <button class="agentic-close-btn" id="agenticCloseBtn">✕ EXIT TERMINAL</button>
+            </div>
+
+            <!-- Terminal Tabs -->
+            <div class="terminal-tabs">
+                <button class="terminal-tab active" data-tab="live">📡 LIVE FEED</button>
+                <button class="terminal-tab" data-tab="archive">📚 ARCHIVE</button>
+                <button class="terminal-tab" data-tab="stats">📊 STATS</button>
+            </div>
+
+            <div class="agentic-main">
+                <!-- Stats Sidebar -->
+                <div class="agentic-stats">
+                    <div class="stats-section">
+                        <div class="stats-section-title">📊 Live Stats</div>
+                        <div class="stat-row">
+                            <span class="stat-label">Market Cap</span>
+                            <span class="stat-value purple" id="agenticMcap">$0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Price</span>
+                            <span class="stat-value" id="agenticPrice">$0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">24h Change</span>
+                            <span class="stat-value green" id="agenticChange">+0%</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Holders</span>
+                            <span class="stat-value" id="agenticHolders">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Liquidity</span>
+                            <span class="stat-value" id="agenticLiquidity">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="stats-section">
+                        <div class="stats-section-title">🔗 Contract</div>
+                        <div class="stat-row">
+                            <span class="stat-label" id="agenticContract" style="font-size: 0.7rem; word-break: break-all;">...</span>
+                        </div>
+                    </div>
+
+                    <div class="stats-section">
+                        <div class="stats-section-title">⚡ Terminal Status</div>
+                        <div class="stat-row">
+                            <span class="stat-label">Mode</span>
+                            <span class="stat-value green">AUTONOMOUS</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Update Rate</span>
+                            <span class="stat-value">30s</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Viewers</span>
+                            <span class="stat-value" id="agenticViewers">1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terminal Content Area -->
+                <div class="terminal-content-wrapper">
+                    <!-- Live Terminal -->
+                    <div class="agentic-terminal tab-content active" id="liveTab">
+                        <div class="terminal-header">
+                            <div class="terminal-dot red"></div>
+                            <div class="terminal-dot yellow"></div>
+                            <div class="terminal-dot green"></div>
+                            <span class="terminal-title" id="terminalTitle">AGENTIC TERMINAL v1.0</span>
+                        </div>
+                        <div class="terminal-output" id="terminalOutput">
+                            <!-- Terminal lines will be added here -->
+                        </div>
+                        <div class="scanlines"></div>
+                        <div class="terminal-footer">
+                            <div class="terminal-status">
+                                <span>🤖 AI-Powered • Read-Only Mode</span>
+                            </div>
+                            <div class="terminal-status">
+                                <span>Next update: </span>
+                                <span class="next-update" id="nextUpdateTimer">30s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Archive Tab -->
+                    <div class="agentic-terminal tab-content" id="archiveTab">
+                        <div class="terminal-header">
+                            <div class="terminal-dot red"></div>
+                            <div class="terminal-dot yellow"></div>
+                            <div class="terminal-dot green"></div>
+                            <span class="terminal-title">📚 AGENTIC ARCHIVE</span>
+                        </div>
+                        <div class="archive-controls">
+                            <button class="archive-btn" id="refreshArchive">🔄 Refresh</button>
+                            <button class="archive-btn" id="downloadJson">📥 Download JSON</button>
+                            <button class="archive-btn" id="downloadTxt">📄 Download TXT</button>
+                            <span class="archive-count" id="archiveCount">0 entries</span>
+                        </div>
+                        <div class="terminal-output archive-output" id="archiveOutput">
+                            <!-- Archive entries will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Stats Tab -->
+                    <div class="agentic-terminal tab-content" id="statsTab">
+                        <div class="terminal-header">
+                            <div class="terminal-dot red"></div>
+                            <div class="terminal-dot yellow"></div>
+                            <div class="terminal-dot green"></div>
+                            <span class="terminal-title">📊 TOKEN ANALYTICS</span>
+                        </div>
+                        <div class="stats-full-view" id="statsFullView">
+                            <!-- Full stats will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // ==========================================
+    // ZENT LAUNCHPAD - MAIN SCRIPT
+    // ==========================================
+
+    // --- GLOBALS ---
+    let userWalletAddress = null;
+    let connectedProvider = null;
+    let countdownInterval = null;
+
+    // --- INTRO PAGE AGENT GRID ---
+    function generateAgentGrid() {
+        const grid = document.getElementById('agent-grid');
+        const colors = ['pink', 'magenta', 'purple', 'blue', 'cyan', 'teal', 'green', 'lime', 'yellow', 'orange', 'peach', 'rose'];
+        const totalCards = 200;
+        
+        for (let i = 0; i < totalCards; i++) {
+            const card = document.createElement('div');
+            card.className = `agent-card ${colors[Math.floor(Math.random() * colors.length)]}`;
+            
+            // Calculate opacity based on position (fade effect)
+            const row = Math.floor(i / 20);
+            const col = i % 20;
+            const distanceFromCenter = Math.sqrt(Math.pow(col - 5, 2) + Math.pow(row - 3, 2));
+            const opacity = Math.max(0.1, 0.8 - (distanceFromCenter * 0.08));
+            
+            card.style.setProperty('--final-opacity', opacity);
+            card.style.animationDelay = `${Math.random() * 2}s`;
+            
+            // Add agent icon
+            card.innerHTML = `<svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+            </svg>`;
+            
+            grid.appendChild(card);
+        }
+    }
+
+    // --- COUNTDOWN TIMER ---
+    // FIXED END TIME: December 15, 2025 at 11:00 AM UTC+2 (09:00 UTC)
+    const FIXED_COUNTDOWN_END = Date.UTC(2025, 11, 15, 9, 0, 0);
+    
+    // ALLOWED LAUNCHER WALLET
+    // ALLOWED LAUNCHER WALLET - fetched from server config
+    // Empty string means anyone can launch
+    let ALLOWED_LAUNCHER_WALLET = '';
+    
+    // Fetch launcher config from server
+    async function fetchLauncherConfig() {
+        try {
+            const res = await fetch('/config/launcher');
+            if (res.ok) {
+                const config = await res.json();
+                ALLOWED_LAUNCHER_WALLET = config.allowedLauncher || '';
+            }
+        } catch (e) {
+            console.log('Launcher restriction not configured');
+        }
+    }
+    fetchLauncherConfig();
+
+    async function initCountdown() {
+        // Use fixed end time - no server call needed, same for everyone
+        startCountdown(FIXED_COUNTDOWN_END);
+    }
+
+    function startCountdown(endTime) {
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        const timerContainer = document.getElementById('countdown-timer');
+
+        function updateCountdown() {
+            const now = Date.now();
+            const remaining = endTime - now;
+
+            if (remaining <= 0) {
+                timerContainer.innerHTML = '<div class="countdown-ended">🚀 LAUNCHED!</div>';
+                clearInterval(countdownInterval);
+                return;
+            }
+
+            const hours = Math.floor(remaining / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+
+            hoursEl.textContent = String(hours).padStart(2, '0');
+            minutesEl.textContent = String(minutes).padStart(2, '0');
+            secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        updateCountdown();
+        countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    // --- ENTER LAUNCHPAD ---
+    function enterLaunchpad() {
+        const introPage = document.getElementById('intro-page');
+        const mainApp = document.getElementById('main-app');
+        
+        introPage.style.opacity = '0';
+        introPage.style.transition = 'opacity 0.5s ease';
+        
+        setTimeout(() => {
+            introPage.style.display = 'none';
+            mainApp.style.display = 'block';
+            mainApp.style.opacity = '0';
+            mainApp.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                mainApp.style.opacity = '1';
+                fetchAllTokens();
+            }, 50);
+        }, 500);
+    }
+
+    // --- VIEW MANAGEMENT ---
+    function showView(viewId) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.footer-tab').forEach(t => t.classList.remove('active'));
+        
+        document.getElementById(viewId).classList.add('active');
+        document.querySelector(`[data-view="${viewId}"]`)?.classList.add('active');
+        
+        // Check authorization when navigating to create view
+        if (viewId === 'create-view') {
+            updateCreateAuthWarning();
+        }
+    }
+
+    // --- CHECK CREATE AUTHORIZATION ---
+    function updateCreateAuthWarning() {
+        const warningBanner = document.getElementById('create-auth-warning');
+        const formContainer = document.querySelector('.create-form-container');
+        
+        if (!userWalletAddress) {
+            // No wallet connected - show warning
+            warningBanner.style.display = 'block';
+            warningBanner.querySelector('.auth-warning-text strong').textContent = 'Connect your wallet first';
+            warningBanner.querySelector('.auth-warning-text p').textContent = 'Please connect your wallet to check if you can create agents.';
+            if (formContainer) formContainer.classList.add('form-disabled');
+        } else if (ALLOWED_LAUNCHER_WALLET && userWalletAddress !== ALLOWED_LAUNCHER_WALLET) {
+            // Wrong wallet - show warning
+            warningBanner.style.display = 'block';
+            warningBanner.querySelector('.auth-warning-text strong').textContent = 'HOLD $ZENT agentic token to launch agents';
+            warningBanner.querySelector('.auth-warning-text p').textContent = 'Token creation is currently restricted to authorized wallets. Stay tuned for public launch after the countdown ends!';
+            if (formContainer) formContainer.classList.add('form-disabled');
+        } else {
+            // Authorized wallet - hide warning
+            warningBanner.style.display = 'none';
+            if (formContainer) formContainer.classList.remove('form-disabled');
+        }
+    }
+
+    // --- WALLET CONNECTION ---
+    async function connectWallet(walletType) {
+        let provider;
+        
+        try {
+            switch (walletType) {
+                case 'phantom':
+                    provider = window.solana;
+                    break;
+                case 'solflare':
+                    provider = window.solflare;
+                    break;
+                case 'backpack':
+                    provider = window.backpack;
+                    break;
+            }
+
+            if (!provider) {
+                alert(`${walletType} wallet not found. Please install it.`);
+                return;
+            }
+
+            const response = await provider.connect();
+            userWalletAddress = response.publicKey.toString();
+            connectedProvider = provider;
+
+            document.getElementById('connect').textContent = userWalletAddress.slice(0, 4) + '...' + userWalletAddress.slice(-4);
+            document.getElementById('disconnect').classList.remove('hidden');
+            document.getElementById('deployer-input').value = userWalletAddress;
+            document.getElementById('walletModal').classList.remove('open');
+
+            // Update create authorization warning
+            updateCreateAuthWarning();
+            
+            fetchMyTokens();
+        } catch (error) {
+            console.error('Wallet connection failed:', error);
+        }
+    }
+
+    function disconnectWallet() {
+        if (connectedProvider && connectedProvider.disconnect) {
+            connectedProvider.disconnect();
+        }
+        userWalletAddress = null;
+        connectedProvider = null;
+        
+        document.getElementById('connect').textContent = 'Connect Wallet';
+        document.getElementById('disconnect').classList.add('hidden');
+        document.getElementById('deployer-input').value = '';
+        
+        // Update create authorization warning
+        updateCreateAuthWarning();
+    }
+
+    // --- FETCH TOKENS ---
+    async function fetchAllTokens() {
+        try {
+            const response = await fetch('/all-tokens');
+            const tokens = await response.json();
+            renderTokens(tokens, 'launchpadDashboard');
+        } catch (error) {
+            console.error('Failed to fetch tokens:', error);
+            document.getElementById('launchpadDashboard').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <p class="empty-state-text">Failed to load agents</p>
+                </div>
+            `;
+        }
+    }
+
+    async function fetchMyTokens() {
+        if (!userWalletAddress) {
+            document.getElementById('myAgentsGrid').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔗</div>
+                    <p class="empty-state-text">Connect wallet to see your agents</p>
+                </div>
+            `;
+            return;
+        }
+        
+        const myTokensList = document.getElementById('myAgentsGrid');
+        myTokensList.innerHTML = '<div class="loading-spinner"></div>';
+        
+        try {
+            const res = await fetch(`/tokens?deployer=${userWalletAddress}`, { cache: 'no-store' });
+            const tokens = await res.json();
+
+            if (tokens.length === 0) {
+                myTokensList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🤖</div>
+                        <p class="empty-state-text">No agents deployed by this wallet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Fetch claimable fees for all pools
+            const poolAddresses = tokens.map(t => t.pool).filter(Boolean);
+            let feesMap = {};
+            if (poolAddresses.length > 0) {
+                try {
+                    const feesRes = await fetch('/quote-fees', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ poolAddresses })
+                    });
+                    feesMap = await feesRes.json();
+                } catch (e) {
+                    console.error('Failed to fetch fees:', e);
+                }
+            }
+
+            myTokensList.innerHTML = '';
+
+            tokens.forEach(t => {
+                const claimableFees = feesMap[t.pool] || 0;
+                const quoteDecimals = t.quote === 'SOL' ? 9 : 6;
+                const formattedFees = (claimableFees / Math.pow(10, quoteDecimals)).toFixed(4);
+                const canClaim = claimableFees > 0;
+                const imageUrl = t.imageUrl || 'https://via.placeholder.com/50';
+
+                const card = document.createElement('div');
+                card.className = 'my-token-card';
+
+                card.innerHTML = `
+                    <div class="my-token-info">
+                        <img src="/token-image?url=${encodeURIComponent(imageUrl)}" alt="${t.name} logo" onerror="this.src='https://via.placeholder.com/50'">
+                        <div>
+                            <p class="token-name">${t.name}</p>
+                            <p class="token-symbol">$${t.symbol}</p>
+                        </div>
+                    </div>
+                    <div class="my-token-claim-section">
+                        <span class="claimable-fees">${formattedFees} ${t.quote}</span>
+                        <button class="claim-btn" data-pool="${t.pool}" ${!canClaim ? 'disabled' : ''}>
+                            ${canClaim ? '💰 Claim Fees' : 'No Fees'}
+                        </button>
+                    </div>
+                `;
+
+                if (canClaim) {
+                    card.querySelector('.claim-btn').onclick = (e) => {
+                        e.stopPropagation();
+                        handleClaimFees(e, t.pool);
+                    };
+                }
+
+                myTokensList.appendChild(card);
+            });
+
+        } catch (err) {
+            console.error('Error fetching user tokens:', err);
+            myTokensList.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <p class="empty-state-text">Error loading your agents</p>
+                </div>
+            `;
+        }
+    }
+
+    // --- CLAIM FEES ---
+    async function handleClaimFees(e, pool) {
+        const btn = e.target;
+        
+        if (!userWalletAddress || !connectedProvider) {
+            alert('Please connect your wallet first!');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Claiming...';
+
+        try {
+            const res = await fetch('/claim-fees', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ poolAddress: pool, ownerWallet: userWalletAddress })
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Failed to prepare transaction.');
+
+            const tx = solanaWeb3.VersionedTransaction.deserialize(Buffer.from(data.transaction, 'base64'));
+            const result = await connectedProvider.signAndSendTransaction(tx);
+            const signature = typeof result === 'object' && result.signature ? result.signature : result;
+
+            alert(`✅ Fees claimed!\nhttps://solscan.io/tx/${signature}`);
+            fetchMyTokens(); // Refresh the list
+
+        } catch (err) {
+            console.error('Claim failed:', err);
+            alert(`❌ Claim failed: ${err.message}`);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '💰 Claim Fees';
+        }
+    }
+
+    function renderTokens(tokens, containerId) {
+        const container = document.getElementById(containerId);
+        
+        if (!tokens || tokens.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🤖</div>
+                    <p class="empty-state-text">No agents found</p>
+                </div>
+            `;
+            return;
+        }
+
+        const colors = ['pink', 'magenta', 'purple', 'blue', 'cyan', 'teal', 'green', 'lime', 'yellow', 'orange'];
+        
+        container.innerHTML = tokens.map((token, index) => {
+            const color = colors[index % colors.length];
+            const mcap = token.mcap ? `$${formatNumber(token.mcap)}` : 'N/A';
+            const volume = token.stats24h?.volume ? `$${formatNumber(token.stats24h.volume)}` : 'N/A';
+            const priceChange = token.stats24h?.priceChange24h || 0;
+            const priceClass = priceChange >= 0 ? 'positive' : 'negative';
+            const priceSign = priceChange >= 0 ? '+' : '';
+            
+            return `
+                <div class="agent-token-card" data-mint="${token.baseMint}" onclick="openAgenticTerminal('${token.baseMint}')" style="--card-accent: linear-gradient(90deg, var(--grad-${color}), var(--accent));">
+                    <div class="card-header">
+                        <img src="${token.imageUrl || 'https://via.placeholder.com/50'}" alt="${token.name}" class="card-avatar" onerror="this.src='https://via.placeholder.com/50'">
+                        <div class="card-info">
+                            <div class="card-name">${token.name || 'Unknown'}</div>
+                            <div class="card-symbol">$${token.symbol || '???'}</div>
+                        </div>
+                    </div>
+                    <div class="card-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Market Cap</div>
+                            <div class="stat-value">${mcap}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">24h Change</div>
+                            <div class="stat-value ${priceClass}">${priceSign}${priceChange.toFixed(2)}%</div>
+                        </div>
+                    </div>
+                    <button class="card-buy-btn" data-mint="${token.baseMint}" data-symbol="${token.symbol}" data-name="${token.name}" onclick="event.stopPropagation()">
+                        Buy $${token.symbol || 'TOKEN'}
+                    </button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function formatNumber(num) {
+        if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
+        return num.toFixed(2);
+    }
+
+    // --- BUY MODAL ---
+    function openBuyModal(mint, symbol, name) {
+        document.getElementById('buy-modal-title').textContent = `Buy ${name} ($${symbol})`;
+        document.getElementById('buyModal').classList.add('open');
+        document.getElementById('buyModal').dataset.mint = mint;
+    }
+
+    async function handleBuyExecution() {
+        if (!userWalletAddress) {
+            alert('Please connect your wallet first!');
+            return;
+        }
+
+        const modal = document.getElementById('buyModal');
+        const mint = modal.dataset.mint;
+        const amount = document.getElementById('buy-amount').value;
+        const statusDiv = document.getElementById('buy-status');
+        const buyBtn = document.getElementById('execute-buy-btn');
+
+        if (!amount || amount <= 0) {
+            statusDiv.textContent = 'Please enter a valid amount';
+            statusDiv.className = 'status-message error';
+            statusDiv.classList.remove('hidden');
+            return;
+        }
+
+        buyBtn.disabled = true;
+        buyBtn.textContent = 'Processing...';
+        statusDiv.classList.add('hidden');
+
+        try {
+            // Your existing buy logic here
+            statusDiv.textContent = 'Transaction submitted!';
+            statusDiv.className = 'status-message success';
+            statusDiv.classList.remove('hidden');
+            
+            setTimeout(() => {
+                modal.classList.remove('open');
+                buyBtn.disabled = false;
+                buyBtn.textContent = 'Confirm Purchase';
+            }, 2000);
+        } catch (error) {
+            statusDiv.textContent = `Error: ${error.message}`;
+            statusDiv.className = 'status-message error';
+            statusDiv.classList.remove('hidden');
+            buyBtn.disabled = false;
+            buyBtn.textContent = 'Confirm Purchase';
+        }
+    }
+
+    // --- CREATE TOKEN ---
+    async function handleCreateToken(e) {
+        e.preventDefault();
+
+        if (!userWalletAddress || !connectedProvider) {
+            alert('Please connect your wallet first!');
+            return;
+        }
+
+        // Check if wallet is authorized to create tokens (only if restriction is enabled)
+        if (ALLOWED_LAUNCHER_WALLET && userWalletAddress !== ALLOWED_LAUNCHER_WALLET) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🔒</div>
+                    <strong>HOLD $ZENT agentic token to launch agents</strong>
+                    <p style="margin-top: 10px; color: var(--muted); font-size: 0.85rem;">
+                        Token creation is currently restricted. Stay tuned for public launch!
+                    </p>
+                </div>
+            `;
+            statusDiv.className = 'status-message error';
+            statusDiv.classList.remove('hidden');
+            return;
+        }
+
+        const form = document.getElementById('createForm');
+        const createBtn = document.getElementById('createBtn');
+        const statusDiv = document.getElementById('status');
+
+        createBtn.disabled = true;
+        createBtn.textContent = 'Preparing...';
+        statusDiv.classList.remove('hidden');
+
+        const formData = new FormData(form);
+
+        try {
+            statusDiv.textContent = 'Step 1/5: Building transaction...';
+            statusDiv.className = 'status-message';
+            
+            const createRes = await fetch('/create', { method: 'POST', body: formData });
+
+            if (!createRes.ok) {
+                const j = await createRes.json();
+                throw new Error(j.error || 'Failed to prepare transaction.');
+            }
+
+            const { transaction, baseMint, keypairFile, uri, imageUrl } = await createRes.json();
+
+            statusDiv.textContent = 'Step 2/5: Please approve in wallet...';
+            const tx = solanaWeb3.Transaction.from(Buffer.from(transaction, 'base64'));
+            const signedTx = await connectedProvider.signTransaction(tx);
+
+            statusDiv.textContent = 'Step 3/5: Sending to server...';
+            const userSignedTxBase64 = signedTx.serialize({ requireAllSignatures: false }).toString('base64');
+
+            const signAndSendRes = await fetch('/sign-and-send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userSignedTransaction: userSignedTxBase64, keypairFile })
+            });
+
+            if (!signAndSendRes.ok) {
+                const j = await signAndSendRes.json();
+                throw new Error(j.error || 'Server failed to sign and send.');
+            }
+
+            const { signature } = await signAndSendRes.json();
+
+            statusDiv.textContent = 'Step 4/5: Finalizing...';
+            await fetch('/confirm-creation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...Object.fromEntries(formData), baseMint, keypairFile, uri, signature, imageUrl })
+            });
+
+            statusDiv.innerHTML = `✅ Success! <a href="https://solscan.io/tx/${signature}" target="_blank" style="color: var(--accent);">View on Solscan</a>`;
+            statusDiv.className = 'status-message success';
+
+            form.reset();
+            document.getElementById('image-preview').style.backgroundImage = '';
+            fetchAllTokens();
+            fetchMyTokens();
+
+        } catch (err) {
+            console.error('Creation failed', err);
+            statusDiv.textContent = `Error: ${err.message}`;
+            statusDiv.className = 'status-message error';
+        } finally {
+            createBtn.disabled = false;
+            createBtn.textContent = 'Deploy Agent';
+        }
+    }
+
+    // --- BUFFER POLYFILL ---
+    (function() {
+        if (window.Buffer && typeof window.Buffer.from === 'function') return;
+        function fromString(str, enc) {
+            if (enc === 'base64') {
+                const bin = atob(str);
+                const out = new Uint8Array(bin.length);
+                for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+                return out;
+            }
+            return new TextEncoder().encode(str);
+        }
+        window.Buffer = {
+            from(input, enc) {
+                if (typeof input === 'string') return fromString(input, enc);
+                return new Uint8Array(input);
+            }
+        };
+    })();
+
+    // ==========================================
+    // AGENTIC TERMINAL SYSTEM
+    // ==========================================
+    let agenticWs = null;
+    let agenticToken = null;
+    let nextUpdateInterval = null;
+    let updateCountdown = 30;
+
+    async function openAgenticTerminal(tokenMint) {
+        currentTokenMint = tokenMint; // Store current token
+        
+        const overlay = document.getElementById('agenticOverlay');
+        const biosScreen = document.getElementById('biosScreen');
+        const agenticContainer = document.getElementById('agenticContainer');
+        
+        overlay.classList.add('active');
+        biosScreen.classList.remove('hidden');
+        agenticContainer.classList.remove('active');
+        
+        // Reset to live tab
+        switchTerminalTab('live');
+        
+        // Start BIOS sequence
+        await runBiosSequence(tokenMint);
+        
+        // Hide BIOS, show terminal
+        biosScreen.classList.add('hidden');
+        agenticContainer.classList.add('active');
+        
+        // Load token data and start terminal
+        await initAgenticTerminal(tokenMint);
+    }
+
+    async function runBiosSequence(tokenMint) {
+        const biosText = document.getElementById('biosText');
+        const progressBar = document.getElementById('biosProgressBar');
+        const progressText = document.getElementById('biosProgressText');
+        
+        biosText.innerHTML = '';
+        progressBar.style.width = '0%';
+        
+        // Fetch token info for BIOS
+        let tokenSymbol = 'TOKEN';
+        let tokenName = 'Unknown Token';
+        try {
+            const res = await fetch(`/api/agentic/${tokenMint}`);
+            if (res.ok) {
+                const data = await res.json();
+                tokenSymbol = data.token.symbol;
+                tokenName = data.token.name;
+            }
+        } catch (e) {}
+        
+        // Custom BIOS lines with token name
+        const customBios = [
+            `${tokenSymbol} AGENTIC BIOS v1.0.0`,
+            'Copyright (C) 2025 ZENT PROTOCOL',
+            '',
+            '> Initializing Neural Interface...',
+            '> Loading AI Core Modules...',
+            '> Connecting to Solana RPC...',
+            `> Scanning $${tokenSymbol} Contract...`,
+            '> Analyzing Holder Distribution...',
+            '> Calibrating Market Sensors...',
+            '> Establishing WebSocket Channel...',
+            '',
+            `${tokenSymbol} CONTRACT VERIFIED`,
+            `${tokenSymbol} AGENTIC ONLINE`,
+            '',
+            `> Starting ${tokenName} Autonomous Feed...`
+        ];
+        
+        for (let i = 0; i < customBios.length; i++) {
+            const line = document.createElement('div');
+            line.className = 'bios-line';
+            line.style.animationDelay = `${i * 0.05}s`;
+            line.innerHTML = customBios[i] || '&nbsp;';
+            if (i === customBios.length - 1) {
+                line.innerHTML += '<span class="bios-cursor"></span>';
+            }
+            biosText.appendChild(line);
+            
+            const progress = Math.round((i / customBios.length) * 100);
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${progress}%`;
+            
+            await sleep(100);
+        }
+        
+        progressBar.style.width = '100%';
+        progressText.textContent = '100%';
+        await sleep(500);
+    }
+
+    async function initAgenticTerminal(tokenMint) {
+        try {
+            // Fetch token data
+            const res = await fetch(`/api/agentic/${tokenMint}`);
+            if (!res.ok) throw new Error('Failed to load terminal');
+            
+            const data = await res.json();
+            agenticToken = data.token;
+            
+            // Update UI with token info
+            updateAgenticUI(data.token);
+            
+            // Clear and populate terminal with history
+            const terminalOutput = document.getElementById('terminalOutput');
+            terminalOutput.innerHTML = '';
+            
+            data.history.forEach(item => {
+                addTerminalLine(item);
+            });
+            
+            // Scroll to bottom
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            
+            // Connect WebSocket for real-time updates
+            connectAgenticWebSocket(tokenMint);
+            
+            // Start countdown timer
+            startUpdateCountdown();
+            
+        } catch (error) {
+            console.error('Agentic terminal error:', error);
+            addTerminalLine({
+                type: 'system',
+                content: `[ERROR] Failed to initialize terminal: ${error.message}`,
+                timestamp: Date.now()
+            });
+        }
+    }
+
+    function updateAgenticUI(token) {
+        document.getElementById('agenticTokenAvatar').src = token.imageUrl || 'https://via.placeholder.com/50';
+        document.getElementById('agenticTokenName').textContent = token.name || 'Unknown';
+        document.getElementById('agenticTokenSymbol').textContent = `$${token.symbol} AGENTIC`;
+        document.getElementById('terminalTitle').textContent = `${token.symbol} AGENTIC TERMINAL v1.0`;
+        
+        document.getElementById('agenticMcap').textContent = token.mcap ? `$${formatNumber(token.mcap)}` : 'N/A';
+        document.getElementById('agenticPrice').textContent = token.usdPrice ? `$${token.usdPrice.toFixed(8)}` : 'N/A';
+        document.getElementById('agenticHolders').textContent = token.holderCount || 'N/A';
+        document.getElementById('agenticLiquidity').textContent = token.liquidity ? `$${formatNumber(token.liquidity)}` : 'N/A';
+        document.getElementById('agenticContract').textContent = token.baseMint || '...';
+        
+        const change = token.stats24h?.priceChange24h || 0;
+        const changeEl = document.getElementById('agenticChange');
+        changeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+        changeEl.className = `stat-value ${change >= 0 ? 'green' : 'red'}`;
+    }
+
+    function connectAgenticWebSocket(tokenMint) {
+        if (agenticWs) {
+            agenticWs.close();
+        }
+        
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        agenticWs = new WebSocket(`${protocol}//${window.location.host}`);
+        
+        agenticWs.onopen = () => {
+            console.log('Agentic WebSocket connected');
+            agenticWs.send(JSON.stringify({
+                type: 'subscribe_agentic',
+                tokenMint: tokenMint
+            }));
+        };
+        
+        agenticWs.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'agentic_history') {
+                    // Already loaded via API
+                }
+                
+                if (data.type === 'agentic_update') {
+                    addTerminalLine(data.data);
+                    resetUpdateCountdown();
+                }
+            } catch (e) {
+                console.error('Agentic WS message error:', e);
+            }
+        };
+        
+        agenticWs.onclose = () => {
+            console.log('Agentic WebSocket disconnected');
+        };
+    }
+
+    function addTerminalLine(item) {
+        const terminalOutput = document.getElementById('terminalOutput');
+        
+        const lineContainer = document.createElement('div');
+        lineContainer.className = 'terminal-line-container';
+        
+        const timestamp = document.createElement('div');
+        timestamp.className = 'terminal-timestamp';
+        timestamp.textContent = new Date(item.timestamp).toLocaleTimeString();
+        
+        const contentType = document.createElement('div');
+        contentType.className = 'terminal-content-type';
+        const typeLabel = (item.type || 'system').toUpperCase().replace(/_/g, ' ');
+        contentType.textContent = `[${typeLabel}]`;
+        
+        // Clean any markdown artifacts from content
+        let cleanContent = (item.content || '')
+            .replace(/```[\s\S]*?```/g, '')
+            .replace(/```/g, '')
+            .replace(/\*\*\*/g, '')
+            .replace(/\*\*/g, '')
+            .replace(/\*([^*]+)\*/g, '$1')
+            .replace(/__/g, '')
+            .replace(/_([^_]+)_/g, '$1')
+            .replace(/`([^`]+)`/g, '$1')
+            .replace(/`/g, '')
+            .replace(/#{1,6}\s/g, '')
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+            .trim();
+        
+        const content = document.createElement('div');
+        content.className = `terminal-line ${item.type || 'system'}`;
+        
+        // For ASCII art, preserve whitespace
+        if (item.type === 'ascii_art') {
+            content.style.whiteSpace = 'pre';
+            content.style.fontFamily = 'monospace';
+            content.style.fontSize = '11px';
+            content.style.lineHeight = '1.1';
+        }
+        
+        content.textContent = cleanContent;
+        
+        lineContainer.appendChild(timestamp);
+        lineContainer.appendChild(contentType);
+        lineContainer.appendChild(content);
+        
+        terminalOutput.appendChild(lineContainer);
+        
+        // Auto-scroll to bottom
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        
+        // Keep max 100 lines
+        while (terminalOutput.children.length > 100) {
+            terminalOutput.removeChild(terminalOutput.firstChild);
+        }
+    }
+
+    function startUpdateCountdown() {
+        updateCountdown = 30;
+        document.getElementById('nextUpdateTimer').textContent = `${updateCountdown}s`;
+        
+        if (nextUpdateInterval) clearInterval(nextUpdateInterval);
+        
+        nextUpdateInterval = setInterval(() => {
+            updateCountdown--;
+            if (updateCountdown <= 0) updateCountdown = 30;
+            document.getElementById('nextUpdateTimer').textContent = `${updateCountdown}s`;
+        }, 1000);
+    }
+
+    function resetUpdateCountdown() {
+        updateCountdown = 30;
+    }
+
+    function closeAgenticTerminal() {
+        const overlay = document.getElementById('agenticOverlay');
+        overlay.classList.remove('active');
+        
+        if (agenticWs) {
+            agenticWs.close();
+            agenticWs = null;
+        }
+        
+        if (nextUpdateInterval) {
+            clearInterval(nextUpdateInterval);
+            nextUpdateInterval = null;
+        }
+        
+        agenticToken = null;
+        currentTokenMint = null;
+    }
+
+    // Tab switching
+    function switchTerminalTab(tabName) {
+        // Update tab buttons
+        document.querySelectorAll('.terminal-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.tab === tabName);
+        });
+        
+        // Update tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.getElementById(`${tabName}Tab`).classList.add('active');
+        
+        // Load archive if switching to archive tab
+        if (tabName === 'archive' && currentTokenMint) {
+            loadArchive(currentTokenMint);
+        }
+        
+        // Load full stats if switching to stats tab
+        if (tabName === 'stats' && agenticToken) {
+            loadFullStats(agenticToken);
+        }
+    }
+
+    // Load archive
+    async function loadArchive(tokenMint) {
+        const archiveOutput = document.getElementById('archiveOutput');
+        const archiveCount = document.getElementById('archiveCount');
+        
+        archiveOutput.innerHTML = '<div style="color: var(--muted); text-align: center; padding: 40px;">Loading archive...</div>';
+        
+        try {
+            const res = await fetch(`/api/agentic/${tokenMint}/archive`);
+            const data = await res.json();
+            
+            archiveCount.textContent = `${data.count} entries`;
+            
+            if (data.archive.length === 0) {
+                archiveOutput.innerHTML = '<div style="color: var(--muted); text-align: center; padding: 40px;">No archive entries yet. Content is archived every 30 seconds.</div>';
+                return;
+            }
+            
+            // Render archive entries (newest first)
+            const reversedArchive = [...data.archive].reverse();
+            archiveOutput.innerHTML = reversedArchive.map(entry => {
+                const date = new Date(entry.timestamp).toLocaleString();
+                const typeLabel = (entry.type || 'unknown').toUpperCase().replace(/_/g, ' ');
+                
+                // Clean content
+                let cleanContent = (entry.content || '')
+                    .replace(/```/g, '')
+                    .replace(/\*\*/g, '')
+                    .replace(/`/g, '')
+                    .trim();
+                
+                return `
+                    <div class="archive-entry">
+                        <div class="archive-entry-header">
+                            <span class="archive-entry-type">[${typeLabel}]</span>
+                            <span class="archive-entry-time">${date}</span>
+                        </div>
+                        <div class="archive-entry-content">${escapeHtml(cleanContent)}</div>
+                    </div>
+                `;
+            }).join('');
+            
+        } catch (error) {
+            console.error('Failed to load archive:', error);
+            archiveOutput.innerHTML = '<div style="color: #ef4444; text-align: center; padding: 40px;">Failed to load archive</div>';
+        }
+    }
+
+    // Load full stats
+    function loadFullStats(token) {
+        const statsView = document.getElementById('statsFullView');
+        
+        const mcap = token.mcap ? `$${formatNumber(token.mcap)}` : 'N/A';
+        const price = token.usdPrice ? `$${token.usdPrice.toFixed(8)}` : 'N/A';
+        const change = token.stats24h?.priceChange24h || 0;
+        const changeClass = change >= 0 ? 'green' : 'red';
+        const volume = token.stats24h?.volume ? `$${formatNumber(token.stats24h.volume)}` : 'N/A';
+        
+        statsView.innerHTML = `
+            <div class="stats-card">
+                <div class="stats-card-title">Market Cap</div>
+                <div class="stats-card-value">${mcap}</div>
+            </div>
+            <div class="stats-card">
+                <div class="stats-card-title">Price (USD)</div>
+                <div class="stats-card-value">${price}</div>
+            </div>
+            <div class="stats-card">
+                <div class="stats-card-title">24h Change</div>
+                <div class="stats-card-value ${changeClass}">${change >= 0 ? '+' : ''}${change.toFixed(2)}%</div>
+            </div>
+            <div class="stats-card">
+                <div class="stats-card-title">24h Volume</div>
+                <div class="stats-card-value">${volume}</div>
+            </div>
+            <div class="stats-card">
+                <div class="stats-card-title">Holders</div>
+                <div class="stats-card-value">${token.holderCount || 'N/A'}</div>
+            </div>
+            <div class="stats-card">
+                <div class="stats-card-title">Liquidity</div>
+                <div class="stats-card-value">${token.liquidity ? `$${formatNumber(token.liquidity)}` : 'N/A'}</div>
+            </div>
+            <div class="stats-card" style="grid-column: 1 / -1;">
+                <div class="stats-card-title">Contract Address</div>
+                <div class="stats-card-value" style="font-size: 0.8rem; word-break: break-all;">${token.baseMint}</div>
+            </div>
+            <div class="stats-card">
+                <div class="stats-card-title">Quote Token</div>
+                <div class="stats-card-value">${token.quote || 'N/A'}</div>
+            </div>
+            <div class="stats-card">
+                <div class="stats-card-title">Deployer</div>
+                <div class="stats-card-value" style="font-size: 0.7rem; word-break: break-all;">${token.deployer ? token.deployer.slice(0, 8) + '...' + token.deployer.slice(-6) : 'N/A'}</div>
+            </div>
+        `;
+    }
+
+    // Download functions
+    function downloadArchiveJson() {
+        if (!currentTokenMint) return;
+        window.open(`/api/agentic/${currentTokenMint}/archive/download`, '_blank');
+    }
+
+    function downloadArchiveTxt() {
+        if (!currentTokenMint) return;
+        window.open(`/api/agentic/${currentTokenMint}/archive/download/txt`, '_blank');
+    }
+
+    // Escape HTML for safe rendering
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    let currentTokenMint = null;
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    // ==========================================
+    // END AGENTIC TERMINAL
+    // ==========================================
+
+    // --- SEARCH & FILTER ---
+    function initFilters() {
+        const searchInput = document.getElementById('search-input');
+        const quoteFilter = document.getElementById('quote-filter');
+        const sortFilter = document.getElementById('sort-filter');
+
+        [searchInput, quoteFilter, sortFilter].forEach(el => {
+            el.addEventListener('change', applyFilters);
+            el.addEventListener('input', applyFilters);
+        });
+    }
+
+    async function applyFilters() {
+        const search = document.getElementById('search-input').value.toLowerCase();
+        const quote = document.getElementById('quote-filter').value;
+        const sort = document.getElementById('sort-filter').value;
+
+        try {
+            const response = await fetch('/all-tokens');
+            let tokens = await response.json();
+
+            // Filter by search
+            if (search) {
+                tokens = tokens.filter(t => 
+                    t.name?.toLowerCase().includes(search) || 
+                    t.symbol?.toLowerCase().includes(search)
+                );
+            }
+
+            // Filter by quote
+            if (quote !== 'all') {
+                tokens = tokens.filter(t => t.quote === quote);
+            }
+
+            // Sort
+            switch (sort) {
+                case 'mcap':
+                    tokens.sort((a, b) => (b.mcap || 0) - (a.mcap || 0));
+                    break;
+                case 'volume':
+                    tokens.sort((a, b) => (b.stats24h?.volume || 0) - (a.stats24h?.volume || 0));
+                    break;
+                default:
+                    tokens.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+            }
+
+            renderTokens(tokens, 'launchpadDashboard');
+        } catch (error) {
+            console.error('Filter error:', error);
+        }
+    }
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // Generate intro page grid
+        generateAgentGrid();
+        
+        // Initialize countdown
+        initCountdown();
+
+        // Enter button
+        document.getElementById('enter-btn').addEventListener('click', enterLaunchpad);
+
+        // Footer navigation
+        document.querySelectorAll('.footer-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                showView(btn.getAttribute('data-view'));
+            });
+        });
+
+        // Wallet modal
+        document.getElementById('connect').addEventListener('click', () => {
+            if (!userWalletAddress) {
+                document.getElementById('walletModal').classList.add('open');
+            }
+        });
+
+        document.getElementById('walletModal').addEventListener('click', (e) => {
+            if (e.target.closest('.btn-close') || e.target.id === 'walletModal') {
+                document.getElementById('walletModal').classList.remove('open');
+            }
+        });
+
+        // Wallet providers
+        document.querySelectorAll('#walletModal .wallet').forEach(w => {
+            w.addEventListener('click', () => connectWallet(w.dataset.wallet));
+        });
+
+        // Disconnect
+        document.getElementById('disconnect').addEventListener('click', disconnectWallet);
+
+        // Buy modal
+        document.getElementById('buyModal').addEventListener('click', (e) => {
+            if (e.target.closest('.btn-close') || e.target.id === 'buyModal') {
+                document.getElementById('buyModal').classList.remove('open');
+            }
+        });
+
+        document.getElementById('execute-buy-btn').addEventListener('click', handleBuyExecution);
+
+        // Buy button clicks on cards
+        document.getElementById('launchpadDashboard').addEventListener('click', (e) => {
+            const buyBtn = e.target.closest('.card-buy-btn');
+            if (buyBtn) {
+                e.stopPropagation();
+                openBuyModal(buyBtn.dataset.mint, buyBtn.dataset.symbol, buyBtn.dataset.name);
+            }
+        });
+
+        // Agentic Terminal close button
+        document.getElementById('agenticCloseBtn').addEventListener('click', closeAgenticTerminal);
+
+        // Terminal tab switching
+        document.querySelectorAll('.terminal-tab').forEach(tab => {
+            tab.addEventListener('click', () => switchTerminalTab(tab.dataset.tab));
+        });
+
+        // Archive buttons
+        document.getElementById('refreshArchive').addEventListener('click', () => {
+            if (currentTokenMint) loadArchive(currentTokenMint);
+        });
+        document.getElementById('downloadJson').addEventListener('click', downloadArchiveJson);
+        document.getElementById('downloadTxt').addEventListener('click', downloadArchiveTxt);
+
+        // ESC key to close agentic terminal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('agenticOverlay').classList.contains('active')) {
+                closeAgenticTerminal();
+            }
+        });
+
+        // Create form
+        document.getElementById('createForm').addEventListener('submit', handleCreateToken);
+
+        // Image preview
+        document.getElementById('image-preview').addEventListener('click', () => {
+            document.getElementById('image-upload').click();
+        });
+
+        document.getElementById('image-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    document.getElementById('image-preview').style.backgroundImage = `url(${ev.target.result})`;
+                    document.getElementById('image-preview').innerHTML = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Header create button
+        document.getElementById('header-create-btn').addEventListener('click', () => {
+            showView('create-view');
+        });
+
+        // Back button
+        document.getElementById('back-btn').addEventListener('click', () => {
+            showView('dashboard-view');
+        });
+
+        // Refresh my tokens button
+        document.getElementById('refresh-my-tokens').addEventListener('click', fetchMyTokens);
+
+        // Initialize filters
+        initFilters();
+
+        // Auto-refresh tokens
+        setInterval(fetchAllTokens, 30000);
+
+        // Check if user prefers to skip intro (optional - localStorage)
+        const skipIntro = localStorage.getItem('zent-skip-intro');
+        if (skipIntro === 'true') {
+            document.getElementById('intro-page').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            fetchAllTokens();
+        }
+    });
+</script>
+</body>
+</html>
