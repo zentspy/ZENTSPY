@@ -601,7 +601,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Website**: [0xzerebro.io](https://0xzerebro.io)
 - **Twitter**: [@ZENTSPY](https://x.com/ZENTSPY)
-- **Documentation**: [docs.zent.dev](https://docs.zent.dev)
+
 
 ---
 
