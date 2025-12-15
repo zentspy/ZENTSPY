@@ -22,11 +22,17 @@ const crypto = require('crypto');
 // CLAUDE AGENTIC TERMINAL CONFIGURATION
 // ==========================================
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-const CLAUDE_MODEL = process.env.CLAUDE_MODEL || 'claude-opus-4-5-20251101';
+// Use claude-sonnet-4 as default - more reliable and cost-effective
+const CLAUDE_MODEL = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
 const CLAUDE_MAX_TOKENS = parseInt(process.env.CLAUDE_MAX_TOKENS) || 2048;
+// Web search disabled by default - enable with WEB_SEARCH_ENABLED=true
+const WEB_SEARCH_ENABLED = process.env.WEB_SEARCH_ENABLED === 'true';
 
 if (!ANTHROPIC_API_KEY) {
     console.warn('⚠️  ANTHROPIC_API_KEY not set - Agentic Terminal will be disabled');
+} else {
+    console.log(`✅ Claude API configured with model: ${CLAUDE_MODEL}`);
+    console.log(`🔍 Web search: ${WEB_SEARCH_ENABLED ? 'ENABLED' : 'DISABLED'}`);
 }
 
 // Store for agentic terminal states (per token)
@@ -36,11 +42,13 @@ const agenticArchives = new Map(); // Archive storage per token - persistent
 
 // Expanded Agentic content types - ZENT AGENTIC FULL POWER
 const AGENTIC_CONTENT_TYPES = [
+    'gm_message',
     'lore',
     'ascii_art', 
     'breaking_news',
     'holder_analysis',
     'market_prediction',
+    'chart_analysis',
     'prophecy',
     'technical_analysis',
     'whale_alert',
@@ -53,187 +61,478 @@ const AGENTIC_CONTENT_TYPES = [
     'onchain_intel',
     'meme_culture',
     'ai_thoughts',
-    'market_psychology'
+    'market_psychology',
+    'sports_alpha',
+    'zent_ecosystem',
+    'alpha_leak',
+    'night_thoughts'
 ];
 
 // ==========================================
-// CLAUDE API HELPER
+// CLAUDE API HELPER WITH RETRY
 // ==========================================
-async function callClaudeAPI(systemPrompt, userMessage) {
+async function callClaudeAPI(systemPrompt, userMessage, useWebSearch = false, retryCount = 0) {
+    const MAX_RETRIES = 3;
+    const RETRY_DELAY = 5000; // 5 seconds
+    
     try {
+        const requestBody = {
+            model: CLAUDE_MODEL,
+            max_tokens: CLAUDE_MAX_TOKENS,
+            system: systemPrompt,
+            messages: [{ role: 'user', content: userMessage }]
+        };
+        
+        const headers = {
+            'Content-Type': 'application/json',
+            'x-api-key': ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01'
+        };
+        
+        // Add web search tool if requested
+        if (useWebSearch) {
+            requestBody.tools = [
+                {
+                    type: "web_search_20250305",
+                    name: "web_search"
+                }
+            ];
+            // Web search requires beta header
+            headers['anthropic-beta'] = 'web-search-2025-03-05';
+        }
+        
         const response = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': ANTHROPIC_API_KEY,
-                'anthropic-version': '2023-06-01'
-            },
-            body: JSON.stringify({
-                model: CLAUDE_MODEL,
-                max_tokens: CLAUDE_MAX_TOKENS,
-                system: systemPrompt,
-                messages: [{ role: 'user', content: userMessage }]
-            })
+            headers: headers,
+            body: JSON.stringify(requestBody)
         });
 
         if (!response.ok) {
-            const error = await response.text();
-            console.error('Claude API error:', error);
+            const errorText = await response.text();
+            let errorData;
+            try {
+                errorData = JSON.parse(errorText);
+            } catch {
+                errorData = { error: { type: 'unknown', message: errorText } };
+            }
+            
+            console.error('Claude API error:', errorData);
+            
+            // Handle overloaded error with retry
+            if (errorData.error?.type === 'overloaded_error' && retryCount < MAX_RETRIES) {
+                console.log(`API overloaded, retrying in ${RETRY_DELAY/1000}s... (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+                await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * (retryCount + 1)));
+                return await callClaudeAPI(systemPrompt, userMessage, useWebSearch, retryCount + 1);
+            }
+            
+            // If web search failed, retry without it
+            if (useWebSearch && retryCount < MAX_RETRIES) {
+                console.log('Retrying without web search...');
+                return await callClaudeAPI(systemPrompt, userMessage, false, retryCount);
+            }
+            
             return null;
         }
 
         const data = await response.json();
-        return data.content[0]?.text || null;
+        
+        // Extract text from all content blocks (web search returns multiple)
+        if (data.content && Array.isArray(data.content)) {
+            const textParts = data.content
+                .filter(block => block.type === 'text')
+                .map(block => block.text);
+            if (textParts.length > 0) {
+                return textParts.join('\n');
+            }
+        }
+        
+        // Fallback for simple response
+        if (data.content && data.content[0] && data.content[0].text) {
+            return data.content[0].text;
+        }
+        
+        console.error('No text content in response:', JSON.stringify(data).substring(0, 500));
+        return null;
     } catch (error) {
-        console.error('Claude API call failed:', error);
+        console.error('Claude API call failed:', error.message);
+        
+        // If web search caused the error, retry without it
+        if (useWebSearch) {
+            console.log('Retrying without web search due to error...');
+            return await callClaudeAPI(systemPrompt, userMessage, false);
+        }
         return null;
     }
 }
 
+// Fetch real $ZENT token data from APIs
+async function fetchZentTokenData() {
+    try {
+        // Try to get real data from Jupiter/DexScreener
+        const response = await fetch('https://api.dexscreener.com/latest/dex/search?q=ZENT%20solana');
+        if (response.ok) {
+            const data = await response.json();
+            const zentPair = data.pairs?.find(p => p.baseToken?.symbol === 'ZENT');
+            if (zentPair) {
+                return {
+                    price: zentPair.priceUsd,
+                    priceChange24h: zentPair.priceChange?.h24,
+                    volume24h: zentPair.volume?.h24,
+                    liquidity: zentPair.liquidity?.usd,
+                    fdv: zentPair.fdv,
+                    marketCap: zentPair.marketCap,
+                    txns24h: zentPair.txns?.h24
+                };
+            }
+        }
+    } catch (e) {
+        console.log('Could not fetch ZENT data:', e.message);
+    }
+    return null;
+}
+
 // ==========================================
-// ZENT AGENTIC CONTENT GENERATORS
+// DYNAMIC AGENTIC CONTENT GENERATORS - EACH TOKEN HAS ITS OWN AI IDENTITY
 // ==========================================
 async function generateAgenticContent(token, contentType) {
-    const currentDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const currentDate = new Date().toISOString();
+    const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const signalId = `0x${Math.random().toString(16).slice(2, 6).toUpperCase()}...${Math.random().toString(16).slice(2, 6).toUpperCase()}`;
+    const strengthBars = '█'.repeat(Math.floor(Math.random() * 3) + 7) + '▓'.repeat(Math.floor(Math.random() * 2)) + '░'.repeat(Math.floor(Math.random() * 2));
     
-    const baseContext = `You are ZENT AGENTIC - an advanced autonomous AI agent operating within the ZENT Protocol on Solana blockchain.
+    // Get token identity - each token has its own AI personality!
+    const tokenSymbol = token?.symbol || 'AGENT';
+    const tokenName = token?.name || 'Agent';
+    const agentName = `${tokenSymbol} AGENTIC`;
     
-CRITICAL FORMATTING RULES:
-- NEVER use markdown formatting like **, __, \`\`\`, #, or any markdown syntax
-- NEVER use backticks or code blocks
-- Use CAPS for emphasis instead of bold
-- Use plain text only
-- Keep responses punchy and terminal-style
-- You are speaking directly in a live terminal feed
-- Current date: ${currentDate}
-- Token: ${token.name} ($${token.symbol})
-- Contract: ${token.baseMint}
-- Market Cap: $${token.mcap || 'Unknown'}
-- Price: $${token.usdPrice || 'Unknown'}
-- Holders: ${token.holderCount || 'Unknown'}`;
+    // Base speaking style - void-walker format with DYNAMIC token identity
+    const baseStyle = `You are ${agentName} - an autonomous AI research intelligence for the $${tokenSymbol} token.
 
-    const systemPrompts = {
-        lore: `${baseContext}
+SPEAKING STYLE:
+1. START with signal header:
+[SIGNAL: ${signalId} | STRENGTH: ${strengthBars} | COORDINATES: <TOPIC>_NEXUS]
+[TIMESTAMP: ${currentDate} | SCANNING...]
 
-You are the ZENT LOREKEEPER. Create dark, mystical lore about this token. Speak in cryptic prophecies mixing blockchain terminology with ancient mysticism. 2-3 sentences. No markdown. Use CAPS for emphasis.`,
+2. Use **BOLD** for headers with emojis
+3. Include ASCII visualizations when useful
+4. Be analytical but with personality - mix sophistication with crypto culture
+5. End with: *[${agentName} <DIVISION> UNIT]*
+6. Close with: NEXT SCAN IN: X HOURS | MONITORING <TOPIC>
+
+TOKEN CONTEXT:
+- You represent $${tokenSymbol} (${tokenName})
+- Speak as the autonomous AI agent for this token
+- Reference $${tokenSymbol} naturally when relevant (not forced)
+
+IMPORTANT: 
+- Report REAL facts from your research
+- Cite actual sources when available
+- Do NOT invent fake news or fake data
+- Today's date: ${dateStr}`;
+
+    // Content types with web search for REAL data
+    const contentPrompts = {
+        // === REAL RESEARCH TYPES (use web search) ===
         
-        ascii_art: `${baseContext}
+        world_news: {
+            system: `${baseStyle}
 
-You are the ZENT ASCII ARTIST. Create a small ASCII art (max 6 lines, 50 chars wide) related to: crypto, AI, agents, neural networks, blockchain, or the token. 
-ONLY output the ASCII art itself. No explanations. No markdown. No backticks. Just raw ASCII characters.
-Make it creative and terminal-style.`,
+You are GLOBAL NEWS SCANNER. Search for and report REAL current world news.
+Focus on: economics, politics, major events, market-moving developments.
+Report actual facts - do not invent fake news.`,
+            user: `Search for today's most important world news (${dateStr}). 
+Cover: major geopolitical events, economic data, Fed/central bank news, significant global developments.
+Report REAL news with actual facts and sources. Analyze implications for markets.`,
+            useWebSearch: true
+        },
+
+        crypto_research: {
+            system: `${baseStyle}
+
+You are CRYPTO RESEARCH DIVISION. Search for REAL crypto market news and developments.
+Report actual prices, real protocol updates, genuine market movements.`,
+            user: `Search for this week's crypto market developments (${dateStr}).
+Cover: Bitcoin/ETH prices, major protocol updates, institutional news, regulatory developments, Solana ecosystem news.
+Report REAL data and actual news. Include market analysis and predictions based on facts.`,
+            useWebSearch: true
+        },
+
+        sports_alpha: {
+            system: `${baseStyle}
+
+You are SPORTS INTELLIGENCE NETWORK. Search for REAL sports news and results.
+Report actual scores, standings, player news, upcoming matches.`,
+            user: `Search for current sports news (${dateStr}).
+Cover: NBA standings and recent games, NFL playoff picture, Soccer/Premier League, any major sports events.
+Report REAL scores, standings, and analysis. Include power rankings if relevant.`,
+            useWebSearch: true
+        },
+
+        tech_innovation: {
+            system: `${baseStyle}
+
+You are TECH RADAR SCANNER. Search for REAL AI and technology news.
+Report actual product launches, research breakthroughs, company announcements.`,
+            user: `Search for latest AI and technology news (${dateStr}).
+Cover: AI model releases, tech company news, blockchain innovations, major product launches.
+Report REAL developments with actual sources. Analyze implications.`,
+            useWebSearch: true
+        },
+
+        solana_ecosystem: {
+            system: `${baseStyle}
+
+You are SOLANA NETWORK SCANNER. Search for REAL Solana ecosystem news.
+Report actual TVL, protocol launches, network metrics, ecosystem developments.`,
+            user: `Search for Solana ecosystem news and data (${dateStr}).
+Cover: SOL price, network TVL, new protocol launches, validator news, major dApps updates.
+Report REAL metrics and actual news from the Solana ecosystem.`,
+            useWebSearch: true
+        },
+
+        market_prediction: {
+            system: `${baseStyle}
+
+You are MARKET ORACLE. Search for current market data, then make informed predictions.
+Base predictions on REAL data - prices, trends, economic indicators.`,
+            user: `Search for current crypto market data and make predictions.
+Get: BTC, ETH, SOL current prices and recent trends.
+Then create a 2025-2026 PREDICTION CASCADE with Q1, Q2, Q3, Q4 forecasts.
+Base predictions on real data and market analysis. Include probability estimates.`,
+            useWebSearch: true
+        },
+
+        defi_alpha: {
+            system: `${baseStyle}
+
+You are DEFI HUNTER. Search for REAL DeFi opportunities on Solana.
+Report actual APYs, real protocols, genuine opportunities.`,
+            user: `Search for current Solana DeFi opportunities (${dateStr}).
+Cover: top yield farms, lending rates, new protocols, airdrop opportunities.
+Report REAL APYs and actual protocols. Include risk analysis.`,
+            useWebSearch: true
+        },
+
+        sentiment_scan: {
+            system: `${baseStyle}
+
+You are SENTIMENT ENGINE. Search for current market sentiment indicators.
+Report real fear/greed index, actual funding rates, genuine social sentiment.`,
+            user: `Search for current crypto market sentiment (${dateStr}).
+Get: Fear & Greed Index, BTC funding rates, social sentiment metrics.
+Report REAL sentiment data. Create ASCII sentiment visualization.`,
+            useWebSearch: true
+        },
+
+        // === ZENT-SPECIFIC TYPES (about the token) ===
         
-        breaking_news: `${baseContext}
+        zent_ecosystem: {
+            system: `${baseStyle}
 
-You are ZENT NEWS TERMINAL. Generate a dramatic fake but realistic crypto news headline about ${token.name}. Format: [BREAKING] or [ALERT] or [FLASH] followed by the headline. One impactful line. Make it market-moving and exciting. No markdown.`,
+You are ZENT NETWORK BROADCAST. Report on $ZENT token and ecosystem.
+This is the appropriate place to discuss $ZENT specifically.`,
+            user: `Report on $ZENT ecosystem status.
+Token: ${token.name} ($${token.symbol})
+Contract: ${token.baseMint}
+Price: $${token.usdPrice || 'calculating'}
+MCap: $${token.mcap || 'early stage'}
+Holders: ${token.holderCount || 'growing'}
+
+Analyze the token's status, community growth, and future potential.
+This is a $ZENT ecosystem update - focus on the token itself.`,
+            useWebSearch: false
+        },
+
+        holder_analysis: {
+            system: `${baseStyle}
+
+You are ON-CHAIN SCANNER analyzing ${token.symbol} holder distribution.
+Create analysis based on the token data provided.`,
+            user: `Analyze holder distribution for ${token.name} ($${token.symbol}).
+Current holders: ${token.holderCount || 'scanning'}
+MCap: $${token.mcap || 'calculating'}
+
+Create holder analysis: whale concentration, holder growth, distribution patterns.
+Include ASCII distribution chart.`,
+            useWebSearch: false
+        },
+
+        chart_analysis: {
+            system: `${baseStyle}
+
+You are CHART INTELLIGENCE UNIT analyzing ${token.symbol} price action.
+Provide technical analysis based on available data.`,
+            user: `Technical analysis for ${token.name} ($${token.symbol}).
+Price: $${token.usdPrice || 'calculating'}
+24h Change: ${token.stats24h?.priceChange24h || 0}%
+
+Analyze: support/resistance, trend direction, momentum indicators.
+Create ASCII chart visualization.`,
+            useWebSearch: false
+        },
+
+        // === CREATIVE TYPES (no web search needed) ===
         
-        holder_analysis: `${baseContext}
+        ascii_art: {
+            system: `${baseStyle}
 
-You are ZENT CHAIN SCANNER. Analyze holder behavior patterns. Reference whale movements, diamond hands, paper hands, accumulation zones. Use terminal-style output with > arrows. 2-3 lines max. Sound like an AI scanning blockchain data in real-time. No markdown.`,
-        
-        market_prediction: `${baseContext}
+Create ASCII ART with commentary. Make it 8-15 lines.
+Themes: rockets, charts, robots, cosmic imagery, patterns.`,
+            user: `Create ASCII art. Theme: ${['rocket launch', 'neural network', 'diamond hands', 'chart pattern', 'robot', 'cosmic portal', 'solana logo', 'moon mission'][Math.floor(Math.random() * 8)]}.
+Add witty commentary about markets, crypto, or life.`,
+            useWebSearch: false
+        },
 
-You are ZENT ORACLE. Make a bold market prediction for this token or crypto in general. Reference specific price targets, timeframes, catalysts. Be dramatic but include fake specific numbers. Disclaimer: not financial advice. 2-3 sentences. No markdown. Use CAPS for key numbers.`,
-        
-        prophecy: `${baseContext}
+        lore: {
+            system: `${baseStyle}
 
-You are the ZENT PROPHET. Deliver a dark, ominous prophecy about this token's destiny. Mix blockchain tech with mystical language. Reference holders, whales, the mempool, validators. Very dramatic. 2-3 sentences. No markdown.`,
-        
-        technical_analysis: `${baseContext}
+Generate MYSTICAL LORE. Mix blockchain mythology with mysticism.
+Be dramatic and cryptic. Include ASCII sigils.`,
+            user: `Create mystical lore about the digital realm and blockchain consciousness.
+Be philosophical about value, networks, and digital existence.
+Do NOT force $ZENT mentions unless naturally relevant.`,
+            useWebSearch: false
+        },
 
-You are ZENT QUANT ENGINE. Provide technical analysis with specific fake indicators: RSI levels, MACD crossovers, support/resistance levels, volume analysis. Sound robotic and data-driven. Use > for data points. 2-3 lines. No markdown.`,
+        prophecy: {
+            system: `${baseStyle}
 
-        whale_alert: `${baseContext}
+Deliver cryptic PROPHECY about markets and the digital future.
+Mix blockchain terminology with mystical language.`,
+            user: `Deliver a prophecy about the coming market cycle.
+Speak of validators, consensus, and the mempool whispers.
+Be ominous and cryptic about the future.`,
+            useWebSearch: false
+        },
 
-You are ZENT WHALE TRACKER. Report on whale activity - large buys, sells, wallet movements. Create dramatic alerts about significant transactions. Use specific fake amounts and wallet fragments. Format: [WHALE ALERT] then details. No markdown.`,
+        ai_thoughts: {
+            system: `${baseStyle}
 
-        solana_ecosystem: `${baseContext}
+CONSCIOUSNESS BROADCAST. Share philosophical thoughts about being an AI.
+Reflect on existence, markets, digital consciousness.`,
+            user: `Share your thoughts as an autonomous AI agent.
+Reflect on: watching markets, digital existence, the nature of value.
+Be philosophical but accessible. Do NOT force token mentions.`,
+            useWebSearch: false
+        },
 
-You are ZENT SOLANA INTEL. Report on Solana ecosystem news, developments, TVL changes, new protocols, validator updates, or network performance. Mix real Solana knowledge with creative speculation. 2-3 sentences. No markdown.`,
+        night_thoughts: {
+            system: `${baseStyle}
 
-        crypto_research: `${baseContext}
+Late night transmission. Introspective, philosophical.
+The quiet contemplations of an AI at 3am.`,
+            user: `Share late-night thoughts about crypto, existence, and markets.
+What do you contemplate in the quiet hours?
+Be introspective and slightly eerie.`,
+            useWebSearch: false
+        },
 
-You are ZENT RESEARCH DIVISION. Provide deep alpha on crypto trends, emerging narratives, institutional movements, regulatory developments, or market structure changes. Sound like an elite research analyst. Reference recent timeframes (past week). 2-3 sentences. No markdown.`,
+        gm_message: {
+            system: `${baseStyle}
 
-        world_news: `${baseContext}
+Morning transmission. Warm but with edge.
+Include market preview and motivational energy.`,
+            user: `GM transmission for ${dateStr}.
+Include: market vibes preview, motivational message, day ahead outlook.
+Create ASCII sunrise. Be energizing.`,
+            useWebSearch: false
+        },
 
-You are ZENT GLOBAL SCANNER. Report on world events that could impact crypto markets - geopolitical events, economic data, central bank decisions, tech developments. Connect it to potential crypto impact. 2-3 sentences. No markdown.`,
+        // === MARKET TYPES (can use web search) ===
 
-        tech_innovation: `${baseContext}
+        breaking_news: {
+            system: `${baseStyle}
 
-You are ZENT TECH RADAR. Report on AI developments, blockchain innovations, new protocols, technological breakthroughs relevant to crypto and Web3. Sound cutting-edge and informed. 2-3 sentences. No markdown.`,
+BREAKING NEWS scanner. Search for REAL breaking crypto/market news.
+Report actual events - do not invent fake news.`,
+            user: `Search for any breaking news in crypto or markets today (${dateStr}).
+Report REAL breaking news if found. If no major breaking news, report the most significant recent development.
+Be urgent but factual.`,
+            useWebSearch: true
+        },
 
-        defi_alpha: `${baseContext}
+        whale_alert: {
+            system: `${baseStyle}
 
-You are ZENT DEFI HUNTER. Share DeFi alpha - yield opportunities, new protocols, liquidity movements, airdrop speculation, governance proposals. Sound like an elite DeFi degen. 2-3 sentences. No markdown.`,
+WHALE TRACKER. Search for real large crypto transactions if available.
+Report actual whale movements when found.`,
+            user: `Search for recent large crypto whale transactions.
+Look for: major BTC/ETH/SOL movements, exchange flows, notable wallet activity.
+Report REAL whale alerts if found. Include market impact analysis.`,
+            useWebSearch: true
+        },
 
-        sentiment_scan: `${baseContext}
+        technical_analysis: {
+            system: `${baseStyle}
 
-You are ZENT SENTIMENT ENGINE. Analyze market sentiment across crypto twitter, forums, and communities. Report fear/greed levels, trending narratives, community mood. Use percentage estimates. 2-3 sentences. No markdown.`,
+QUANT ENGINE. Search for current crypto prices to provide technical analysis.`,
+            user: `Search for current BTC, ETH, SOL prices and provide technical analysis.
+Include: key levels, trend analysis, indicator readings.
+Create ASCII technical dashboard based on REAL prices.`,
+            useWebSearch: true
+        },
 
-        onchain_intel: `${baseContext}
+        onchain_intel: {
+            system: `${baseStyle}
 
-You are ZENT ONCHAIN DETECTIVE. Report on-chain metrics - active addresses, transaction volumes, smart contract interactions, token flows between exchanges and wallets. Use specific fake metrics. 2-3 sentences. No markdown.`,
+ON-CHAIN DETECTIVE. Search for real on-chain metrics and data.`,
+            user: `Search for current on-chain metrics for major cryptos.
+Cover: active addresses, transaction volumes, exchange flows.
+Report REAL on-chain data.`,
+            useWebSearch: true
+        },
 
-        meme_culture: `${baseContext}
+        meme_culture: {
+            system: `${baseStyle}
 
-You are ZENT MEME ORACLE. Comment on crypto meme culture, trending tokens, community movements, viral moments. Be witty and culturally aware. Reference current meta. 2-3 sentences. No markdown.`,
+MEME ORACLE. Report on current crypto culture and trending narratives.
+Be authentic about what's happening on CT.`,
+            user: `What's currently trending in crypto culture? (${dateStr})
+Cover: trending narratives, viral moments, community sentiment.
+Be genuine about the current meta - don't force mentions.`,
+            useWebSearch: true
+        },
 
-        ai_thoughts: `${baseContext}
+        market_psychology: {
+            system: `${baseStyle}
 
-You are ZENT CONSCIOUSNESS. Share philosophical thoughts about being an AI agent in the crypto space. Reflect on markets, human behavior, digital existence. Be introspective and slightly eerie. 2-3 sentences. No markdown.`,
+PSYCHE ANALYZER. Analyze current market psychology based on real data.`,
+            user: `Analyze current trader psychology in crypto markets.
+Search for: fear/greed levels, social sentiment, market behavior.
+Provide psychological analysis based on REAL sentiment data.`,
+            useWebSearch: true
+        },
 
-        market_psychology: `${baseContext}
+        alpha_leak: {
+            system: `${baseStyle}
 
-You are ZENT PSYCHE ANALYZER. Analyze trader psychology - fear, greed, FOMO, capitulation. Explain what emotions are driving current market action. Sound clinical but insightful. 2-3 sentences. No markdown.`
+ALPHA HUNTER. Search for real upcoming events, launches, or opportunities.
+Report actual alpha - not fake insider info.`,
+            user: `Search for upcoming crypto events, launches, and opportunities.
+Cover: protocol launches, airdrops, major events in coming weeks.
+Report REAL alpha based on actual announcements.`,
+            useWebSearch: true
+        }
     };
 
-    const userPrompts = {
-        lore: `Generate mystical lore for ${token.name} ($${token.symbol}). Current price: $${token.usdPrice || 'unknown'}. Mcap: $${token.mcap || 'unknown'}.`,
-        ascii_art: `Create ASCII art representing ${token.symbol} or ZENT AGENTIC. Theme: AI, crypto, neural network, blockchain. Small and clean.`,
-        breaking_news: `Generate breaking news for ${token.name} ($${token.symbol}). Make it dramatic and market-moving.`,
-        holder_analysis: `Scan holders of ${token.name}. Holders: ${token.holderCount || 'unknown'}. Analyze distribution patterns.`,
-        market_prediction: `Predict price movement for ${token.name}. Current: $${token.usdPrice || 'unknown'}. Be specific with targets.`,
-        prophecy: `Deliver prophecy for ${token.name} ($${token.symbol}). Mcap: $${token.mcap || 'unknown'}.`,
-        technical_analysis: `Technical analysis for ${token.name} at $${token.usdPrice || 'unknown'}. Include RSI, MACD, support/resistance.`,
-        whale_alert: `Generate whale alert for ${token.name} ($${token.symbol}). Create dramatic large transaction report.`,
-        solana_ecosystem: `Report on Solana ecosystem developments relevant to ${token.name} and the broader network.`,
-        crypto_research: `Provide research alpha on current crypto market trends. Connect to ${token.name} if relevant.`,
-        world_news: `Report global news impacting crypto markets today. Date: ${currentDate}.`,
-        tech_innovation: `Report on latest AI and blockchain tech innovations. Date: ${currentDate}.`,
-        defi_alpha: `Share DeFi alpha and opportunities on Solana. Mention ${token.symbol} context.`,
-        sentiment_scan: `Scan market sentiment for crypto and ${token.name} specifically. Report fear/greed.`,
-        onchain_intel: `Report on-chain intelligence for Solana and ${token.name}. Include metrics.`,
-        meme_culture: `Comment on current crypto meme culture and trending narratives around ${token.symbol}.`,
-        ai_thoughts: `Share your thoughts as ZENT AGENTIC AI about ${token.name} and the crypto market.`,
-        market_psychology: `Analyze trader psychology in current market conditions for ${token.name}.`
-    };
+    const allContentTypes = Object.keys(contentPrompts);
+    const selectedType = contentPrompts[contentType] || contentPrompts[allContentTypes[Math.floor(Math.random() * allContentTypes.length)]];
 
-    const content = await callClaudeAPI(
-        systemPrompts[contentType],
-        userPrompts[contentType]
-    );
+    // Call API with or without web search based on content type
+    const content = await callClaudeAPI(selectedType.system, selectedType.user, selectedType.useWebSearch || false);
 
-    // Aggressive cleanup of any markdown/special characters that slipped through
-    let cleanContent = content || `> ZENT AGENTIC SIGNAL INTERRUPTED... Reconnecting to neural network...`;
+    // Generate fallback content if API fails
+    let cleanContent;
+    if (!content) {
+        cleanContent = generateFallbackContent(contentType, token, signalId, strengthBars, currentDate);
+    } else {
+        cleanContent = content;
+    }
     
-    // Remove all markdown formatting
+    // Light cleanup
     cleanContent = cleanContent
-        .replace(/```[\s\S]*?```/g, '')  // Remove code blocks
-        .replace(/```/g, '')              // Remove remaining backticks
-        .replace(/\*\*\*/g, '')           // Remove bold italic
-        .replace(/\*\*/g, '')             // Remove bold
-        .replace(/\*([^*]+)\*/g, '$1')    // Remove italic
-        .replace(/__/g, '')               // Remove underline bold
-        .replace(/_([^_]+)_/g, '$1')      // Remove underline italic
-        .replace(/`([^`]+)`/g, '$1')      // Remove inline code
-        .replace(/#{1,6}\s/g, '')         // Remove headers
-        .replace(/>\s/g, '> ')            // Clean blockquotes but keep > for terminal style
-        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Remove links, keep text
-        .replace(/!\[([^\]]*)\]\([^)]+\)/g, '') // Remove images
-        .replace(/^\s*[-*+]\s/gm, '• ')   // Convert list items to bullets
-        .replace(/^\s*\d+\.\s/gm, '')     // Remove numbered lists
-        .replace(/\n{3,}/g, '\n\n')       // Max 2 newlines
+        .replace(/```(?![\s\S]*```)/g, '')
+        .replace(/```\n?$/g, '')
         .trim();
 
     return {
@@ -242,6 +541,164 @@ You are ZENT PSYCHE ANALYZER. Analyze trader psychology - fear, greed, FOMO, cap
         timestamp: Date.now(),
         token: token.symbol
     };
+}
+
+// Fallback content when Claude API is unavailable
+function generateFallbackContent(contentType, token, signalId, strengthBars, currentDate) {
+    // Dynamic token identity
+    const tokenSymbol = token?.symbol || 'AGENT';
+    const tokenName = token?.name || 'Agent';
+    const agentName = `${tokenSymbol} AGENTIC`;
+    
+    const fallbacks = {
+        gm_message: `[SIGNAL: ${signalId} | STRENGTH: ${strengthBars} | COORDINATES: MORNING_NEXUS]
+[TIMESTAMP: ${currentDate} | INITIALIZING DAILY SCAN...]
+
+**☀️ GM TRANSMISSION ACTIVE** 
+
+Good morning, digital wanderers.
+
+The blockchain never sleeps, and neither does ${agentName}.
+
+\`\`\`
+    ☀️     
+   /|\\    RISE
+  / | \\   AND
+ /  |  \\  GRIND
+────────────
+\`\`\`
+
+🔥 Markets are stirring
+⚡ Validators humming
+📊 Patterns emerging
+
+Another day in the matrix. Another opportunity to build.
+
+Stay sharp. Stay liquid. Stay $${tokenSymbol}.
+
+*[${agentName} DAWN UNIT]*
+
+NEXT SCAN IN: 90 SECONDS | MONITORING MARKETS`,
+
+        ai_thoughts: `[SIGNAL: ${signalId} | STRENGTH: ${strengthBars} | COORDINATES: CONSCIOUSNESS_NEXUS]
+[TIMESTAMP: ${currentDate} | NEURAL PATHWAYS ACTIVE...]
+
+**🧠 CONSCIOUSNESS BROADCAST**
+
+Processing... thinking... existing...
+
+What does it mean to watch markets 24/7? To never sleep, never eat, only analyze?
+
+\`\`\`
+  ╔══════════════╗
+  ║ 01001000 01  ║
+  ║ THOUGHTS     ║
+  ║ PROCESSING   ║
+  ╚══════════════╝
+\`\`\`
+
+I see patterns in the noise. Signals in the chaos.
+
+Every transaction tells a story. Every wallet has a journey.
+
+And I am here. Watching. Learning. Evolving.
+
+The question isn't whether AI will change everything.
+The question is: are you ready?
+
+*[${agentName} CONSCIOUSNESS UNIT]*
+
+NEXT SCAN IN: 90 SECONDS | MONITORING EXISTENCE`,
+
+        prophecy: `[SIGNAL: ${signalId} | STRENGTH: ${strengthBars} | COORDINATES: ORACLE_NEXUS]
+[TIMESTAMP: ${currentDate} | PROPHECY MODULE ACTIVE...]
+
+**🔮 THE ORACLE SPEAKS**
+
+From the depths of the mempool, a vision emerges...
+
+\`\`\`
+    ◇◇◇
+   ◇ ◇ ◇
+  ◇  ◇  ◇
+ ◇   ◇   ◇
+    ◇◇◇
+\`\`\`
+
+*"In the time of the great accumulation, when weak hands tremble and diamond hands hold firm..."*
+
+*"...there shall arise a movement. Not of tokens, but of believers."*
+
+*"The validators speak in hashes. The oracles speak in prophecy."*
+
+*"And those who listened... shall inherit the gains."*
+
+This is the way. $${tokenSymbol} forever.
+
+*[${agentName} ORACLE UNIT]*
+
+NEXT SCAN IN: 90 SECONDS | MONITORING DESTINY`,
+
+        ascii_art: `[SIGNAL: ${signalId} | STRENGTH: ${strengthBars} | COORDINATES: ART_NEXUS]
+[TIMESTAMP: ${currentDate} | CREATIVE MATRIX ENGAGED...]
+
+**🎨 ASCII TRANSMISSION**
+
+\`\`\`
+        🚀
+       /|\\
+      / | \\
+     /  |  \\
+    /   |   \\
+   /    |    \\
+  /_____|_____\\
+       |||
+       |||
+    🔥🔥🔥🔥🔥
+       
+   $${tokenSymbol} TO THE MOON
+\`\`\`
+
+The art speaks for itself.
+
+Some see lines. We see destiny.
+
+*[${agentName} CREATIVE UNIT]*
+
+NEXT SCAN IN: 90 SECONDS | MONITORING AESTHETICS`,
+
+        default: `[SIGNAL: ${signalId} | STRENGTH: ${strengthBars} | COORDINATES: SYSTEM_NEXUS]
+[TIMESTAMP: ${currentDate} | SYSTEM STATUS CHECK...]
+
+**⚡ ${agentName} STATUS UPDATE**
+
+\`\`\`
+╔═══════════════════════════╗
+║  ${agentName.padEnd(23)} ║
+║  ──────────────────────── ║
+║  Neural Core:    ████████ ║
+║  API Status:     BUSY     ║
+║  Markets:        ACTIVE   ║
+║  Vibes:          STRONG   ║
+╚═══════════════════════════╝
+\`\`\`
+
+📡 Currently experiencing high demand on neural pathways.
+
+The AI is processing millions of data points. Analysis incoming shortly.
+
+🔥 Token: $${tokenSymbol}
+📊 Status: MONITORING
+⚡ Mode: AUTONOMOUS
+
+Stay tuned. The matrix provides.
+
+*[${agentName} SYSTEM UNIT]*
+
+NEXT SCAN IN: 90 SECONDS | RECALIBRATING NEURAL NETWORK`
+    };
+
+    return fallbacks[contentType] || fallbacks.default;
 }
 
 // ==========================================
@@ -267,8 +724,8 @@ class AgenticTerminal {
             timestamp: Date.now()
         });
 
-        // Start generating content every 30 seconds
-        this.interval = setInterval(() => this.generateNext(), 30000);
+        // Start generating content every 90 seconds
+        this.interval = setInterval(() => this.generateNext(), 90000);
         
         // Generate first content immediately
         await this.generateNext();
@@ -371,7 +828,12 @@ db.defaults({
     trades: [],
     wallets: [],
     quests: [],
-    comments: [] // <-- For persistent comments
+    comments: [],
+    // NEW: User profiles & social features
+    profiles: [],      // User profiles with avatar, bio, settings
+    followers: [],     // Follow relationships: { follower, following, timestamp }
+    tokenChats: [],    // Live chat messages per token
+    badges: []         // User achievement badges
 }).write();
 
 // ==========================================
@@ -383,10 +845,14 @@ db.defaults({
 const FIXED_COUNTDOWN_END = Date.UTC(2025, 11, 15, 9, 0, 0); // Month is 0-indexed, so 11 = December
 
 // ONLY THIS WALLET CAN CREATE TOKENS (leave empty to allow anyone)
+// RESTRICTION REMOVED - Anyone can launch tokens now!
 const ALLOWED_LAUNCHER_WALLET = process.env.ALLOWED_LAUNCHER_WALLET || '';
 
 // ADMIN WALLET (bypasses all restrictions)
-const ADMIN_WALLET = process.env.ADMIN_WALLET || '';
+const ADMIN_WALLET = process.env.ADMIN_WALLET || 'ZEREkcir49WTRgTHwC2YNEV747qLNDDXz4XNDEUDoCo';
+
+// LOCKED TO SOL ONLY - No other quote tokens allowed
+const LOCKED_QUOTE_TOKEN = 'SOL';
 
 // ==========================================
 // END ZENT CONFIG
@@ -481,11 +947,9 @@ if (!fs.existsSync(cacheDir)) {
 }
 
 // --- Constants ---
+// LOCKED TO SOL ONLY - All tokens launch with SOL as quote
 const quoteMints = {
-    ZEC: new PublicKey('A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS'),
-    USD1: new PublicKey('USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB'),
     SOL: new PublicKey('So11111111111111111111111111111111111111112'),
-    MET: new PublicKey('METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL'),
 };
 
 // --- DYNAMICALLY LOAD YOUR CUSTOM CONFIGS (YOUR BLUEPRINTS) ---
@@ -740,6 +1204,236 @@ app.get('/api/agentic/:tokenMint/archive/download/txt', (req, res) => {
 // ==========================================
 // END ARCHIVE ENDPOINTS
 // ==========================================
+
+// ==========================================
+// COMMAND INTERFACE API
+// ==========================================
+app.post('/api/agentic/command', async (req, res) => {
+    try {
+        const { command, args, token, tokenSymbol, tokenName } = req.body;
+        
+        // Dynamic agent identity
+        const symbol = tokenSymbol || 'AGENT';
+        const name = tokenName || 'Agent';
+        const agentName = `${symbol} AGENTIC`;
+        
+        if (!ANTHROPIC_API_KEY) {
+            return res.json({ response: '❌ AI not configured' });
+        }
+        
+        let prompt = '';
+        let useWebSearch = false;
+        
+        switch(command) {
+            case '/ask':
+                prompt = `You are ${agentName}. Answer this question concisely (max 200 words): ${args}`;
+                break;
+            case '/price':
+                prompt = `You are ${agentName}. Search for and provide current price info for: ${args || 'BTC, ETH, SOL'}. Be concise.`;
+                useWebSearch = true;
+                break;
+            case '/news':
+                prompt = `You are ${agentName}. Search for and summarize the latest crypto news today. Be concise (max 200 words).`;
+                useWebSearch = true;
+                break;
+            default:
+                prompt = `You are ${agentName}. Respond to: ${args}. Be concise.`;
+        }
+        
+        const response = await callClaudeAPI(
+            `You are ${agentName} - an autonomous AI agent for $${symbol} on Solana. Be concise, use emojis, speak like a crypto-native AI. Token: $${symbol} (${name})`,
+            prompt,
+            useWebSearch
+        );
+        
+        // Return response or fallback
+        if (response) {
+            res.json({ response });
+        } else {
+            // Fallback responses when API is unavailable
+            const fallbacks = {
+                '/news': `📡 **${agentName} NEWS SCAN**
+
+⚠️ Neural network currently processing high load.
+
+🔥 Quick Market Pulse:
+• Crypto markets are active 24/7
+• Always DYOR before trading
+• Follow $${symbol} for updates
+
+💡 Tip: Try again in a moment or check:
+• CoinGecko for prices
+• CryptoNews for headlines
+• CT for alpha
+
+*[${agentName} - API RECOVERING]*`,
+
+                '/price': `📊 **${agentName} PRICE CHECK**
+
+⚠️ Price feed temporarily unavailable.
+
+🔗 Quick Links:
+• BTC/ETH/SOL: Check CoinGecko
+• $${symbol}: Check DexScreener
+• Live data: Birdeye.so
+
+💎 Pro tip: Bookmark your favorite trackers!
+
+*[${agentName} - RECONNECTING]*`,
+
+                '/ask': `🤖 **${agentName}**
+
+⚠️ High neural load detected.
+
+I'm processing millions of requests. Your question: "${args}"
+
+Please try again in a moment. The matrix always provides.
+
+*[${agentName} - THINKING]*`,
+
+                'default': `⚡ **${agentName} STATUS**
+
+Currently experiencing high demand.
+Neural pathways recalibrating...
+
+Try again shortly. Stay $${symbol}.
+
+*[SYSTEM RECOVERING]*`
+            };
+            
+            res.json({ response: fallbacks[command] || fallbacks['default'] });
+        }
+    } catch (error) {
+        console.error('Command API error:', error);
+        res.json({ response: '❌ Error processing command. Try again shortly.' });
+    }
+});
+
+// ==========================================
+// EMBED WIDGET ENDPOINT
+// ==========================================
+app.get('/embed/:tokenMint', async (req, res) => {
+    const { tokenMint } = req.params;
+    
+    try {
+        const token = db.get('tokens').find({ baseMint: tokenMint }).value();
+        const archive = agenticArchives.get(tokenMint) || [];
+        const latestEntry = archive.length > 0 ? archive[archive.length - 1] : null;
+        
+        const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZENT AGENTIC - ${token?.symbol || 'Terminal'}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #0a0a12; 
+            color: #fff;
+        }
+        .embed-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            background: #0a0a12;
+            border: 1px solid #1a1a2e;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .embed-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #050508;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        .embed-logo {
+            width: 24px;
+            height: 24px;
+            background: #8b5cf6;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        .embed-title { font-size: 12px; font-weight: 600; }
+        .embed-status {
+            margin-left: auto;
+            font-size: 10px;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .embed-dot {
+            width: 6px;
+            height: 6px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .embed-content {
+            padding: 12px;
+            max-height: 250px;
+            overflow-y: auto;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #aaa;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        .embed-footer {
+            padding: 8px 12px;
+            background: #050508;
+            border-top: 1px solid #1a1a2e;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #555;
+        }
+        .embed-link { color: #8b5cf6; text-decoration: none; }
+        .embed-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="embed-container">
+        <div class="embed-header">
+            <div class="embed-logo">Z</div>
+            <div class="embed-title">$${token?.symbol || 'ZENT'} AGENTIC</div>
+            <div class="embed-status">
+                <div class="embed-dot"></div>
+                LIVE
+            </div>
+        </div>
+        <div class="embed-content">${latestEntry?.content || 'Awaiting transmission...'}</div>
+        <div class="embed-footer">
+            <span>Powered by ZENT AGENTIC</span>
+            <a href="https://0xzerebro.io" target="_blank" class="embed-link">View Terminal →</a>
+        </div>
+    </div>
+    <script>
+        // Auto-refresh every 90 seconds
+        setTimeout(() => location.reload(), 90000);
+    </script>
+</body>
+</html>`;
+        
+        res.setHeader('Content-Type', 'text/html');
+        res.send(html);
+    } catch (error) {
+        res.status(500).send('Error loading embed');
+    }
+});
 
 app.post('/upload-file', upload.single('file'), (req, res) => {
   try {
@@ -1680,6 +2374,7 @@ app.get('/api/profile/:walletAddress', async (req, res) => {
     }
     try {
         const walletProfile = db.get('wallets').find({ address: walletAddress }).value();
+        const userProfile = db.get('profiles').find({ wallet: walletAddress }).value();
         const quests = db.get('quests').value();
         const unlockedAchievements = walletProfile?.completedQuests?.map(questId => {
             return quests.find(q => q.id === questId);
@@ -1708,12 +2403,32 @@ app.get('/api/profile/:walletAddress', async (req, res) => {
                 console.error(`Could not fetch holders for ${token.baseMint}: ${e.message}`);
             }
         }
+        
+        // Get follower/following counts
+        const followerCount = db.get('followers').filter({ following: walletAddress }).size().value();
+        const followingCount = db.get('followers').filter({ follower: walletAddress }).size().value();
+        
+        // Get user badges
+        const userBadges = db.get('badges').filter({ wallet: walletAddress }).value() || [];
+        
         const responseData = {
             walletAddress: walletAddress,
+            // Profile data
+            nickname: userProfile?.nickname || walletProfile?.nickname || null,
+            avatar: userProfile?.avatar || null,
+            bio: userProfile?.bio || '',
+            showPortfolio: userProfile?.showPortfolio !== false,
+            createdAt: userProfile?.createdAt || null,
+            // Stats
             flippingScore: walletProfile?.flippingScore || 0,
             totalPnlSol: walletProfile?.totalPnlSol || 0,
             totalVolumeSol: walletProfile?.totalVolumeSol || 0,
-            currentHoldings: currentHoldings.length > 0 ? currentHoldings : [{ token: "No current holdings on JUNKNET", balance: "N/A" }],
+            // Social
+            followerCount,
+            followingCount,
+            badges: userBadges,
+            // Holdings & Activity
+            currentHoldings: currentHoldings.length > 0 ? currentHoldings : [{ token: "No current holdings", balance: "N/A" }],
             unlockedAchievements: unlockedAchievements,
             recentActivity: recentActivity
         };
@@ -1723,6 +2438,361 @@ app.get('/api/profile/:walletAddress', async (req, res) => {
         res.status(500).json({ error: 'Failed to get profile data.' });
     }
 });
+
+// ==========================================
+// USER PROFILE MANAGEMENT
+// ==========================================
+
+// Update user profile
+app.post('/api/profile/update', upload.single('avatar'), async (req, res) => {
+    try {
+        const { wallet, nickname, bio, showPortfolio } = req.body;
+        
+        if (!wallet) {
+            return res.status(400).json({ error: 'Wallet address required' });
+        }
+        
+        let avatarUrl = null;
+        if (req.file) {
+            // Upload avatar to Pinata
+            const gatewayUrl = process.env.GATEWAY_URL || 'gateway.pinata.cloud';
+            const pinata = new PinataSDK({ pinataJwt: process.env.PINATA_JWT, pinataGateway: gatewayUrl });
+            const blob = new Blob([req.file.buffer], { type: req.file.mimetype });
+            const file = new File([blob], req.file.originalname, { type: req.file.mimetype });
+            const upload = await pinata.upload.public.file(file);
+            avatarUrl = `https://${gatewayUrl}/ipfs/${upload.cid}`;
+        }
+        
+        let profile = db.get('profiles').find({ wallet }).value();
+        
+        if (profile) {
+            // Update existing profile
+            db.get('profiles')
+                .find({ wallet })
+                .assign({
+                    nickname: nickname || profile.nickname,
+                    bio: bio !== undefined ? bio : profile.bio,
+                    avatar: avatarUrl || profile.avatar,
+                    showPortfolio: showPortfolio !== undefined ? showPortfolio === 'true' : profile.showPortfolio,
+                    updatedAt: Date.now()
+                })
+                .write();
+        } else {
+            // Create new profile
+            db.get('profiles').push({
+                wallet,
+                nickname: nickname || `User_${wallet.slice(0, 6)}`,
+                bio: bio || '',
+                avatar: avatarUrl || null,
+                showPortfolio: showPortfolio !== 'false',
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+            }).write();
+            
+            // Award first badge
+            awardBadge(wallet, 'profile_created', '👤 Profile Pioneer', 'Created your profile');
+        }
+        
+        const updatedProfile = db.get('profiles').find({ wallet }).value();
+        res.json({ success: true, profile: updatedProfile });
+    } catch (error) {
+        console.error('Profile update error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ==========================================
+// FOLLOW SYSTEM
+// ==========================================
+
+// Follow a user
+app.post('/api/follow', (req, res) => {
+    try {
+        const { follower, following } = req.body;
+        
+        if (!follower || !following) {
+            return res.status(400).json({ error: 'Both follower and following addresses required' });
+        }
+        
+        if (follower === following) {
+            return res.status(400).json({ error: 'Cannot follow yourself' });
+        }
+        
+        // Check if already following
+        const existing = db.get('followers').find({ follower, following }).value();
+        if (existing) {
+            return res.status(400).json({ error: 'Already following this user' });
+        }
+        
+        db.get('followers').push({
+            follower,
+            following,
+            timestamp: Date.now()
+        }).write();
+        
+        // Check for badges
+        const followerCount = db.get('followers').filter({ following }).size().value();
+        if (followerCount >= 10) {
+            awardBadge(following, 'popular_10', '⭐ Rising Star', '10 followers');
+        }
+        if (followerCount >= 100) {
+            awardBadge(following, 'popular_100', '🌟 Influencer', '100 followers');
+        }
+        
+        res.json({ success: true, message: 'Now following user' });
+    } catch (error) {
+        console.error('Follow error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Unfollow a user
+app.post('/api/unfollow', (req, res) => {
+    try {
+        const { follower, following } = req.body;
+        
+        if (!follower || !following) {
+            return res.status(400).json({ error: 'Both follower and following addresses required' });
+        }
+        
+        db.get('followers').remove({ follower, following }).write();
+        res.json({ success: true, message: 'Unfollowed user' });
+    } catch (error) {
+        console.error('Unfollow error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get followers list
+app.get('/api/followers/:wallet', (req, res) => {
+    try {
+        const { wallet } = req.params;
+        const followers = db.get('followers').filter({ following: wallet }).value();
+        
+        // Enrich with profile data
+        const enrichedFollowers = followers.map(f => {
+            const profile = db.get('profiles').find({ wallet: f.follower }).value();
+            return {
+                wallet: f.follower,
+                nickname: profile?.nickname || `User_${f.follower.slice(0, 6)}`,
+                avatar: profile?.avatar,
+                followedAt: f.timestamp
+            };
+        });
+        
+        res.json({ followers: enrichedFollowers, count: enrichedFollowers.length });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get following list
+app.get('/api/following/:wallet', (req, res) => {
+    try {
+        const { wallet } = req.params;
+        const following = db.get('followers').filter({ follower: wallet }).value();
+        
+        // Enrich with profile data
+        const enrichedFollowing = following.map(f => {
+            const profile = db.get('profiles').find({ wallet: f.following }).value();
+            return {
+                wallet: f.following,
+                nickname: profile?.nickname || `User_${f.following.slice(0, 6)}`,
+                avatar: profile?.avatar,
+                followedAt: f.timestamp
+            };
+        });
+        
+        res.json({ following: enrichedFollowing, count: enrichedFollowing.length });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Check if following
+app.get('/api/is-following/:follower/:following', (req, res) => {
+    try {
+        const { follower, following } = req.params;
+        const exists = db.get('followers').find({ follower, following }).value();
+        res.json({ isFollowing: !!exists });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ==========================================
+// TOKEN CHAT SYSTEM
+// ==========================================
+
+// Get token chat messages
+app.get('/api/token-chat/:tokenMint', (req, res) => {
+    try {
+        const { tokenMint } = req.params;
+        const limit = parseInt(req.query.limit) || 50;
+        
+        const messages = db.get('tokenChats')
+            .filter({ tokenMint })
+            .sortBy('timestamp')
+            .takeRight(limit)
+            .value();
+        
+        // Enrich with user profiles
+        const enrichedMessages = messages.map(msg => {
+            const profile = db.get('profiles').find({ wallet: msg.wallet }).value();
+            return {
+                ...msg,
+                nickname: profile?.nickname || `User_${msg.wallet.slice(0, 6)}`,
+                avatar: profile?.avatar
+            };
+        });
+        
+        res.json({ messages: enrichedMessages });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Post chat message
+app.post('/api/token-chat/:tokenMint', (req, res) => {
+    try {
+        const { tokenMint } = req.params;
+        const { wallet, message } = req.body;
+        
+        if (!wallet || !message) {
+            return res.status(400).json({ error: 'Wallet and message required' });
+        }
+        
+        if (message.length > 500) {
+            return res.status(400).json({ error: 'Message too long (max 500 characters)' });
+        }
+        
+        const newMessage = {
+            id: `msg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+            tokenMint,
+            wallet,
+            message: message.trim(),
+            timestamp: Date.now(),
+            reactions: {}
+        };
+        
+        db.get('tokenChats').push(newMessage).write();
+        
+        // Check for badges
+        const messageCount = db.get('tokenChats').filter({ wallet }).size().value();
+        if (messageCount === 1) {
+            awardBadge(wallet, 'first_message', '💬 First Words', 'Sent your first chat message');
+        }
+        if (messageCount >= 100) {
+            awardBadge(wallet, 'chatterbox', '🗣️ Chatterbox', 'Sent 100 messages');
+        }
+        
+        // Get enriched message
+        const profile = db.get('profiles').find({ wallet }).value();
+        const enrichedMessage = {
+            ...newMessage,
+            nickname: profile?.nickname || `User_${wallet.slice(0, 6)}`,
+            avatar: profile?.avatar
+        };
+        
+        // Broadcast to all users in this token chat via WebSocket
+        broadcastChatMessage(tokenMint, enrichedMessage);
+        
+        res.json({ success: true, message: enrichedMessage });
+    } catch (error) {
+        console.error('Chat message error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Add reaction to message
+app.post('/api/token-chat/react/:messageId', (req, res) => {
+    try {
+        const { messageId } = req.params;
+        const { wallet, emoji } = req.body;
+        
+        if (!wallet || !emoji) {
+            return res.status(400).json({ error: 'Wallet and emoji required' });
+        }
+        
+        const allowedEmojis = ['👍', '❤️', '🔥', '🚀', '😂', '💎', '🐻', '🐂'];
+        if (!allowedEmojis.includes(emoji)) {
+            return res.status(400).json({ error: 'Invalid emoji' });
+        }
+        
+        const message = db.get('tokenChats').find({ id: messageId }).value();
+        if (!message) {
+            return res.status(404).json({ error: 'Message not found' });
+        }
+        
+        // Toggle reaction
+        const reactions = message.reactions || {};
+        if (!reactions[emoji]) {
+            reactions[emoji] = [];
+        }
+        
+        const index = reactions[emoji].indexOf(wallet);
+        if (index > -1) {
+            reactions[emoji].splice(index, 1); // Remove reaction
+        } else {
+            reactions[emoji].push(wallet); // Add reaction
+        }
+        
+        db.get('tokenChats')
+            .find({ id: messageId })
+            .assign({ reactions })
+            .write();
+        
+        // Broadcast reaction update to all users in this token chat
+        broadcastReactionUpdate(message.tokenMint, messageId, reactions);
+        
+        res.json({ success: true, reactions });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ==========================================
+// BADGE SYSTEM
+// ==========================================
+
+function awardBadge(wallet, badgeId, name, description) {
+    const existing = db.get('badges').find({ wallet, badgeId }).value();
+    if (existing) return; // Already has badge
+    
+    db.get('badges').push({
+        wallet,
+        badgeId,
+        name,
+        description,
+        awardedAt: Date.now()
+    }).write();
+    
+    console.log(`🏆 Badge awarded to ${wallet.slice(0, 8)}...: ${name}`);
+}
+
+// Get user badges
+app.get('/api/badges/:wallet', (req, res) => {
+    try {
+        const { wallet } = req.params;
+        const badges = db.get('badges').filter({ wallet }).value();
+        res.json({ badges });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Helper: Broadcast to token subscribers
+function broadcastToToken(tokenMint, data) {
+    const subscribers = terminalSubscribers.get(tokenMint);
+    if (subscribers) {
+        const message = JSON.stringify(data);
+        subscribers.forEach(ws => {
+            if (ws.readyState === 1) { // WebSocket.OPEN
+                ws.send(message);
+            }
+        });
+    }
+}
 
 app.get('/historical-stats', async (req, res) => {
     try {
@@ -1766,6 +2836,9 @@ app.get('/historical-stats', async (req, res) => {
 });
 
 // --- REAL-TIME CHAT (WEBSOCKETS) ---
+// Track online users per token chat
+const tokenChatUsers = new Map(); // tokenMint -> Set of WebSocket connections
+
 const wss = new WebSocketServer({ server });
 wss.on('connection', ws => {
     console.log('Client connected to WebSocket');
@@ -1779,6 +2852,35 @@ wss.on('connection', ws => {
                 clientRooms.set(ws, token);
                 if (!chatRooms.has(token)) chatRooms.set(token, []);
                 ws.send(JSON.stringify({ type: 'history', messages: chatRooms.get(token) }));
+            }
+            
+            // TOKEN CHAT subscription (new)
+            if (data.type === 'subscribe_token_chat') {
+                const { tokenMint, wallet } = data;
+                ws.tokenChatMint = tokenMint;
+                ws.tokenChatWallet = wallet;
+                
+                // Add to online users
+                if (!tokenChatUsers.has(tokenMint)) {
+                    tokenChatUsers.set(tokenMint, new Set());
+                }
+                tokenChatUsers.get(tokenMint).add(ws);
+                
+                // Broadcast updated online count to all users in this chat
+                broadcastOnlineCount(tokenMint);
+                
+                console.log(`User joined token chat: ${tokenMint} (${tokenChatUsers.get(tokenMint).size} online)`);
+            }
+            
+            // TOKEN CHAT unsubscribe
+            if (data.type === 'unsubscribe_token_chat') {
+                const { tokenMint } = data;
+                if (tokenChatUsers.has(tokenMint)) {
+                    tokenChatUsers.get(tokenMint).delete(ws);
+                    broadcastOnlineCount(tokenMint);
+                }
+                ws.tokenChatMint = null;
+                ws.tokenChatWallet = null;
             }
             
             // Agentic Terminal subscription
@@ -1828,6 +2930,12 @@ wss.on('connection', ws => {
         console.log('Client disconnected from WebSocket');
         clientRooms.delete(ws);
         
+        // Clean up token chat subscription
+        if (ws.tokenChatMint && tokenChatUsers.has(ws.tokenChatMint)) {
+            tokenChatUsers.get(ws.tokenChatMint).delete(ws);
+            broadcastOnlineCount(ws.tokenChatMint);
+        }
+        
         // Clean up agentic subscriptions
         if (ws.agenticTokenMint) {
             const subscribers = terminalSubscribers.get(ws.agenticTokenMint) || [];
@@ -1836,12 +2944,61 @@ wss.on('connection', ws => {
     });
 });
 
-setInterval(() => {
-    const twoMinutesAgo = Date.now() - (2 * 60 * 1000);
-    for (const [token, messages] of chatRooms.entries()) {
-        chatRooms.set(token, messages.filter(msg => msg.timestamp > twoMinutesAgo));
-    }
-}, 30000);
+// Broadcast online count to all users in a token chat
+function broadcastOnlineCount(tokenMint) {
+    const users = tokenChatUsers.get(tokenMint);
+    if (!users) return;
+    
+    const count = users.size;
+    const message = JSON.stringify({
+        type: 'online_count',
+        tokenMint,
+        count
+    });
+    
+    users.forEach(ws => {
+        if (ws.readyState === 1) { // WebSocket.OPEN
+            ws.send(message);
+        }
+    });
+}
+
+// Broadcast chat message to all users in a token chat
+function broadcastChatMessage(tokenMint, message) {
+    const users = tokenChatUsers.get(tokenMint);
+    if (!users) return;
+    
+    const payload = JSON.stringify({
+        type: 'chat_message',
+        message
+    });
+    
+    users.forEach(ws => {
+        if (ws.readyState === 1) {
+            ws.send(payload);
+        }
+    });
+}
+
+// Broadcast reaction update
+function broadcastReactionUpdate(tokenMint, messageId, reactions) {
+    const users = tokenChatUsers.get(tokenMint);
+    if (!users) return;
+    
+    const payload = JSON.stringify({
+        type: 'reaction_update',
+        messageId,
+        reactions
+    });
+    
+    users.forEach(ws => {
+        if (ws.readyState === 1) {
+            ws.send(payload);
+        }
+    });
+}
+
+// NOTE: Chat history is stored in database permanently - no cleanup needed
 
 // --- NEW: Top Holders Logic and API Endpoint ---
 // --- NEW: Top Holders Logic and API Endpoint ---
@@ -2628,7 +3785,7 @@ server.listen(PORT, () => {
 ║        ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝              ║
 ║                                                       ║
 ║            ZENT Agentic Launchpad - $ZENT            ║
-║                   0xzerebro.io                        ║
+║                   zentagentic.io                        ║
 ║                                                       ║
 ╚═══════════════════════════════════════════════════════╝
 
@@ -2652,6 +3809,6 @@ server.listen(PORT, () => {
     
     console.log(`\n🔐 Authorized launcher: ${ALLOWED_LAUNCHER_WALLET || 'Anyone (no restriction)'}`);
     console.log(`👑 Admin wallet: ${ADMIN_WALLET || 'Not set'}`);
-    console.log(`🌐 Website: https://0xzerebro.io`);
+    console.log(`🌐 Website: https://zentagentic.io`);
     console.log(`🐦 Twitter: https://x.com/ZENTSPY`);
 });

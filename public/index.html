@@ -13,7 +13,7 @@
     <meta property="og:title" content="ZENT Agentic Launchpad" />
     <meta property="og:description" content="ZENT Agentic Launchpad - $ZENT" />
     <meta property="og:image" content="zent.png" />
-    <meta property="og:url" content="https://0xzerebro.io/" />
+    <meta property="og:url" content="https://zentagentic.io/" />
     <meta property="og:site_name" content="ZENT" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="ZENT Agentic Launchpad" />
@@ -271,75 +271,209 @@
             50% { transform: scale(1.02); box-shadow: 0 15px 50px rgba(139, 92, 246, 0.6); }
         }
 
-        /* Countdown Timer */
-        .countdown-container {
-            margin-top: 20px;
+        /* Social Icons */
+        .social-container {
+            margin-top: 30px;
         }
 
-        .countdown-label {
-            font-size: 0.9rem;
-            color: var(--muted);
-            letter-spacing: 3px;
-            text-transform: uppercase;
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
             margin-bottom: 20px;
         }
 
-        .countdown-timer {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .countdown-unit {
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
             background: linear-gradient(145deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
             border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 16px;
-            padding: 20px 25px;
-            min-width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.3rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
             backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
         }
 
-        .countdown-unit::before {
-            content: '';
+        .social-icon:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.4), rgba(139, 92, 246, 0.2));
+        }
+
+        .social-icon.twitter:hover { border-color: #1d9bf0; box-shadow: 0 10px 30px rgba(29, 155, 240, 0.4); }
+        .social-icon.web:hover { border-color: #10b981; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4); }
+        .social-icon.github:hover { border-color: #fff; box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2); }
+
+        /* Contract Address with Glitch Effect */
+        .contract-address {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: rgba(139, 92, 246, 0.7);
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .contract-address:hover {
+            color: var(--accent);
+        }
+
+        .contract-address::before,
+        .contract-address::after {
+            content: attr(data-text);
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            width: 100%;
+            height: 100%;
+            opacity: 0;
         }
 
-        .countdown-value {
-            font-family: var(--font-display);
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(180deg, #fff, var(--accent-2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .contract-address:hover::before {
+            animation: glitch-1 0.3s infinite linear alternate-reverse;
+            color: #ff00ff;
+            opacity: 0.8;
+            clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
         }
 
-        .countdown-name {
+        .contract-address:hover::after {
+            animation: glitch-2 0.3s infinite linear alternate-reverse;
+            color: #00ffff;
+            opacity: 0.8;
+            clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+        }
+
+        @keyframes glitch-1 {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            60% { transform: translateX(-1px); }
+            80% { transform: translateX(1px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes glitch-2 {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(2px); }
+            40% { transform: translateX(-2px); }
+            60% { transform: translateX(1px); }
+            80% { transform: translateX(-1px); }
+            100% { transform: translateX(0); }
+        }
+
+        .copy-feedback {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .copy-feedback.show {
+            opacity: 1;
+        }
+
+        /* Market Cap Progress Bar */
+        .mcap-progress-container {
+            width: 100%;
+            max-width: 350px;
+            margin: 25px auto 0;
+        }
+
+        .mcap-progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
             font-size: 0.75rem;
+        }
+
+        .mcap-current {
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        .mcap-target {
+            color: #ffd700;
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        .mcap-progress-bar {
+            position: relative;
+            height: 12px;
+            background: rgba(139, 92, 246, 0.15);
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            overflow: visible;
+        }
+
+        .mcap-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--grad-magenta), #ffd700);
+            border-radius: 20px;
+            width: 0%;
+            transition: width 1s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mcap-progress-glow {
+            position: absolute;
+            top: -2px;
+            left: 0;
+            height: calc(100% + 4px);
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--grad-magenta), #ffd700);
+            border-radius: 20px;
+            filter: blur(8px);
+            opacity: 0.6;
+            transition: width 1s ease-out;
+            z-index: 0;
+        }
+
+        .mcap-airdrop-icon {
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            opacity: 0.5;
+            transition: all 0.3s;
+            animation: airdropBounce 2s ease-in-out infinite;
+        }
+
+        .mcap-airdrop-icon.active {
+            opacity: 1;
+            filter: drop-shadow(0 0 10px #ffd700);
+        }
+
+        @keyframes airdropBounce {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(-3px); }
+        }
+
+        .mcap-progress-percent {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.7rem;
             color: var(--muted);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-top: 5px;
-        }
-
-        .countdown-ended {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            color: var(--good);
-            animation: pulseGreen 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulseGreen {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            font-family: var(--font-mono);
         }
 
         .enter-btn {
@@ -459,6 +593,20 @@
             border-color: var(--accent);
         }
 
+        .btn-profile {
+            background: linear-gradient(135deg, var(--accent), #ec4899);
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            padding: 8px 12px;
+            min-width: auto;
+        }
+
+        .btn-profile:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
         /* Main Content */
         .main-content {
             max-width: 1600px;
@@ -513,6 +661,44 @@
             cursor: pointer;
         }
 
+        /* Pagination Controls */
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .pagination-btn {
+            background: var(--bg-2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: var(--ink);
+            font-family: var(--font-main);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
         /* Agent Cards Grid */
         .agents-grid {
             display: grid;
@@ -551,6 +737,121 @@
 
         .agent-token-card:hover::before {
             opacity: 1;
+        }
+
+        /* ==========================================
+           CYBERPUNK GLOW - TOP 3 TOKENS
+           ========================================== */
+        .agent-token-card.top-rank {
+            position: relative;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .agent-token-card.top-rank-1 {
+            border-color: #f0b90b;
+            box-shadow: 
+                0 0 20px rgba(240, 185, 11, 0.4),
+                0 0 40px rgba(240, 185, 11, 0.2),
+                inset 0 0 20px rgba(240, 185, 11, 0.05);
+            animation: glowPulse1 2s ease-in-out infinite;
+        }
+
+        .agent-token-card.top-rank-2 {
+            border-color: #c0c0c0;
+            box-shadow: 
+                0 0 15px rgba(192, 192, 192, 0.4),
+                0 0 30px rgba(192, 192, 192, 0.2),
+                inset 0 0 15px rgba(192, 192, 192, 0.05);
+            animation: glowPulse2 2.5s ease-in-out infinite;
+        }
+
+        .agent-token-card.top-rank-3 {
+            border-color: #cd7f32;
+            box-shadow: 
+                0 0 15px rgba(205, 127, 50, 0.4),
+                0 0 30px rgba(205, 127, 50, 0.2),
+                inset 0 0 15px rgba(205, 127, 50, 0.05);
+            animation: glowPulse3 3s ease-in-out infinite;
+        }
+
+        /* Rank badges */
+        .rank-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            z-index: 10;
+        }
+
+        .rank-badge.rank-1 {
+            background: linear-gradient(135deg, #f0b90b, #ffd700);
+            color: #000;
+            box-shadow: 0 0 10px rgba(240, 185, 11, 0.6);
+        }
+
+        .rank-badge.rank-2 {
+            background: linear-gradient(135deg, #a8a8a8, #e0e0e0);
+            color: #000;
+            box-shadow: 0 0 10px rgba(192, 192, 192, 0.6);
+        }
+
+        .rank-badge.rank-3 {
+            background: linear-gradient(135deg, #cd7f32, #e8a050);
+            color: #000;
+            box-shadow: 0 0 10px rgba(205, 127, 50, 0.6);
+        }
+
+        @keyframes glowPulse1 {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 20px rgba(240, 185, 11, 0.4),
+                    0 0 40px rgba(240, 185, 11, 0.2),
+                    inset 0 0 20px rgba(240, 185, 11, 0.05);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 30px rgba(240, 185, 11, 0.6),
+                    0 0 60px rgba(240, 185, 11, 0.3),
+                    inset 0 0 30px rgba(240, 185, 11, 0.1);
+            }
+        }
+
+        @keyframes glowPulse2 {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 15px rgba(192, 192, 192, 0.4),
+                    0 0 30px rgba(192, 192, 192, 0.2),
+                    inset 0 0 15px rgba(192, 192, 192, 0.05);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 25px rgba(192, 192, 192, 0.6),
+                    0 0 50px rgba(192, 192, 192, 0.3),
+                    inset 0 0 25px rgba(192, 192, 192, 0.1);
+            }
+        }
+
+        @keyframes glowPulse3 {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 15px rgba(205, 127, 50, 0.4),
+                    0 0 30px rgba(205, 127, 50, 0.2),
+                    inset 0 0 15px rgba(205, 127, 50, 0.05);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 25px rgba(205, 127, 50, 0.6),
+                    0 0 50px rgba(205, 127, 50, 0.3),
+                    inset 0 0 25px rgba(205, 127, 50, 0.1);
+            }
         }
 
         .card-header {
@@ -723,6 +1024,22 @@
         .form-textarea {
             min-height: 100px;
             resize: vertical;
+        }
+
+        .sol-only-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, rgba(20, 241, 149, 0.1), rgba(20, 241, 149, 0.05));
+            border: 1px solid rgba(20, 241, 149, 0.3);
+            border-radius: 12px;
+            color: #14f195;
+            font-weight: 600;
+        }
+
+        .sol-icon {
+            font-size: 1.2rem;
         }
 
         .image-upload-zone {
@@ -1182,26 +1499,27 @@
         }
 
         /* ==========================================
-           AGENTIC TERMINAL STYLES
+           AGENTIC TERMINAL - TWO COLUMN LAYOUT
            ========================================== */
         
         .agentic-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background: #000;
             z-index: 9999;
             display: none;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .agentic-overlay.active {
             display: flex;
         }
 
-        /* BIOS Boot Screen */
+        /* VINTAGE BIOS Boot Screen */
         .bios-screen {
             position: absolute;
             top: 0;
@@ -1211,83 +1529,47 @@
             background: #000;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            padding: 15px;
             font-family: 'Courier New', monospace;
-            color: #0f0;
+            color: #33ff33;
             z-index: 10001;
-            padding: 40px;
+            overflow-y: auto;
         }
 
-        .bios-screen.hidden {
-            display: none;
+        .bios-screen.hidden { display: none; }
+
+        .bios-header {
+            border: 2px solid #33ff33;
+            padding: 8px 15px;
+            margin-bottom: 15px;
+            text-align: center;
         }
 
-        .bios-text {
-            text-align: left;
-            max-width: 800px;
-            width: 100%;
-            font-size: 14px;
-            line-height: 1.6;
-        }
+        .bios-title { font-size: 14px; font-weight: bold; letter-spacing: 2px; }
+        .bios-subtitle { font-size: 10px; color: #22aa22; margin-top: 3px; }
+        .bios-text { flex: 1; font-size: 11px; line-height: 1.3; overflow-y: auto; }
+        .bios-line { opacity: 0; animation: biosTypeLine 0.05s forwards; white-space: pre-wrap; }
+        .bios-line.ok { color: #33ff33; }
+        .bios-line.warn { color: #ffaa00; }
+        .bios-line.info { color: #3399ff; }
+        .bios-line.header { color: #000; background: #33ff33; padding: 2px 5px; display: inline-block; margin: 8px 0 4px 0; }
+        @keyframes biosTypeLine { to { opacity: 1; } }
+        .bios-cursor { display: inline-block; width: 8px; height: 12px; background: #33ff33; animation: biosBlink 0.5s infinite; }
+        @keyframes biosBlink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+        .bios-progress-container { margin-top: 15px; border: 1px solid #33ff33; padding: 8px; }
+        .bios-progress-label { font-size: 10px; margin-bottom: 4px; }
+        .bios-progress { width: 100%; height: 14px; border: 1px solid #33ff33; position: relative; background: #001100; }
+        .bios-progress-bar { height: 100%; background: #33ff33; width: 0%; transition: width 0.1s linear; }
+        .bios-progress-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #000; font-weight: bold; font-size: 10px; }
+        .bios-footer { margin-top: 10px; padding-top: 8px; border-top: 1px solid #33ff33; font-size: 10px; color: #22aa22; }
+        .bios-scanlines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px); z-index: 10002; }
 
-        .bios-line {
-            opacity: 0;
-            animation: biosTypeLine 0.1s forwards;
-        }
-
-        @keyframes biosTypeLine {
-            to { opacity: 1; }
-        }
-
-        .bios-cursor {
-            display: inline-block;
-            width: 10px;
-            height: 18px;
-            background: #0f0;
-            animation: biosBlink 0.5s infinite;
-            vertical-align: middle;
-            margin-left: 5px;
-        }
-
-        @keyframes biosBlink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        .bios-progress {
-            width: 100%;
-            max-width: 500px;
-            height: 20px;
-            border: 1px solid #0f0;
-            margin-top: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .bios-progress-bar {
-            height: 100%;
-            background: #0f0;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .bios-progress-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #000;
-            font-weight: bold;
-            mix-blend-mode: difference;
-        }
-
-        /* Main Terminal View */
+        /* Main Container */
         .agentic-container {
             display: none;
             flex-direction: column;
             flex: 1;
-            background: linear-gradient(180deg, #0a0a0f 0%, #050508 100%);
+            background: #000;
             overflow: hidden;
             height: 100vh;
         }
@@ -1296,73 +1578,113 @@
             display: flex;
         }
 
+        /* Header with Stats */
         .agentic-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 15px 25px;
-            background: rgba(139, 92, 246, 0.1);
-            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            gap: 15px;
+            padding: 8px 15px;
+            background: #0a0a12;
+            border-bottom: 1px solid #1a1a2e;
+            flex-shrink: 0;
+            flex-wrap: wrap;
         }
 
         .agentic-token-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
 
         .agentic-token-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
             border: 2px solid var(--accent);
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
         }
 
         .agentic-token-name {
             font-family: var(--font-display);
-            font-size: 1.5rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #fff;
         }
 
         .agentic-token-symbol {
             color: var(--accent);
-            font-size: 0.9rem;
+            font-size: 0.7rem;
+        }
+
+        /* Stats in Header */
+        .header-stats {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .header-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+
+        .header-stat-label {
+            color: #555;
+        }
+
+        .header-stat-value {
+            color: #fff;
+            font-family: var(--font-mono);
+            font-weight: 600;
+        }
+
+        .header-stat-value.purple { color: var(--accent); }
+        .header-stat-value.green { color: #10b981; }
+        .header-stat-value.red { color: #ef4444; }
+
+        .header-contract {
+            font-size: 0.6rem;
+            color: #555;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .agentic-status {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
             color: #0f0;
             font-family: monospace;
-            font-size: 0.85rem;
+            font-size: 0.65rem;
         }
 
         .agentic-status-dot {
-            width: 10px;
-            height: 10px;
+            width: 6px;
+            height: 6px;
             background: #0f0;
             border-radius: 50%;
             animation: statusPulse 1.5s infinite;
         }
 
         @keyframes statusPulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 10px #0f0; }
-            50% { opacity: 0.5; box-shadow: 0 0 5px #0f0; }
+            0%, 100% { opacity: 1; box-shadow: 0 0 6px #0f0; }
+            50% { opacity: 0.5; }
         }
 
         .agentic-close-btn {
             background: rgba(239, 68, 68, 0.2);
             border: 1px solid #ef4444;
             color: #ef4444;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 5px 12px;
+            border-radius: 4px;
             cursor: pointer;
-            font-family: var(--font-display);
+            font-size: 0.7rem;
             font-weight: 600;
-            transition: all 0.2s ease;
         }
 
         .agentic-close-btn:hover {
@@ -1370,81 +1692,39 @@
             color: #fff;
         }
 
+        /* Two Column Layout */
         .agentic-main {
-            display: grid;
-            grid-template-columns: 300px 1fr;
             flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: #1a1a2e;
             overflow: hidden;
             min-height: 0;
         }
 
-        /* Stats Sidebar */
-        .agentic-stats {
-            background: rgba(10, 10, 20, 0.9);
-            border-right: 1px solid rgba(139, 92, 246, 0.2);
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .stats-section {
-            margin-bottom: 25px;
-        }
-
-        .stats-section-title {
-            font-family: var(--font-display);
-            font-size: 0.75rem;
-            color: var(--accent);
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .stat-label {
-            color: var(--muted);
-            font-size: 0.85rem;
-        }
-
-        .stat-value {
-            font-family: var(--font-mono);
-            color: #fff;
-            font-weight: 600;
-        }
-
-        .stat-value.green { color: #10b981; }
-        .stat-value.red { color: #ef4444; }
-        .stat-value.purple { color: var(--accent); }
-
-        /* Terminal Output */
-        .agentic-terminal {
-            flex: 1;
+        /* Left Column - Terminal */
+        .terminal-column {
             display: flex;
             flex-direction: column;
             background: #000;
-            font-family: 'Courier New', monospace;
-            position: relative;
-            min-height: 0;
             overflow: hidden;
+            min-height: 0;
         }
 
-        .terminal-header {
+        .terminal-column-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px 20px;
-            background: rgba(139, 92, 246, 0.1);
-            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            gap: 8px;
+            padding: 8px 12px;
+            background: #0a0a12;
+            border-bottom: 1px solid #1a1a2e;
+            flex-shrink: 0;
         }
 
         .terminal-dot {
-            width: 12px;
-            height: 12px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
         }
 
@@ -1452,498 +1732,1332 @@
         .terminal-dot.yellow { background: #fbbf24; }
         .terminal-dot.green { background: #10b981; }
 
-        .terminal-title {
+        .terminal-column-title {
             flex: 1;
-            text-align: center;
-            font-family: var(--font-display);
-            font-size: 0.85rem;
-            color: var(--muted);
-            letter-spacing: 2px;
+            font-size: 0.7rem;
+            color: #666;
+            letter-spacing: 1px;
         }
 
         .terminal-output {
             flex: 1;
-            padding: 20px;
+            padding: 12px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
+            min-height: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
         }
 
-        .terminal-output::-webkit-scrollbar {
-            width: 6px;
+        .terminal-output::-webkit-scrollbar { width: 4px; }
+        .terminal-output::-webkit-scrollbar-track { background: #111; }
+        .terminal-output::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+        .terminal-footer {
+            padding: 6px 12px;
+            background: #0a0a12;
+            border-top: 1px solid #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            font-size: 0.65rem;
+            color: #555;
         }
 
-        .terminal-output::-webkit-scrollbar-track {
-            background: #111;
+        /* Terminal Line Styles */
+        .terminal-line-container {
+            background: rgba(10, 10, 20, 0.4);
+            border-radius: 4px;
+            padding: 10px 12px;
+            border-left: 2px solid rgba(139, 92, 246, 0.3);
         }
 
-        .terminal-output::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 3px;
+        .terminal-line-container:hover {
+            border-left-color: var(--accent);
+            background: rgba(10, 10, 20, 0.6);
+        }
+
+        .terminal-line-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .terminal-type-badge {
+            font-size: 0.6rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(139, 92, 246, 0.1);
+            padding: 2px 6px;
+            border-radius: 2px;
+        }
+
+        .terminal-timestamp {
+            font-size: 0.6rem;
+            color: #444;
         }
 
         .terminal-line {
-            animation: terminalFadeIn 0.3s ease;
-        }
-
-        @keyframes terminalFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .terminal-line.system {
-            color: #06b6d4;
-        }
-
-        .terminal-line.lore {
-            color: #a78bfa;
-            font-style: italic;
-            border-left: 2px solid #a78bfa;
-            padding-left: 15px;
+            color: #ccc;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
 
         .terminal-line.ascii_art {
-            color: #10b981;
-            white-space: pre;
-            font-size: 11px;
-            line-height: 1.1;
             font-family: 'Courier New', monospace;
-            background: rgba(16, 185, 129, 0.05);
-            padding: 10px;
-            border-radius: 4px;
-            overflow-x: auto;
+            font-size: 0.7rem;
+            color: #0f0;
+            line-height: 1.2;
         }
 
-        .terminal-line.breaking_news {
-            color: #fbbf24;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        .terminal-line.breaking_news { color: #ef4444; }
+        .terminal-line.whale_alert { color: #3b82f6; }
+        .terminal-line.prophecy { color: #a855f7; }
+
+        /* Right Column - Chart */
+        .chart-column {
+            display: flex;
+            flex-direction: column;
+            background: #000;
+            overflow: hidden;
+            min-height: 0;
         }
 
-        .terminal-line.holder_analysis {
-            color: #f97316;
+        .chart-column-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: #0a0a12;
+            border-bottom: 1px solid #1a1a2e;
+            flex-shrink: 0;
         }
 
-        .terminal-line.market_prediction {
-            color: #ec4899;
-            border-left: 2px solid #ec4899;
-            padding-left: 15px;
+        .chart-token-badge {
+            font-weight: 700;
+            color: #fff;
+            font-size: 0.85rem;
         }
 
-        .terminal-line.prophecy {
-            color: #8b5cf6;
-            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
-            font-style: italic;
-        }
-
-        .terminal-line.technical_analysis {
-            color: #06b6d4;
+        .chart-price {
             font-family: var(--font-mono);
+            color: var(--accent);
+            font-size: 0.85rem;
         }
 
-        .terminal-line.whale_alert {
-            color: #ef4444;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
-            animation: whaleFlash 0.5s ease;
-        }
-
-        @keyframes whaleFlash {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .terminal-line.solana_ecosystem {
-            color: #14f195;
-            border-left: 2px solid #14f195;
-            padding-left: 15px;
-        }
-
-        .terminal-line.crypto_research {
-            color: #60a5fa;
-        }
-
-        .terminal-line.world_news {
-            color: #fbbf24;
-        }
-
-        .terminal-line.tech_innovation {
-            color: #a78bfa;
-        }
-
-        .terminal-line.defi_alpha {
-            color: #34d399;
+        .chart-change {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.7rem;
             font-weight: 600;
         }
 
-        .terminal-line.sentiment_scan {
-            color: #f472b6;
-        }
+        .chart-change.positive { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .chart-change.negative { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
 
-        .terminal-line.onchain_intel {
-            color: #22d3ee;
-            font-family: var(--font-mono);
-        }
-
-        .terminal-line.meme_culture {
-            color: #facc15;
-        }
-
-        .terminal-line.ai_thoughts {
-            color: #c4b5fd;
-            font-style: italic;
-            border-left: 2px solid #c4b5fd;
-            padding-left: 15px;
-        }
-
-        .terminal-line.market_psychology {
-            color: #fb923c;
-        }
-
-        /* Terminal Tabs */
-        .terminal-tabs {
-            display: flex;
-            background: rgba(10, 10, 20, 0.9);
-            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 0 20px;
-            gap: 5px;
-        }
-
-        .terminal-tab {
-            background: transparent;
-            border: none;
-            color: var(--muted);
-            padding: 12px 20px;
-            cursor: pointer;
-            font-family: var(--font-display);
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            transition: all 0.2s ease;
-            border-bottom: 2px solid transparent;
-        }
-
-        .terminal-tab:hover {
-            color: var(--accent);
-        }
-
-        .terminal-tab.active {
-            color: var(--accent);
-            border-bottom-color: var(--accent);
-            background: rgba(139, 92, 246, 0.1);
-        }
-
-        .terminal-content-wrapper {
+        .chart-canvas-container {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            min-height: 0;
+            padding: 10px;
+            min-height: 200px;
         }
 
-        .tab-content {
-            display: none;
-            flex: 1;
-            flex-direction: column;
-            min-height: 0;
-            overflow: hidden;
+        .price-chart-canvas {
+            width: 100%;
+            height: 100%;
+            background: #050508;
+            border: 1px solid #1a1a2e;
+            border-radius: 4px;
         }
 
-        .tab-content.active {
-            display: flex;
+        /* Chart Analysis Below Chart */
+        .chart-analysis-container {
+            flex-shrink: 0;
+            max-height: 40%;
+            overflow-y: auto;
+            border-top: 1px solid #1a1a2e;
         }
 
-        /* Archive Controls */
-        .archive-controls {
+        .chart-analysis-header {
             display: flex;
-            gap: 10px;
-            padding: 15px 20px;
-            background: rgba(139, 92, 246, 0.05);
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-            flex-wrap: wrap;
             align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #0a0a12;
+            font-size: 0.7rem;
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+        }
+
+        .chart-analysis-content {
+            padding: 12px;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            color: #aaa;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+
+        /* Archive Modal */
+        .archive-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10010;
+            padding: 20px;
+        }
+
+        .archive-modal.active { display: flex; }
+
+        .archive-modal-content {
+            background: #0a0a12;
+            border: 1px solid #1a1a2e;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .archive-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #050508;
+            border-bottom: 1px solid #1a1a2e;
+        }
+
+        .archive-modal-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .archive-modal-controls {
+            display: flex;
+            gap: 8px;
         }
 
         .archive-btn {
             background: rgba(139, 92, 246, 0.2);
             border: 1px solid var(--accent);
             color: var(--accent);
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 5px 10px;
+            border-radius: 3px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.65rem;
             font-weight: 600;
-            transition: all 0.2s ease;
         }
 
-        .archive-btn:hover {
-            background: var(--accent);
-            color: #fff;
+        .archive-btn:hover { background: var(--accent); color: #fff; }
+
+        .archive-close-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.65rem;
         }
 
-        .archive-count {
-            margin-left: auto;
-            color: var(--muted);
-            font-size: 0.85rem;
-            font-family: var(--font-mono);
-        }
+        .archive-close-btn:hover { background: #ef4444; color: #fff; }
 
-        .archive-output {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .archive-entry {
-            background: rgba(20, 20, 30, 0.8);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .archive-entry-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .archive-entry-type {
-            font-family: var(--font-display);
-            font-size: 0.75rem;
-            color: var(--accent);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .archive-entry-time {
+        .archive-stats-bar {
+            padding: 8px 16px;
+            background: #0a0a12;
+            border-bottom: 1px solid #1a1a2e;
             font-size: 0.7rem;
-            color: var(--muted);
-            font-family: var(--font-mono);
+            color: #666;
         }
 
-        .archive-entry-content {
-            color: #ddd;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            white-space: pre-wrap;
-        }
-
-        /* Stats Full View */
-        .stats-full-view {
+        .archive-list-container {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            align-content: start;
+            font-family: 'Courier New', monospace;
         }
 
-        .stats-card {
-            background: rgba(20, 20, 30, 0.8);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .stats-card-title {
+        .archive-entry-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-bottom: 1px solid #111;
+            cursor: pointer;
             font-size: 0.75rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
         }
 
-        .stats-card-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            font-family: var(--font-mono);
-            color: var(--accent);
-        }
+        .archive-entry-row:hover { background: rgba(139, 92, 246, 0.1); }
 
-        .stats-card-value.green { color: #10b981; }
-        .stats-card-value.red { color: #ef4444; }
+        .archive-entry-icon { color: var(--accent); }
+        .archive-entry-votes { color: #555; min-width: 20px; }
+        .archive-entry-title { flex: 1; color: #3dd8e8; }
+        .archive-entry-title:hover { text-decoration: underline; }
+        .archive-entry-time { color: #555; font-size: 0.7rem; }
 
-        /* Improved Responsive for Terminal */
-        @media (max-width: 1024px) {
-            .agentic-main {
-                grid-template-columns: 1fr;
-            }
-
-            .agentic-stats {
-                display: none;
-            }
-
-            .agentic-header {
-                flex-wrap: wrap;
-                gap: 10px;
-                padding: 10px 15px;
-            }
-
-            .agentic-token-info {
-                flex: 1;
-                min-width: 200px;
-            }
-
-            .agentic-status {
-                display: none;
-            }
-
-            .terminal-tabs {
-                padding: 0 10px;
-                overflow-x: auto;
-            }
-
-            .terminal-tab {
-                padding: 10px 15px;
-                font-size: 0.75rem;
-                white-space: nowrap;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .agentic-header {
-                padding: 10px;
-            }
-
-            .agentic-token-avatar {
-                width: 40px;
-                height: 40px;
-            }
-
-            .agentic-token-name {
-                font-size: 1.1rem;
-            }
-
-            .agentic-close-btn {
-                padding: 8px 12px;
-                font-size: 0.75rem;
-            }
-
-            .terminal-output {
-                padding: 10px;
-            }
-
-            .terminal-line {
-                font-size: 0.85rem;
-            }
-
-            .archive-controls {
-                padding: 10px;
-                gap: 8px;
-            }
-
-            .archive-btn {
-                padding: 6px 12px;
-                font-size: 0.75rem;
-            }
-
-            .archive-count {
-                width: 100%;
-                text-align: center;
-                margin-top: 5px;
-            }
-
-            .stats-full-view {
-                grid-template-columns: 1fr 1fr;
-                padding: 10px;
-                gap: 10px;
-            }
-
-            .stats-card {
-                padding: 15px;
-            }
-
-            .stats-card-value {
-                font-size: 1.2rem;
-            }
-        }
-
-        /* Ensure terminal output is scrollable */
-        .terminal-output {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
+        .archive-detail-container {
+            display: none;
             flex-direction: column;
-            gap: 15px;
-            min-height: 0;
-        }
-        
-        .agentic-terminal {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
             overflow: hidden;
         }
 
-        .terminal-timestamp {
-            font-size: 0.7rem;
-            color: #444;
-            margin-bottom: 5px;
+        .archive-detail-container.active { display: flex; }
+
+        .archive-detail-header {
+            padding: 12px 16px;
+            background: #050508;
+            border-bottom: 1px solid #1a1a2e;
         }
 
-        .terminal-content-type {
+        .archive-back-btn {
+            background: transparent;
+            border: 1px solid #555;
+            color: #888;
+            padding: 4px 10px;
+            border-radius: 3px;
+            cursor: pointer;
             font-size: 0.7rem;
-            color: var(--accent);
-            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .archive-back-btn:hover { background: #1a1a2e; color: #fff; }
+
+        .archive-detail-title { font-family: monospace; color: #3dd8e8; font-size: 0.8rem; margin-bottom: 4px; }
+        .archive-detail-meta { font-size: 0.65rem; color: #555; }
+
+        .archive-detail-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            line-height: 1.6;
+            color: #aaa;
+            white-space: pre-wrap;
+            background: #000;
+        }
+
+        /* ==========================================
+           LIVE ACTIVITY TICKER
+           ========================================== */
+        .activity-ticker {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: linear-gradient(90deg, #0a0a12 0%, #1a1a2e 50%, #0a0a12 100%);
+            border-top: 1px solid #1a1a2e;
+            overflow: hidden;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker-label {
+            background: var(--accent);
+            color: #fff;
+            padding: 0 12px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: 0.65rem;
+            font-weight: 700;
             letter-spacing: 1px;
-            margin-bottom: 5px;
+            flex-shrink: 0;
+            z-index: 1;
         }
 
-        .terminal-footer {
-            padding: 15px 20px;
-            background: rgba(139, 92, 246, 0.05);
-            border-top: 1px solid rgba(139, 92, 246, 0.2);
+        .ticker-content {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ticker-scroll {
+            display: flex;
+            animation: tickerScroll 60s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes tickerScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 20px;
+            font-size: 0.7rem;
+            color: #888;
+        }
+
+        .ticker-item .ticker-action { font-weight: 600; }
+        .ticker-item .ticker-action.buy { color: #10b981; }
+        .ticker-item .ticker-action.sell { color: #ef4444; }
+        .ticker-item .ticker-action.new { color: var(--accent); }
+        .ticker-item .ticker-amount { color: #fff; }
+        .ticker-item .ticker-token { color: var(--accent); }
+        .ticker-item .ticker-time { color: #555; font-size: 0.6rem; }
+
+        /* ==========================================
+           ARCHIVE SEARCH & FILTER
+           ========================================== */
+        .archive-search-bar {
+            display: flex;
+            gap: 10px;
+            padding: 10px 16px;
+            background: #050508;
+            border-bottom: 1px solid #1a1a2e;
+            flex-wrap: wrap;
+        }
+
+        .archive-search-input {
+            flex: 1;
+            min-width: 150px;
+            background: #0a0a12;
+            border: 1px solid #1a1a2e;
+            border-radius: 4px;
+            padding: 8px 12px;
+            color: #fff;
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+        }
+
+        .archive-search-input::placeholder {
+            color: #555;
+        }
+
+        .archive-search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .archive-type-filter {
+            background: #0a0a12;
+            border: 1px solid #1a1a2e;
+            border-radius: 4px;
+            padding: 8px 12px;
+            color: #fff;
+            font-size: 0.75rem;
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        .archive-type-filter:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .archive-share-btn {
+            background: transparent;
+            border: none;
+            color: #555;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+
+        .archive-share-btn:hover {
+            background: rgba(29, 155, 240, 0.2);
+            color: #1d9bf0;
+        }
+
+        /* ==========================================
+           COMMAND INTERFACE
+           ========================================== */
+        .command-input-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #050508;
+            border-top: 1px solid #1a1a2e;
+        }
+
+        .command-prompt {
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .command-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        .command-input::placeholder {
+            color: #444;
+        }
+
+        .command-send-btn {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .command-send-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .command-help {
+            font-size: 0.6rem;
+            color: #444;
+            padding: 4px 12px;
+            background: #050508;
+            border-top: 1px solid #0a0a12;
+        }
+
+        /* Command response styling */
+        .terminal-command {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .terminal-response {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 2px solid var(--accent);
+            padding: 8px 12px;
+            margin: 4px 0;
+        }
+
+        /* ==========================================
+           SHARE MODAL
+           ========================================== */
+        .share-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10020;
+        }
+
+        .share-modal.active { display: flex; }
+
+        .share-modal-content {
+            background: #0a0a12;
+            border: 1px solid #1a1a2e;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .share-modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px;
+            border: 1px solid #1a1a2e;
+            border-radius: 8px;
+            background: #050508;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .share-btn:hover {
+            border-color: var(--accent);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .share-btn.twitter:hover { border-color: #1d9bf0; }
+        .share-btn.copy:hover { border-color: #10b981; }
+
+        /* ==========================================
+           EMBEDDABLE WIDGET STYLES
+           ========================================== */
+        .embed-container {
+            width: 100%;
+            max-width: 400px;
+            background: #0a0a12;
+            border: 1px solid #1a1a2e;
+            border-radius: 8px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .embed-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #050508;
+            border-bottom: 1px solid #1a1a2e;
+        }
+
+        .embed-logo {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .embed-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .embed-status {
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .embed-content {
+            padding: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            color: #aaa;
+            font-family: 'Courier New', monospace;
+        }
+
+        .embed-footer {
+            padding: 8px 12px;
+            background: #050508;
+            border-top: 1px solid #1a1a2e;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            font-size: 0.6rem;
+            color: #555;
         }
 
-        .terminal-status {
+        .embed-link {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .embed-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ==========================================
+           TOKEN CHAT SYSTEM
+           ========================================== */
+        .chat-panel {
+            position: fixed;
+            bottom: 40px;
+            right: 20px;
+            width: 360px;
+            max-height: 500px;
+            background: #0a0a12;
+            border: 1px solid #1a1a2e;
+            border-radius: 12px;
+            display: none;
+            flex-direction: column;
+            z-index: 9000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-panel.active { display: flex; }
+
+        .chat-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.8rem;
-            color: var(--muted);
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #050508;
+            border-bottom: 1px solid #1a1a2e;
+            border-radius: 12px 12px 0 0;
         }
 
-        .next-update {
+        .chat-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-online-count {
+            font-size: 0.65rem;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .chat-close-btn {
+            background: transparent;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 4px;
+        }
+
+        .chat-close-btn:hover { color: #fff; }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 350px;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .chat-message:hover {
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .chat-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .chat-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .chat-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .chat-nickname {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent);
+            cursor: pointer;
+        }
+
+        .chat-nickname:hover {
+            text-decoration: underline;
+        }
+
+        .chat-time {
+            font-size: 0.65rem;
+            color: #555;
+        }
+
+        .chat-text {
+            font-size: 0.8rem;
+            color: #ccc;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .chat-reactions {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .chat-reaction {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a1a2e;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .chat-reaction:hover {
+            border-color: var(--accent);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .chat-reaction.active {
+            border-color: var(--accent);
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .chat-reaction-count {
+            color: #888;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            background: #050508;
+            border-top: 1px solid #1a1a2e;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: #0a0a12;
+            border: 1px solid #1a1a2e;
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: #fff;
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: var(--accent);
+        }
+
+        .chat-send-btn {
+            background: var(--accent);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .chat-send-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .chat-emoji-bar {
+            display: flex;
+            gap: 4px;
+            padding: 4px 12px;
+            background: #050508;
+            border-top: 1px solid #0a0a12;
+        }
+
+        .chat-emoji-btn {
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            opacity: 0.6;
+            transition: all 0.2s;
+        }
+
+        .chat-emoji-btn:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Chat Toggle Button */
+        .chat-toggle-btn {
+            position: fixed;
+            bottom: 50px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #fff;
+            z-index: 8999;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s;
+        }
+
+        .chat-toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(139, 92, 246, 0.6);
+        }
+
+        .chat-toggle-btn .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            background: #ef4444;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ==========================================
+           USER PROFILE MODAL
+           ========================================== */
+        .profile-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10030;
+            padding: 20px;
+        }
+
+        .profile-modal.active { display: flex; }
+
+        .profile-modal-content {
+            background: #0a0a12;
+            border: 1px solid #1a1a2e;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .profile-header {
+            position: relative;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+            border-radius: 16px 16px 0 0;
+        }
+
+        .profile-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .profile-avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            border: 3px solid #fff;
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-nickname {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .profile-wallet {
+            font-size: 0.7rem;
+            color: #888;
             font-family: var(--font-mono);
+        }
+
+        .profile-bio {
+            font-size: 0.85rem;
+            color: #aaa;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 16px;
+            border-bottom: 1px solid #1a1a2e;
+        }
+
+        .profile-stat {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .profile-stat:hover .profile-stat-value {
             color: var(--accent);
         }
 
-        /* Scanline effect */
-        .scanlines {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.1),
-                rgba(0, 0, 0, 0.1) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            z-index: 10;
+        .profile-stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
         }
 
-        /* Mobile responsive */
+        .profile-stat-label {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            padding: 16px;
+            border-bottom: 1px solid #1a1a2e;
+        }
+
+        .profile-action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .profile-follow-btn {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+        }
+
+        .profile-follow-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .profile-follow-btn.following {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .profile-message-btn {
+            background: transparent;
+            border: 1px solid #1a1a2e;
+            color: #888;
+        }
+
+        .profile-message-btn:hover {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .profile-badges {
+            padding: 16px;
+            border-bottom: 1px solid #1a1a2e;
+        }
+
+        .profile-section-title {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badges-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge-item {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+        }
+
+        .badge-icon {
+            font-size: 1rem;
+        }
+
+        .badge-name {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .profile-holdings {
+            padding: 16px;
+        }
+
+        .holding-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #0a0a12;
+            font-size: 0.8rem;
+        }
+
+        .holding-token {
+            color: #fff;
+        }
+
+        .holding-balance {
+            color: var(--accent);
+            font-family: var(--font-mono);
+        }
+
+        /* Edit Profile Form */
+        .edit-profile-form {
+            padding: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: #050508;
+            border: 1px solid #1a1a2e;
+            border-radius: 8px;
+            padding: 10px 12px;
+            color: #fff;
+            font-size: 0.85rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .avatar-upload {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #ec4899);
+            overflow: hidden;
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-upload-btn {
+            background: transparent;
+            border: 1px dashed #1a1a2e;
+            color: #888;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .avatar-upload-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+
+        .save-profile-btn {
+            width: 100%;
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .save-profile-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Responsive - Stack on mobile */
         @media (max-width: 900px) {
             .agentic-main {
                 grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
             }
-
-            .agentic-stats {
+            .header-stats {
                 display: none;
+            }
+            .activity-ticker {
+                height: 28px;
+            }
+            .ticker-label {
+                padding: 0 8px;
+                font-size: 0.6rem;
+            }
+            .ticker-item {
+                font-size: 0.65rem;
+                padding: 0 12px;
+            }
+            .archive-search-bar {
+                flex-direction: column;
+            }
+            .command-input-container {
+                flex-wrap: wrap;
+            }
+            /* Chat panel mobile */
+            .chat-panel {
+                right: 10px;
+                left: 10px;
+                width: auto;
+                max-height: 70vh;
+                bottom: 50px;
+            }
+            .chat-toggle-btn {
+                bottom: 60px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+            }
+            /* Profile modal mobile */
+            .profile-modal-content {
+                max-width: 100%;
+                margin: 10px;
+            }
+            .profile-stats {
+                gap: 15px;
+            }
+            .profile-stat-value {
+                font-size: 1rem;
             }
         }
     </style>
@@ -1966,21 +3080,46 @@
             <div class="intro-tagline">in development.</div>
             <div class="ticker-badge">$ZENT</div>
 
-            <div class="countdown-container">
-                <p class="countdown-label">Launch Countdown</p>
-                <div class="countdown-timer" id="countdown-timer">
-                    <div class="countdown-unit">
-                        <div class="countdown-value" id="hours">00</div>
-                        <div class="countdown-name">Hours</div>
+            <!-- Social Icons -->
+            <div class="social-container">
+                <div class="social-icons">
+                    <a href="https://x.com/ZENTSPY" target="_blank" class="social-icon twitter" title="Twitter/X">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://0xzerebro.io" target="_blank" class="social-icon web" title="Website">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                    </a>
+                    <a href="https://github.com/zentspy" target="_blank" class="social-icon github" title="GitHub">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                </div>
+                <div style="position: relative; display: inline-block;">
+                    <span class="contract-address" id="contractAddress" data-text="2a1sAFexKT1i3QpVYkaTfi5ed4auMeZZVFy4mdGJzent" onclick="copyContract()">
+                        2a1sAFexKT1i3QpVYkaTfi5ed4auMeZZVFy4mdGJzent
+                    </span>
+                    <span class="copy-feedback" id="copyFeedback">Copied!</span>
+                </div>
+
+                <!-- Market Cap Progress Bar -->
+                <div class="mcap-progress-container">
+                    <div class="mcap-progress-labels">
+                        <span class="mcap-current" id="mcapCurrent">$0</span>
+                        <span class="mcap-target">$10M 🪂</span>
                     </div>
-                    <div class="countdown-unit">
-                        <div class="countdown-value" id="minutes">00</div>
-                        <div class="countdown-name">Minutes</div>
+                    <div class="mcap-progress-bar">
+                        <div class="mcap-progress-fill" id="mcapProgressFill"></div>
+                        <div class="mcap-progress-glow" id="mcapProgressGlow"></div>
+                        <div class="mcap-airdrop-icon" id="mcapAirdropIcon">🪂</div>
                     </div>
-                    <div class="countdown-unit">
-                        <div class="countdown-value" id="seconds">00</div>
-                        <div class="countdown-name">Seconds</div>
-                    </div>
+                    <div class="mcap-progress-percent" id="mcapProgressPercent">0%</div>
                 </div>
             </div>
 
@@ -2000,6 +3139,7 @@
             </div>
             <div class="header-actions">
                 <button class="header-btn btn-create" id="header-create-btn">+ Create Agent</button>
+                <button class="header-btn btn-profile hidden" id="header-profile-btn" title="My Profile">👤</button>
                 <button class="header-btn btn-connect" id="connect">Connect Wallet</button>
                 <button class="header-btn btn-connect hidden" id="disconnect">Disconnect</button>
             </div>
@@ -2013,22 +3153,22 @@
                 
                 <div class="filter-bar">
                     <input type="text" class="filter-input" id="search-input" placeholder="Search agents...">
-                    <select class="filter-select" id="quote-filter">
-                        <option value="all">All Quotes</option>
-                        <option value="SOL">SOL</option>
-                        <option value="USD1">USD1</option>
-                        <option value="ZEC">ZEC</option>
-                        <option value="MET">MET</option>
-                    </select>
                     <select class="filter-select" id="sort-filter">
-                        <option value="newest">Newest First</option>
-                        <option value="mcap">Market Cap</option>
+                        <option value="mcap" selected>Market Cap</option>
                         <option value="volume">24h Volume</option>
+                        <option value="newest">Newest First</option>
                     </select>
                 </div>
 
                 <div class="agents-grid" id="launchpadDashboard">
                     <div class="loading-spinner"></div>
+                </div>
+
+                <!-- Pagination Controls -->
+                <div class="pagination-controls" id="paginationControls" style="display: none;">
+                    <button class="pagination-btn" id="prevPageBtn" disabled>← Prev</button>
+                    <span class="pagination-info" id="paginationInfo">Page 1 of 1</span>
+                    <button class="pagination-btn" id="nextPageBtn">Next →</button>
                 </div>
             </div>
 
@@ -2082,14 +3222,14 @@
                             <input type="url" class="form-input" name="twitter" placeholder="https://x.com/...">
                         </div>
 
+                        <!-- SOL is the only quote token -->
                         <div class="form-group">
                             <label class="form-label">Quote Token</label>
-                            <select class="form-input" name="quote" id="quote-select">
-                                <option value="SOL">SOL</option>
-                                <option value="USD1">USD1</option>
-                                <option value="ZEC">ZEC</option>
-                                <option value="MET">MET</option>
-                            </select>
+                            <div class="sol-only-badge">
+                                <span class="sol-icon">◎</span>
+                                <span>SOL (Native)</span>
+                            </div>
+                            <input type="hidden" name="quote" value="SOL">
                         </div>
 
                         <input type="hidden" name="deployer" id="deployer-input">
@@ -2171,147 +3311,302 @@
 
     <!-- Agentic Terminal Overlay -->
     <div class="agentic-overlay" id="agenticOverlay">
-        <!-- BIOS Boot Screen -->
+        <!-- Vintage BIOS Boot Screen -->
         <div class="bios-screen" id="biosScreen">
+            <div class="bios-scanlines"></div>
+            <div class="bios-header">
+                <div class="bios-title">ZENT AGENTIC BIOS v1.0.0</div>
+                <div class="bios-subtitle">Copyright (C) 2025 ZENT Protocol - All Rights Reserved</div>
+            </div>
             <div class="bios-text" id="biosText"></div>
-            <div class="bios-progress">
-                <div class="bios-progress-bar" id="biosProgressBar"></div>
-                <span class="bios-progress-text" id="biosProgressText">0%</span>
+            <div class="bios-progress-container">
+                <div class="bios-progress-label">Loading ZENT Neural Core...</div>
+                <div class="bios-progress">
+                    <div class="bios-progress-bar" id="biosProgressBar"></div>
+                    <span class="bios-progress-text" id="biosProgressText">0%</span>
+                </div>
+            </div>
+            <div class="bios-footer">
+                Press ESC to exit • ZENT AGENTIC • Powered by Claude Opus 4.5
             </div>
         </div>
 
-        <!-- Main Terminal Container -->
+        <!-- Main Terminal Container - TWO COLUMN LAYOUT -->
         <div class="agentic-container" id="agenticContainer">
+            <!-- Header with Stats -->
             <div class="agentic-header">
                 <div class="agentic-token-info">
                     <img src="" alt="" class="agentic-token-avatar" id="agenticTokenAvatar">
                     <div>
                         <div class="agentic-token-name" id="agenticTokenName">TOKEN</div>
-                        <div class="agentic-token-symbol" id="agenticTokenSymbol">$SYMBOL AGENTIC</div>
+                        <div class="agentic-token-symbol" id="agenticTokenSymbol">$SYMBOL</div>
                     </div>
                 </div>
+                
+                <!-- Live Stats in Header -->
+                <div class="header-stats">
+                    <div class="header-stat">
+                        <span class="header-stat-label">MCap</span>
+                        <span class="header-stat-value purple" id="agenticMcap">$0</span>
+                    </div>
+                    <div class="header-stat">
+                        <span class="header-stat-label">Price</span>
+                        <span class="header-stat-value" id="agenticPrice">$0</span>
+                    </div>
+                    <div class="header-stat">
+                        <span class="header-stat-label">24h</span>
+                        <span class="header-stat-value green" id="agenticChange">+0%</span>
+                    </div>
+                    <div class="header-stat">
+                        <span class="header-stat-label">Holders</span>
+                        <span class="header-stat-value" id="agenticHolders">0</span>
+                    </div>
+                    <div class="header-stat">
+                        <span class="header-stat-label">Liq</span>
+                        <span class="header-stat-value" id="agenticLiquidity">$0</span>
+                    </div>
+                    <div class="header-stat">
+                        <span class="header-stat-label">📋</span>
+                        <span class="header-contract" id="agenticContract">...</span>
+                    </div>
+                </div>
+                
                 <div class="agentic-status">
                     <div class="agentic-status-dot"></div>
-                    <span>LIVE FEED ACTIVE</span>
+                    <span>LIVE</span>
                 </div>
-                <button class="agentic-close-btn" id="agenticCloseBtn">✕ EXIT TERMINAL</button>
+                
+                <button class="terminal-tab" data-tab="archive" style="margin-left: 10px;">📚</button>
+                <button class="agentic-close-btn" id="agenticCloseBtn">EXIT</button>
             </div>
 
-            <!-- Terminal Tabs -->
-            <div class="terminal-tabs">
-                <button class="terminal-tab active" data-tab="live">📡 LIVE FEED</button>
-                <button class="terminal-tab" data-tab="archive">📚 ARCHIVE</button>
-                <button class="terminal-tab" data-tab="stats">📊 STATS</button>
-            </div>
-
+            <!-- Two Column Main Area -->
             <div class="agentic-main">
-                <!-- Stats Sidebar -->
-                <div class="agentic-stats">
-                    <div class="stats-section">
-                        <div class="stats-section-title">📊 Live Stats</div>
-                        <div class="stat-row">
-                            <span class="stat-label">Market Cap</span>
-                            <span class="stat-value purple" id="agenticMcap">$0</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Price</span>
-                            <span class="stat-value" id="agenticPrice">$0</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">24h Change</span>
-                            <span class="stat-value green" id="agenticChange">+0%</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Holders</span>
-                            <span class="stat-value" id="agenticHolders">0</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Liquidity</span>
-                            <span class="stat-value" id="agenticLiquidity">$0</span>
-                        </div>
+                <!-- LEFT: Terminal Output -->
+                <div class="terminal-column">
+                    <div class="terminal-column-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                        <span class="terminal-column-title" id="terminalTitle">📡 ZENT AGENTIC TERMINAL</span>
                     </div>
-
-                    <div class="stats-section">
-                        <div class="stats-section-title">🔗 Contract</div>
-                        <div class="stat-row">
-                            <span class="stat-label" id="agenticContract" style="font-size: 0.7rem; word-break: break-all;">...</span>
-                        </div>
+                    <div class="terminal-output" id="terminalOutput">
+                        <!-- Terminal lines will be added here -->
                     </div>
-
-                    <div class="stats-section">
-                        <div class="stats-section-title">⚡ Terminal Status</div>
-                        <div class="stat-row">
-                            <span class="stat-label">Mode</span>
-                            <span class="stat-value green">AUTONOMOUS</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Update Rate</span>
-                            <span class="stat-value">30s</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Viewers</span>
-                            <span class="stat-value" id="agenticViewers">1</span>
-                        </div>
+                    <!-- Command Interface -->
+                    <div class="command-help">Commands: /ask [question] • /price [token] • /news • /analyze • /help</div>
+                    <div class="command-input-container">
+                        <span class="command-prompt">></span>
+                        <input type="text" class="command-input" id="commandInput" placeholder="Type a command or ask ZENT AGENTIC..." autocomplete="off">
+                        <button class="command-send-btn" id="commandSendBtn">SEND</button>
+                    </div>
+                    <div class="terminal-footer">
+                        <span>🤖 AUTONOMOUS MODE</span>
+                        <span>Next: <span id="nextUpdateTimer">90s</span></span>
                     </div>
                 </div>
 
-                <!-- Terminal Content Area -->
-                <div class="terminal-content-wrapper">
-                    <!-- Live Terminal -->
-                    <div class="agentic-terminal tab-content active" id="liveTab">
-                        <div class="terminal-header">
-                            <div class="terminal-dot red"></div>
-                            <div class="terminal-dot yellow"></div>
-                            <div class="terminal-dot green"></div>
-                            <span class="terminal-title" id="terminalTitle">AGENTIC TERMINAL v1.0</span>
-                        </div>
-                        <div class="terminal-output" id="terminalOutput">
-                            <!-- Terminal lines will be added here -->
-                        </div>
-                        <div class="scanlines"></div>
-                        <div class="terminal-footer">
-                            <div class="terminal-status">
-                                <span>🤖 AI-Powered • Read-Only Mode</span>
-                            </div>
-                            <div class="terminal-status">
-                                <span>Next update: </span>
-                                <span class="next-update" id="nextUpdateTimer">30s</span>
-                            </div>
-                        </div>
+                <!-- RIGHT: Chart + Analysis -->
+                <div class="chart-column">
+                    <div class="chart-column-header">
+                        <span class="chart-token-badge" id="chartTokenName">$TOKEN</span>
+                        <span class="chart-price" id="chartCurrentPrice">$0.00</span>
+                        <span class="chart-change positive" id="chartChange">+0.00%</span>
                     </div>
-
-                    <!-- Archive Tab -->
-                    <div class="agentic-terminal tab-content" id="archiveTab">
-                        <div class="terminal-header">
-                            <div class="terminal-dot red"></div>
-                            <div class="terminal-dot yellow"></div>
-                            <div class="terminal-dot green"></div>
-                            <span class="terminal-title">📚 AGENTIC ARCHIVE</span>
-                        </div>
-                        <div class="archive-controls">
-                            <button class="archive-btn" id="refreshArchive">🔄 Refresh</button>
-                            <button class="archive-btn" id="downloadJson">📥 Download JSON</button>
-                            <button class="archive-btn" id="downloadTxt">📄 Download TXT</button>
-                            <span class="archive-count" id="archiveCount">0 entries</span>
-                        </div>
-                        <div class="terminal-output archive-output" id="archiveOutput">
-                            <!-- Archive entries will be loaded here -->
-                        </div>
+                    <div class="chart-canvas-container">
+                        <canvas id="priceChart" class="price-chart-canvas"></canvas>
                     </div>
-
-                    <!-- Stats Tab -->
-                    <div class="agentic-terminal tab-content" id="statsTab">
-                        <div class="terminal-header">
-                            <div class="terminal-dot red"></div>
-                            <div class="terminal-dot yellow"></div>
-                            <div class="terminal-dot green"></div>
-                            <span class="terminal-title">📊 TOKEN ANALYTICS</span>
+                    <div class="chart-analysis-container">
+                        <div class="chart-analysis-header">
+                            <span>🤖</span>
+                            <span>ZENT AGENTIC CHART ANALYSIS</span>
                         </div>
-                        <div class="stats-full-view" id="statsFullView">
-                            <!-- Full stats will be loaded here -->
+                        <div class="chart-analysis-content" id="chartAnalysisContent">
+                            Analyzing chart patterns...
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Archive Modal (Popup) -->
+        <div class="archive-modal" id="archiveModal">
+            <div class="archive-modal-content">
+                <div class="archive-modal-header">
+                    <div class="archive-modal-title">
+                        <span>📚</span>
+                        <span>AGENTIC ARCHIVE</span>
+                    </div>
+                    <div class="archive-modal-controls">
+                        <button class="archive-btn" id="refreshArchive">🔄 Refresh</button>
+                        <button class="archive-btn" id="downloadJson">📥 JSON</button>
+                        <button class="archive-btn" id="downloadTxt">📄 TXT</button>
+                        <button class="archive-close-btn" id="archiveCloseBtn">✕ Close</button>
+                    </div>
+                </div>
+                <!-- Search & Filter Bar -->
+                <div class="archive-search-bar">
+                    <input type="text" class="archive-search-input" id="archiveSearchInput" placeholder="🔍 Search transmissions...">
+                    <select class="archive-type-filter" id="archiveTypeFilter">
+                        <option value="all">All Types</option>
+                        <option value="world_news">🌍 World News</option>
+                        <option value="crypto_research">📊 Crypto Research</option>
+                        <option value="sports_alpha">⚽ Sports</option>
+                        <option value="tech_innovation">🤖 Tech</option>
+                        <option value="market_prediction">🔮 Predictions</option>
+                        <option value="solana_ecosystem">◎ Solana</option>
+                        <option value="defi_alpha">💰 DeFi</option>
+                        <option value="ascii_art">🎨 ASCII Art</option>
+                        <option value="lore">📜 Lore</option>
+                        <option value="prophecy">🌙 Prophecy</option>
+                        <option value="ai_thoughts">🧠 AI Thoughts</option>
+                    </select>
+                </div>
+                <div class="archive-stats-bar" id="archiveCount">0 transmissions | 0 messages</div>
+                <div class="archive-list-container" id="archiveListView">
+                    <!-- Archive entries will be listed here -->
+                </div>
+                <div class="archive-detail-container" id="archiveDetailView">
+                    <div class="archive-detail-header">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                            <button class="archive-back-btn" id="archiveBackBtn">← Back</button>
+                            <button class="archive-btn" id="shareDetailBtn">🐦 Share</button>
+                            <button class="archive-btn" id="copyDetailBtn">📋 Copy</button>
+                        </div>
+                        <div class="archive-detail-title" id="archiveDetailTitle">transmission_xxx</div>
+                        <div class="archive-detail-meta" id="archiveDetailMeta">timestamp</div>
+                    </div>
+                    <div class="archive-detail-content" id="archiveDetailContent">
+                        <!-- Full content here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Activity Ticker -->
+        <div class="activity-ticker" id="activityTicker">
+            <div class="ticker-label">⚡ LIVE</div>
+            <div class="ticker-content">
+                <div class="ticker-scroll" id="tickerScroll">
+                    <!-- Ticker items will be added dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Toggle Button -->
+        <button class="chat-toggle-btn" id="chatToggleBtn" style="display: none;">
+            💬
+            <span class="notification-badge" id="chatNotificationBadge" style="display: none;">0</span>
+        </button>
+
+        <!-- Token Chat Panel -->
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <span>💬</span>
+                    <span id="chatTokenName">Token Chat</span>
+                    <span class="chat-online-count" id="chatOnlineCount">0 online</span>
+                </div>
+                <button class="chat-close-btn" id="chatCloseBtn">×</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will be added here -->
+            </div>
+            <div class="chat-emoji-bar">
+                <button class="chat-emoji-btn" data-emoji="👍">👍</button>
+                <button class="chat-emoji-btn" data-emoji="❤️">❤️</button>
+                <button class="chat-emoji-btn" data-emoji="🔥">🔥</button>
+                <button class="chat-emoji-btn" data-emoji="🚀">🚀</button>
+                <button class="chat-emoji-btn" data-emoji="😂">😂</button>
+                <button class="chat-emoji-btn" data-emoji="💎">💎</button>
+                <button class="chat-emoji-btn" data-emoji="🐻">🐻</button>
+                <button class="chat-emoji-btn" data-emoji="🐂">🐂</button>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..." maxlength="500">
+                <button class="chat-send-btn" id="chatSendBtn">➤</button>
+            </div>
+        </div>
+
+        <!-- User Profile Modal -->
+        <div class="profile-modal" id="profileModal">
+            <div class="profile-modal-content">
+                <div class="profile-header">
+                    <button class="profile-close-btn" id="profileCloseBtn">×</button>
+                    <div class="profile-avatar-container">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <span id="profileAvatarLetter">?</span>
+                        </div>
+                        <div class="profile-nickname" id="profileNickname">User</div>
+                        <div class="profile-wallet" id="profileWallet">...</div>
+                        <div class="profile-bio" id="profileBio"></div>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="profile-stat" id="profileFollowersBtn">
+                        <div class="profile-stat-value" id="profileFollowers">0</div>
+                        <div class="profile-stat-label">Followers</div>
+                    </div>
+                    <div class="profile-stat" id="profileFollowingBtn">
+                        <div class="profile-stat-value" id="profileFollowing">0</div>
+                        <div class="profile-stat-label">Following</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value" id="profilePnl">$0</div>
+                        <div class="profile-stat-label">Total PnL</div>
+                    </div>
+                </div>
+                <div class="profile-actions" id="profileActions">
+                    <button class="profile-action-btn profile-follow-btn" id="profileFollowBtn">Follow</button>
+                    <button class="profile-action-btn profile-message-btn" id="profileEditBtn">Edit Profile</button>
+                </div>
+                <div class="profile-badges" id="profileBadgesSection">
+                    <div class="profile-section-title">🏆 Badges</div>
+                    <div class="badges-grid" id="profileBadgesGrid">
+                        <!-- Badges will be added here -->
+                    </div>
+                </div>
+                <div class="profile-holdings" id="profileHoldingsSection">
+                    <div class="profile-section-title">💼 Holdings</div>
+                    <div id="profileHoldings">
+                        <!-- Holdings will be added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Profile Modal -->
+        <div class="profile-modal" id="editProfileModal">
+            <div class="profile-modal-content">
+                <div class="profile-header" style="padding: 16px;">
+                    <button class="profile-close-btn" id="editProfileCloseBtn">×</button>
+                    <h3 style="color: #fff; margin: 0;">Edit Profile</h3>
+                </div>
+                <form class="edit-profile-form" id="editProfileForm">
+                    <div class="form-group">
+                        <label class="form-label">Avatar</label>
+                        <div class="avatar-upload">
+                            <div class="avatar-preview" id="editAvatarPreview"></div>
+                            <input type="file" id="editAvatarInput" accept="image/*" style="display: none;">
+                            <button type="button" class="avatar-upload-btn" id="editAvatarBtn">📷 Upload Image</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nickname</label>
+                        <input type="text" class="form-input" id="editNickname" placeholder="Your nickname" maxlength="30">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Bio</label>
+                        <textarea class="form-input form-textarea" id="editBio" placeholder="Tell us about yourself..." maxlength="200"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="editShowPortfolio" checked>
+                            <span>Show portfolio to others</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="save-profile-btn">Save Profile</button>
+                </form>
             </div>
         </div>
     </div>
@@ -2324,7 +3619,89 @@
     // --- GLOBALS ---
     let userWalletAddress = null;
     let connectedProvider = null;
-    let countdownInterval = null;
+
+    // --- PAGINATION ---
+    const AGENTS_PER_PAGE = 10;
+    let allTokensCache = [];
+    let currentPage = 1;
+    let totalPages = 1;
+
+    // --- COPY CONTRACT ADDRESS ---
+    function copyContract() {
+        const contract = '2a1sAFexKT1i3QpVYkaTfi5ed4auMeZZVFy4mdGJzent';
+        navigator.clipboard.writeText(contract).then(() => {
+            const feedback = document.getElementById('copyFeedback');
+            feedback.classList.add('show');
+            setTimeout(() => feedback.classList.remove('show'), 1500);
+        }).catch(err => {
+            console.error('Failed to copy:', err);
+        });
+    }
+
+    // --- MARKET CAP PROGRESS BAR ---
+    const ZENT_TOKEN_MINT = '2a1sAFexKT1i3QpVYkaTfi5ed4auMeZZVFy4mdGJzent';
+    const MCAP_TARGET = 10000000; // $10M target
+    
+    async function updateMcapProgress() {
+        try {
+            // Fetch ZENT token data from DexScreener
+            const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${ZENT_TOKEN_MINT}`);
+            const data = await response.json();
+            
+            let currentMcap = 0;
+            if (data.pairs && data.pairs.length > 0) {
+                // Get the pair with highest liquidity
+                const bestPair = data.pairs.reduce((a, b) => 
+                    (parseFloat(a.liquidity?.usd) || 0) > (parseFloat(b.liquidity?.usd) || 0) ? a : b
+                );
+                currentMcap = parseFloat(bestPair.fdv) || parseFloat(bestPair.marketCap) || 0;
+            }
+            
+            // Calculate progress percentage (cap at 100%)
+            const progressPercent = Math.min((currentMcap / MCAP_TARGET) * 100, 100);
+            
+            // Update UI elements
+            const mcapCurrentEl = document.getElementById('mcapCurrent');
+            const mcapFillEl = document.getElementById('mcapProgressFill');
+            const mcapGlowEl = document.getElementById('mcapProgressGlow');
+            const mcapPercentEl = document.getElementById('mcapProgressPercent');
+            const airdropIcon = document.getElementById('mcapAirdropIcon');
+            
+            if (mcapCurrentEl) {
+                mcapCurrentEl.textContent = formatMcapValue(currentMcap);
+            }
+            
+            if (mcapFillEl) {
+                mcapFillEl.style.width = `${progressPercent}%`;
+            }
+            
+            if (mcapGlowEl) {
+                mcapGlowEl.style.width = `${progressPercent}%`;
+            }
+            
+            if (mcapPercentEl) {
+                mcapPercentEl.textContent = `${progressPercent.toFixed(2)}% to Airdrop`;
+            }
+            
+            // Activate airdrop icon when close to goal
+            if (airdropIcon && progressPercent >= 80) {
+                airdropIcon.classList.add('active');
+            }
+            
+        } catch (error) {
+            console.error('Failed to fetch mcap:', error);
+        }
+    }
+    
+    function formatMcapValue(value) {
+        if (value >= 1000000) {
+            return `$${(value / 1000000).toFixed(2)}M`;
+        } else if (value >= 1000) {
+            return `$${(value / 1000).toFixed(2)}K`;
+        } else {
+            return `$${value.toFixed(0)}`;
+        }
+    }
 
     // --- INTRO PAGE AGENT GRID ---
     function generateAgentGrid() {
@@ -2354,62 +3731,10 @@
         }
     }
 
-    // --- COUNTDOWN TIMER ---
-    // FIXED END TIME: December 15, 2025 at 11:00 AM UTC+2 (09:00 UTC)
-    const FIXED_COUNTDOWN_END = Date.UTC(2025, 11, 15, 9, 0, 0);
+    // --- COUNTDOWN REMOVED - Social icons added instead ---
     
-    // ALLOWED LAUNCHER WALLET
-    // ALLOWED LAUNCHER WALLET - fetched from server config
-    // Empty string means anyone can launch
-    let ALLOWED_LAUNCHER_WALLET = '';
-    
-    // Fetch launcher config from server
-    async function fetchLauncherConfig() {
-        try {
-            const res = await fetch('/config/launcher');
-            if (res.ok) {
-                const config = await res.json();
-                ALLOWED_LAUNCHER_WALLET = config.allowedLauncher || '';
-            }
-        } catch (e) {
-            console.log('Launcher restriction not configured');
-        }
-    }
-    fetchLauncherConfig();
-
-    async function initCountdown() {
-        // Use fixed end time - no server call needed, same for everyone
-        startCountdown(FIXED_COUNTDOWN_END);
-    }
-
-    function startCountdown(endTime) {
-        const hoursEl = document.getElementById('hours');
-        const minutesEl = document.getElementById('minutes');
-        const secondsEl = document.getElementById('seconds');
-        const timerContainer = document.getElementById('countdown-timer');
-
-        function updateCountdown() {
-            const now = Date.now();
-            const remaining = endTime - now;
-
-            if (remaining <= 0) {
-                timerContainer.innerHTML = '<div class="countdown-ended">🚀 LAUNCHED!</div>';
-                clearInterval(countdownInterval);
-                return;
-            }
-
-            const hours = Math.floor(remaining / (1000 * 60 * 60));
-            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
-
-            hoursEl.textContent = String(hours).padStart(2, '0');
-            minutesEl.textContent = String(minutes).padStart(2, '0');
-            secondsEl.textContent = String(seconds).padStart(2, '0');
-        }
-
-        updateCountdown();
-        countdownInterval = setInterval(updateCountdown, 1000);
-    }
+    // ALLOWED LAUNCHER WALLET - REMOVED! Anyone can launch now!
+    const ALLOWED_LAUNCHER_WALLET = ''; // Empty = no restriction
 
     // --- ENTER LAUNCHPAD ---
     function enterLaunchpad() {
@@ -2447,24 +3772,20 @@
     }
 
     // --- CHECK CREATE AUTHORIZATION ---
+    // NOTE: Wallet restriction removed - anyone can create tokens now!
     function updateCreateAuthWarning() {
         const warningBanner = document.getElementById('create-auth-warning');
         const formContainer = document.querySelector('.create-form-container');
         
         if (!userWalletAddress) {
-            // No wallet connected - show warning
+            // No wallet connected - show warning to connect
             warningBanner.style.display = 'block';
-            warningBanner.querySelector('.auth-warning-text strong').textContent = 'Connect your wallet first';
-            warningBanner.querySelector('.auth-warning-text p').textContent = 'Please connect your wallet to check if you can create agents.';
-            if (formContainer) formContainer.classList.add('form-disabled');
-        } else if (ALLOWED_LAUNCHER_WALLET && userWalletAddress !== ALLOWED_LAUNCHER_WALLET) {
-            // Wrong wallet - show warning
-            warningBanner.style.display = 'block';
-            warningBanner.querySelector('.auth-warning-text strong').textContent = 'HOLD $ZENT agentic token to launch agents';
-            warningBanner.querySelector('.auth-warning-text p').textContent = 'Token creation is currently restricted to authorized wallets. Stay tuned for public launch after the countdown ends!';
+            warningBanner.querySelector('.auth-warning-icon').textContent = '🔗';
+            warningBanner.querySelector('.auth-warning-text strong').textContent = 'Connect your wallet to launch';
+            warningBanner.querySelector('.auth-warning-text p').textContent = 'Connect your Solana wallet to create your own AI agent token!';
             if (formContainer) formContainer.classList.add('form-disabled');
         } else {
-            // Authorized wallet - hide warning
+            // Wallet connected - allow creation
             warningBanner.style.display = 'none';
             if (formContainer) formContainer.classList.remove('form-disabled');
         }
@@ -2498,6 +3819,7 @@
 
             document.getElementById('connect').textContent = userWalletAddress.slice(0, 4) + '...' + userWalletAddress.slice(-4);
             document.getElementById('disconnect').classList.remove('hidden');
+            document.getElementById('header-profile-btn').classList.remove('hidden');
             document.getElementById('deployer-input').value = userWalletAddress;
             document.getElementById('walletModal').classList.remove('open');
 
@@ -2519,6 +3841,7 @@
         
         document.getElementById('connect').textContent = 'Connect Wallet';
         document.getElementById('disconnect').classList.add('hidden');
+        document.getElementById('header-profile-btn').classList.add('hidden');
         document.getElementById('deployer-input').value = '';
         
         // Update create authorization warning
@@ -2529,8 +3852,9 @@
     async function fetchAllTokens() {
         try {
             const response = await fetch('/all-tokens');
-            const tokens = await response.json();
-            renderTokens(tokens, 'launchpadDashboard');
+            allTokensCache = await response.json();
+            currentPage = 1;
+            renderPaginatedTokens();
         } catch (error) {
             console.error('Failed to fetch tokens:', error);
             document.getElementById('launchpadDashboard').innerHTML = `
@@ -2539,7 +3863,87 @@
                     <p class="empty-state-text">Failed to load agents</p>
                 </div>
             `;
+            document.getElementById('paginationControls').style.display = 'none';
         }
+    }
+
+    function renderPaginatedTokens() {
+        // Apply current filters/sort first
+        let filteredTokens = [...allTokensCache];
+        
+        // ALWAYS sort by market cap first (highest first) - this is the default
+        filteredTokens.sort((a, b) => (b.mcap || 0) - (a.mcap || 0));
+        
+        // Store the global rank (1-based) for each token BEFORE filtering
+        filteredTokens.forEach((token, idx) => {
+            token._globalRank = idx + 1;
+        });
+        
+        // Apply search filter
+        const searchTerm = document.getElementById('search-input')?.value?.toLowerCase() || '';
+        if (searchTerm) {
+            filteredTokens = filteredTokens.filter(t => 
+                t.name?.toLowerCase().includes(searchTerm) || 
+                t.symbol?.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        // Apply additional sort (after mcap base sort)
+        const sortBy = document.getElementById('sort-filter')?.value || 'mcap';
+        if (sortBy === 'volume') {
+            filteredTokens.sort((a, b) => (b.stats24h?.volume || 0) - (a.stats24h?.volume || 0));
+        } else if (sortBy === 'newest') {
+            filteredTokens.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+        }
+        // 'mcap' keeps the default order
+        
+        // Calculate pagination
+        totalPages = Math.ceil(filteredTokens.length / AGENTS_PER_PAGE);
+        if (totalPages === 0) totalPages = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        
+        // Get current page tokens
+        const startIndex = (currentPage - 1) * AGENTS_PER_PAGE;
+        const pageTokens = filteredTokens.slice(startIndex, startIndex + AGENTS_PER_PAGE);
+        
+        // Render tokens with their global ranks
+        renderTokens(pageTokens, 'launchpadDashboard');
+        
+        // Update pagination controls
+        updatePaginationControls(filteredTokens.length);
+    }
+
+    function updatePaginationControls(totalCount) {
+        const controls = document.getElementById('paginationControls');
+        const prevBtn = document.getElementById('prevPageBtn');
+        const nextBtn = document.getElementById('nextPageBtn');
+        const info = document.getElementById('paginationInfo');
+        
+        if (totalCount <= AGENTS_PER_PAGE) {
+            controls.style.display = 'none';
+            return;
+        }
+        
+        controls.style.display = 'flex';
+        prevBtn.disabled = currentPage <= 1;
+        nextBtn.disabled = currentPage >= totalPages;
+        info.textContent = `Page ${currentPage} of ${totalPages} (${totalCount} agents)`;
+    }
+
+    function goToPage(page) {
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderPaginatedTokens();
+        // Scroll to top of grid
+        document.getElementById('dashboard-view').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function nextPage() {
+        goToPage(currentPage + 1);
+    }
+
+    function prevPage() {
+        goToPage(currentPage - 1);
     }
 
     async function fetchMyTokens() {
@@ -2696,8 +4100,17 @@
             const priceClass = priceChange >= 0 ? 'positive' : 'negative';
             const priceSign = priceChange >= 0 ? '+' : '';
             
+            // Get global rank (1-3 get special treatment)
+            const globalRank = token._globalRank || (index + 1);
+            const isTop3 = globalRank <= 3;
+            const topRankClass = isTop3 ? `top-rank top-rank-${globalRank}` : '';
+            
+            // Rank badge for top 3
+            const rankBadge = isTop3 ? `<div class="rank-badge rank-${globalRank}">${globalRank === 1 ? '🥇' : globalRank === 2 ? '🥈' : '🥉'}</div>` : '';
+            
             return `
-                <div class="agent-token-card" data-mint="${token.baseMint}" onclick="openAgenticTerminal('${token.baseMint}')" style="--card-accent: linear-gradient(90deg, var(--grad-${color}), var(--accent));">
+                <div class="agent-token-card ${topRankClass}" data-mint="${token.baseMint}" onclick="openAgenticTerminal('${token.baseMint}')" style="--card-accent: linear-gradient(90deg, var(--grad-${color}), var(--accent));">
+                    ${rankBadge}
                     <div class="card-header">
                         <img src="${token.imageUrl || 'https://via.placeholder.com/50'}" alt="${token.name}" class="card-avatar" onerror="this.src='https://via.placeholder.com/50'">
                         <div class="card-info">
@@ -2724,9 +4137,14 @@
     }
 
     function formatNumber(num) {
-        if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
-        if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
-        return num.toFixed(2);
+        // Convert to number if string, return 0 if invalid
+        if (num === null || num === undefined) return '0';
+        const n = parseFloat(num);
+        if (isNaN(n)) return '0';
+        if (n >= 1000000) return (n / 1000000).toFixed(2) + 'M';
+        if (n >= 1000) return (n / 1000).toFixed(2) + 'K';
+        if (n < 1 && n > 0) return n.toFixed(6);
+        return n.toFixed(0);
     }
 
     // --- BUY MODAL ---
@@ -2788,22 +4206,13 @@
             return;
         }
 
-        // Check if wallet is authorized to create tokens (only if restriction is enabled)
+        // Wallet restriction removed - anyone can create tokens!
+        // Old restriction code kept for reference but disabled
+        /*
         if (ALLOWED_LAUNCHER_WALLET && userWalletAddress !== ALLOWED_LAUNCHER_WALLET) {
-            const statusDiv = document.getElementById('status');
-            statusDiv.innerHTML = `
-                <div style="text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 10px;">🔒</div>
-                    <strong>HOLD $ZENT agentic token to launch agents</strong>
-                    <p style="margin-top: 10px; color: var(--muted); font-size: 0.85rem;">
-                        Token creation is currently restricted. Stay tuned for public launch!
-                    </p>
-                </div>
-            `;
-            statusDiv.className = 'status-message error';
-            statusDiv.classList.remove('hidden');
-            return;
+            // Restriction disabled
         }
+        */
 
         const form = document.getElementById('createForm');
         const createBtn = document.getElementById('createBtn');
@@ -2924,6 +4333,11 @@
         
         // Load token data and start terminal
         await initAgenticTerminal(tokenMint);
+        
+        // Initialize chat for this token
+        if (agenticToken) {
+            initChat(tokenMint, agenticToken.symbol);
+        }
     }
 
     async function runBiosSequence(tokenMint) {
@@ -2946,45 +4360,81 @@
             }
         } catch (e) {}
         
-        // Custom BIOS lines with token name
-        const customBios = [
-            `${tokenSymbol} AGENTIC BIOS v1.0.0`,
-            'Copyright (C) 2025 ZENT PROTOCOL',
-            '',
-            '> Initializing Neural Interface...',
-            '> Loading AI Core Modules...',
-            '> Connecting to Solana RPC...',
-            `> Scanning $${tokenSymbol} Contract...`,
-            '> Analyzing Holder Distribution...',
-            '> Calibrating Market Sensors...',
-            '> Establishing WebSocket Channel...',
-            '',
-            `${tokenSymbol} CONTRACT VERIFIED`,
-            `${tokenSymbol} AGENTIC ONLINE`,
-            '',
-            `> Starting ${tokenName} Autonomous Feed...`
+        const currentDate = new Date().toLocaleDateString('en-US', { 
+            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' 
+        });
+        const currentTime = new Date().toLocaleTimeString('en-US', { hour12: false });
+        
+        // Dynamic agent name for BIOS
+        const agentName = `${tokenSymbol} AGENTIC`;
+        
+        // Vintage BIOS boot sequence
+        const biosLines = [
+            { text: `${agentName} BIOS v1.0.0 - ${currentDate} ${currentTime}`, class: '' },
+            { text: `Copyright (C) 2025 ${tokenName}. Powered by Claude AI.`, class: '' },
+            { text: '', class: '' },
+            { text: 'CPU: Claude Opus 4.5 Neural Processor @ 1.0 PFLOPS', class: '' },
+            { text: 'Memory Test: 2048M OK', class: 'ok' },
+            { text: '', class: '' },
+            { text: ' SYSTEM CONFIGURATION ', class: 'header' },
+            { text: '', class: '' },
+            { text: 'Detecting Primary Neural Core............ [OK]', class: 'ok' },
+            { text: 'Loading AI Language Model................ [OK]', class: 'ok' },
+            { text: 'Initializing WebSocket Channels.......... [OK]', class: 'ok' },
+            { text: 'Connecting to Solana RPC................. [OK]', class: 'ok' },
+            { text: '', class: '' },
+            { text: ' BLOCKCHAIN INTERFACE ', class: 'header' },
+            { text: '', class: '' },
+            { text: `Scanning Token Contract: ${tokenMint.slice(0,8)}...${tokenMint.slice(-6)}`, class: 'info' },
+            { text: `Token Symbol: $${tokenSymbol}`, class: 'info' },
+            { text: `Token Name: ${tokenName}`, class: 'info' },
+            { text: 'Verifying Contract Bytecode.............. [OK]', class: 'ok' },
+            { text: 'Loading Holder Distribution.............. [OK]', class: 'ok' },
+            { text: 'Syncing Jupiter Price Feeds.............. [OK]', class: 'ok' },
+            { text: '', class: '' },
+            { text: ` ${agentName} MODULES `, class: 'header' },
+            { text: '', class: '' },
+            { text: 'Loading Lore Generator................... [OK]', class: 'ok' },
+            { text: 'Loading ASCII Art Engine................. [OK]', class: 'ok' },
+            { text: 'Loading News Scanner..................... [OK]', class: 'ok' },
+            { text: 'Loading Chart Analyzer................... [OK]', class: 'ok' },
+            { text: 'Loading Prophecy Module.................. [OK]', class: 'ok' },
+            { text: 'Loading Research Engine.................. [OK]', class: 'ok' },
+            { text: '', class: '' },
+            { text: 'All systems nominal. Starting autonomous feed...', class: 'ok' },
+            { text: '', class: '' },
+            { text: `>>> Entering ${agentName} TERMINAL <<<`, class: 'info' }
         ];
         
-        for (let i = 0; i < customBios.length; i++) {
+        for (let i = 0; i < biosLines.length; i++) {
             const line = document.createElement('div');
-            line.className = 'bios-line';
-            line.style.animationDelay = `${i * 0.05}s`;
-            line.innerHTML = customBios[i] || '&nbsp;';
-            if (i === customBios.length - 1) {
+            line.className = `bios-line ${biosLines[i].class}`;
+            line.style.animationDelay = `${i * 0.02}s`;
+            
+            if (biosLines[i].class === 'header') {
+                line.innerHTML = biosLines[i].text;
+            } else if (biosLines[i].text === '') {
+                line.innerHTML = '&nbsp;';
+            } else {
+                line.textContent = biosLines[i].text;
+            }
+            
+            if (i === biosLines.length - 1) {
                 line.innerHTML += '<span class="bios-cursor"></span>';
             }
+            
             biosText.appendChild(line);
             
-            const progress = Math.round((i / customBios.length) * 100);
+            const progress = Math.round((i / biosLines.length) * 100);
             progressBar.style.width = `${progress}%`;
             progressText.textContent = `${progress}%`;
             
-            await sleep(100);
+            await sleep(50);
         }
         
         progressBar.style.width = '100%';
         progressText.textContent = '100%';
-        await sleep(500);
+        await sleep(300);
     }
 
     async function initAgenticTerminal(tokenMint) {
@@ -3027,21 +4477,74 @@
     }
 
     function updateAgenticUI(token) {
-        document.getElementById('agenticTokenAvatar').src = token.imageUrl || 'https://via.placeholder.com/50';
-        document.getElementById('agenticTokenName').textContent = token.name || 'Unknown';
-        document.getElementById('agenticTokenSymbol').textContent = `$${token.symbol} AGENTIC`;
-        document.getElementById('terminalTitle').textContent = `${token.symbol} AGENTIC TERMINAL v1.0`;
+        // Safe element update helper
+        const safeUpdate = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        };
         
-        document.getElementById('agenticMcap').textContent = token.mcap ? `$${formatNumber(token.mcap)}` : 'N/A';
-        document.getElementById('agenticPrice').textContent = token.usdPrice ? `$${token.usdPrice.toFixed(8)}` : 'N/A';
-        document.getElementById('agenticHolders').textContent = token.holderCount || 'N/A';
-        document.getElementById('agenticLiquidity').textContent = token.liquidity ? `$${formatNumber(token.liquidity)}` : 'N/A';
-        document.getElementById('agenticContract').textContent = token.baseMint || '...';
+        const safeSetAttr = (id, attr, value) => {
+            const el = document.getElementById(id);
+            if (el) el[attr] = value;
+        };
         
+        // Dynamic agent name
+        const agentName = `${token.symbol} AGENTIC`;
+        
+        // Update header elements
+        safeSetAttr('agenticTokenAvatar', 'src', token.imageUrl || 'https://via.placeholder.com/50');
+        safeUpdate('agenticTokenName', token.name || 'Unknown');
+        safeUpdate('agenticTokenSymbol', `$${token.symbol}`);
+        safeUpdate('terminalTitle', `📡 ${agentName} TERMINAL`);
+        
+        // Update command input placeholder
+        const cmdInput = document.getElementById('commandInput');
+        if (cmdInput) cmdInput.placeholder = `Type a command or ask ${agentName}...`;
+        
+        // Update chart analysis header
+        const chartHeader = document.querySelector('.chart-analysis-header');
+        if (chartHeader) {
+            chartHeader.innerHTML = `<span>🤖</span><span>${agentName} CHART ANALYSIS</span>`;
+        }
+        
+        // Update header stats
+        safeUpdate('agenticMcap', token.mcap ? `$${formatNumber(token.mcap)}` : 'N/A');
+        safeUpdate('agenticPrice', token.usdPrice ? `$${token.usdPrice.toFixed(8)}` : 'N/A');
+        safeUpdate('agenticHolders', token.holderCount || 'N/A');
+        safeUpdate('agenticLiquidity', token.liquidity ? `$${formatNumber(token.liquidity)}` : 'N/A');
+        safeUpdate('agenticContract', token.baseMint ? token.baseMint.slice(0, 8) + '...' : '...');
+        
+        // Update 24h change with color
         const change = token.stats24h?.priceChange24h || 0;
         const changeEl = document.getElementById('agenticChange');
-        changeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
-        changeEl.className = `stat-value ${change >= 0 ? 'green' : 'red'}`;
+        if (changeEl) {
+            changeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+            changeEl.className = `header-stat-value ${change >= 0 ? 'green' : 'red'}`;
+        }
+        
+        // Update chart info
+        safeUpdate('chartTokenName', `$${token.symbol}`);
+        safeUpdate('chartCurrentPrice', token.usdPrice ? `$${token.usdPrice.toFixed(8)}` : '$0.00');
+        const chartChangeEl = document.getElementById('chartChange');
+        if (chartChangeEl) {
+            chartChangeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+            chartChangeEl.className = `chart-change ${change >= 0 ? 'positive' : 'negative'}`;
+        }
+        
+        // Auto-load chart
+        loadChart(token);
+    }
+    
+    // Archive Modal Functions
+    function openArchiveModal() {
+        document.getElementById('archiveModal').classList.add('active');
+        if (currentTokenMint) {
+            loadArchive(currentTokenMint);
+        }
+    }
+    
+    function closeArchiveModal() {
+        document.getElementById('archiveModal').classList.remove('active');
     }
 
     function connectAgenticWebSocket(tokenMint) {
@@ -3088,14 +4591,17 @@
         const lineContainer = document.createElement('div');
         lineContainer.className = 'terminal-line-container';
         
-        const timestamp = document.createElement('div');
-        timestamp.className = 'terminal-timestamp';
-        timestamp.textContent = new Date(item.timestamp).toLocaleTimeString();
-        
-        const contentType = document.createElement('div');
-        contentType.className = 'terminal-content-type';
+        // Format type label nicely
         const typeLabel = (item.type || 'system').toUpperCase().replace(/_/g, ' ');
-        contentType.textContent = `[${typeLabel}]`;
+        const typeEmoji = getTypeEmoji(item.type);
+        
+        // Create header with timestamp and type
+        const header = document.createElement('div');
+        header.className = 'terminal-line-header';
+        header.innerHTML = `
+            <span class="terminal-type-badge">${typeEmoji} ${typeLabel}</span>
+            <span class="terminal-timestamp">${new Date(item.timestamp).toLocaleTimeString()}</span>
+        `;
         
         // Clean any markdown artifacts from content
         let cleanContent = (item.content || '')
@@ -3118,15 +4624,17 @@
         // For ASCII art, preserve whitespace
         if (item.type === 'ascii_art') {
             content.style.whiteSpace = 'pre';
-            content.style.fontFamily = 'monospace';
+            content.style.fontFamily = "'Courier New', monospace";
             content.style.fontSize = '11px';
-            content.style.lineHeight = '1.1';
+            content.style.lineHeight = '1.2';
+            content.style.background = 'rgba(16, 185, 129, 0.05)';
+            content.style.padding = '10px';
+            content.style.borderRadius = '4px';
         }
         
         content.textContent = cleanContent;
         
-        lineContainer.appendChild(timestamp);
-        lineContainer.appendChild(contentType);
+        lineContainer.appendChild(header);
         lineContainer.appendChild(content);
         
         terminalOutput.appendChild(lineContainer);
@@ -3140,21 +4648,51 @@
         }
     }
 
+    function getTypeEmoji(type) {
+        const emojis = {
+            'system': '⚙️',
+            'lore': '📜',
+            'ascii_art': '🎨',
+            'breaking_news': '🚨',
+            'holder_analysis': '🔍',
+            'market_prediction': '🔮',
+            'prophecy': '🌙',
+            'technical_analysis': '📊',
+            'whale_alert': '🐋',
+            'solana_ecosystem': '◎',
+            'crypto_research': '🔬',
+            'world_news': '🌍',
+            'tech_innovation': '🤖',
+            'defi_alpha': '💎',
+            'sentiment_scan': '🧠',
+            'onchain_intel': '⛓️',
+            'meme_culture': '🐸',
+            'ai_thoughts': '💭',
+            'market_psychology': '😱',
+            'sports_alpha': '⚽',
+            'zent_ecosystem': '💜',
+            'alpha_leak': '🤫',
+            'gm_message': '☀️',
+            'night_thoughts': '🌙'
+        };
+        return emojis[type] || '📡';
+    }
+
     function startUpdateCountdown() {
-        updateCountdown = 30;
+        updateCountdown = 90;
         document.getElementById('nextUpdateTimer').textContent = `${updateCountdown}s`;
         
         if (nextUpdateInterval) clearInterval(nextUpdateInterval);
         
         nextUpdateInterval = setInterval(() => {
             updateCountdown--;
-            if (updateCountdown <= 0) updateCountdown = 30;
+            if (updateCountdown <= 0) updateCountdown = 90;
             document.getElementById('nextUpdateTimer').textContent = `${updateCountdown}s`;
         }, 1000);
     }
 
     function resetUpdateCountdown() {
-        updateCountdown = 30;
+        updateCountdown = 90;
     }
 
     function closeAgenticTerminal() {
@@ -3173,128 +4711,650 @@
         
         agenticToken = null;
         currentTokenMint = null;
+        
+        // Close chat
+        closeChat();
     }
 
     // Tab switching
     function switchTerminalTab(tabName) {
-        // Update tab buttons
+        // Archive opens as modal
+        if (tabName === 'archive') {
+            openArchiveModal();
+            return;
+        }
+        
+        // Update tab buttons (excluding archive which is modal)
         document.querySelectorAll('.terminal-tab').forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.tab === tabName);
+            if (tab.dataset.tab !== 'archive') {
+                tab.classList.toggle('active', tab.dataset.tab === tabName);
+            }
         });
         
         // Update tab content
         document.querySelectorAll('.tab-content').forEach(content => {
             content.classList.remove('active');
         });
-        document.getElementById(`${tabName}Tab`).classList.add('active');
         
-        // Load archive if switching to archive tab
-        if (tabName === 'archive' && currentTokenMint) {
-            loadArchive(currentTokenMint);
+        const tabElement = document.getElementById(`${tabName}Tab`);
+        if (tabElement) {
+            tabElement.classList.add('active');
         }
         
-        // Load full stats if switching to stats tab
-        if (tabName === 'stats' && agenticToken) {
-            loadFullStats(agenticToken);
+        // Load chart if switching to chart tab
+        if (tabName === 'chart' && agenticToken) {
+            loadChart(agenticToken);
+        }
+    }
+
+    // Chart data and rendering
+    let chartData = [];
+    let chartCanvas = null;
+    let chartCtx = null;
+
+    async function loadChart(token) {
+        const canvas = document.getElementById('priceChart');
+        if (!canvas) return;
+        
+        chartCanvas = canvas;
+        chartCtx = canvas.getContext('2d');
+        
+        // Update chart info
+        document.getElementById('chartTokenName').textContent = `$${token.symbol}`;
+        document.getElementById('chartCurrentPrice').textContent = token.usdPrice ? `$${token.usdPrice.toFixed(8)}` : '$0.00';
+        
+        const change = token.stats24h?.priceChange24h || 0;
+        const changeEl = document.getElementById('chartChange');
+        changeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+        changeEl.className = `chart-change ${change >= 0 ? 'positive' : 'negative'}`;
+        
+        // Generate simulated price data (in real app, fetch from API)
+        generateChartData(token);
+        drawChart();
+        
+        // Generate AI analysis
+        generateChartAnalysis(token);
+    }
+
+    function generateChartData(token) {
+        chartData = [];
+        const basePrice = token.usdPrice || 0.0001;
+        const volatility = 0.15; // 15% volatility
+        
+        // Generate 24 hours of data (hourly candles)
+        let price = basePrice * (1 + (Math.random() - 0.5) * 0.3);
+        
+        for (let i = 0; i < 48; i++) {
+            const change = (Math.random() - 0.48) * volatility;
+            const open = price;
+            const close = price * (1 + change);
+            const high = Math.max(open, close) * (1 + Math.random() * 0.02);
+            const low = Math.min(open, close) * (1 - Math.random() * 0.02);
+            
+            chartData.push({
+                time: Date.now() - (48 - i) * 30 * 60 * 1000,
+                open,
+                high,
+                low,
+                close,
+                volume: Math.random() * 10000
+            });
+            
+            price = close;
+        }
+    }
+
+    function drawChart() {
+        if (!chartCtx || !chartCanvas || chartData.length === 0) return;
+        
+        const dpr = window.devicePixelRatio || 1;
+        const rect = chartCanvas.getBoundingClientRect();
+        
+        chartCanvas.width = rect.width * dpr;
+        chartCanvas.height = rect.height * dpr;
+        chartCtx.scale(dpr, dpr);
+        
+        const width = rect.width;
+        const height = rect.height;
+        const padding = { top: 20, right: 60, bottom: 30, left: 10 };
+        const chartWidth = width - padding.left - padding.right;
+        const chartHeight = height - padding.top - padding.bottom;
+        
+        // Clear canvas
+        chartCtx.fillStyle = '#0a0a0f';
+        chartCtx.fillRect(0, 0, width, height);
+        
+        // Find price range
+        const prices = chartData.flatMap(d => [d.high, d.low]);
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+        const priceRange = maxPrice - minPrice || 1;
+        
+        // Draw grid
+        chartCtx.strokeStyle = 'rgba(139, 92, 246, 0.1)';
+        chartCtx.lineWidth = 1;
+        
+        for (let i = 0; i <= 4; i++) {
+            const y = padding.top + (chartHeight * i / 4);
+            chartCtx.beginPath();
+            chartCtx.moveTo(padding.left, y);
+            chartCtx.lineTo(width - padding.right, y);
+            chartCtx.stroke();
+            
+            // Price labels
+            const price = maxPrice - (priceRange * i / 4);
+            chartCtx.fillStyle = '#666';
+            chartCtx.font = '10px monospace';
+            chartCtx.textAlign = 'left';
+            chartCtx.fillText(`$${price.toFixed(6)}`, width - padding.right + 5, y + 3);
+        }
+        
+        // Draw candles
+        const candleWidth = Math.max(2, (chartWidth / chartData.length) - 2);
+        
+        chartData.forEach((candle, i) => {
+            const x = padding.left + (i * chartWidth / chartData.length) + candleWidth / 2;
+            const isGreen = candle.close >= candle.open;
+            
+            const openY = padding.top + ((maxPrice - candle.open) / priceRange) * chartHeight;
+            const closeY = padding.top + ((maxPrice - candle.close) / priceRange) * chartHeight;
+            const highY = padding.top + ((maxPrice - candle.high) / priceRange) * chartHeight;
+            const lowY = padding.top + ((maxPrice - candle.low) / priceRange) * chartHeight;
+            
+            // Wick
+            chartCtx.strokeStyle = isGreen ? '#10b981' : '#ef4444';
+            chartCtx.lineWidth = 1;
+            chartCtx.beginPath();
+            chartCtx.moveTo(x, highY);
+            chartCtx.lineTo(x, lowY);
+            chartCtx.stroke();
+            
+            // Body
+            chartCtx.fillStyle = isGreen ? '#10b981' : '#ef4444';
+            const bodyTop = Math.min(openY, closeY);
+            const bodyHeight = Math.max(1, Math.abs(closeY - openY));
+            chartCtx.fillRect(x - candleWidth/2, bodyTop, candleWidth, bodyHeight);
+        });
+        
+        // Current price line
+        const currentPrice = chartData[chartData.length - 1].close;
+        const currentY = padding.top + ((maxPrice - currentPrice) / priceRange) * chartHeight;
+        
+        chartCtx.strokeStyle = '#8b5cf6';
+        chartCtx.setLineDash([5, 5]);
+        chartCtx.beginPath();
+        chartCtx.moveTo(padding.left, currentY);
+        chartCtx.lineTo(width - padding.right, currentY);
+        chartCtx.stroke();
+        chartCtx.setLineDash([]);
+        
+        // Current price label
+        chartCtx.fillStyle = '#8b5cf6';
+        chartCtx.fillRect(width - padding.right, currentY - 8, 55, 16);
+        chartCtx.fillStyle = '#fff';
+        chartCtx.font = 'bold 9px monospace';
+        chartCtx.fillText(`$${currentPrice.toFixed(6)}`, width - padding.right + 3, currentY + 3);
+    }
+
+    async function generateChartAnalysis(token) {
+        const analysisContent = document.getElementById('chartAnalysisContent');
+        if (!analysisContent) return;
+        
+        analysisContent.innerHTML = '<span style="color: var(--accent);">Analyzing chart patterns...</span>';
+        
+        // Calculate some basic metrics from chart data
+        if (chartData.length > 0) {
+            const firstPrice = chartData[0].open;
+            const lastPrice = chartData[chartData.length - 1].close;
+            const change = ((lastPrice - firstPrice) / firstPrice * 100).toFixed(2);
+            const high = Math.max(...chartData.map(d => d.high));
+            const low = Math.min(...chartData.map(d => d.low));
+            const volatility = ((high - low) / low * 100).toFixed(2);
+            
+            // Determine trend
+            const recentPrices = chartData.slice(-10).map(d => d.close);
+            const avgRecent = recentPrices.reduce((a, b) => a + b, 0) / recentPrices.length;
+            const trend = lastPrice > avgRecent ? 'bullish' : 'bearish';
+            
+            // Support/Resistance levels
+            const support = low * 1.02;
+            const resistance = high * 0.98;
+            
+            // Generate analysis text
+            const analyses = [
+                `:: ZENT AGENTIC CHART ANALYSIS ::`,
+                ``,
+                `> Scanning $${token.symbol} price action over 24h window...`,
+                ``,
+                `METRICS:`,
+                `• 24h Change: ${change >= 0 ? '+' : ''}${change}%`,
+                `• Range: $${low.toFixed(8)} - $${high.toFixed(8)}`,
+                `• Volatility Index: ${volatility}%`,
+                `• Current Trend: ${trend.toUpperCase()}`,
+                ``,
+                `TECHNICAL LEVELS:`,
+                `• Support: $${support.toFixed(8)}`,
+                `• Resistance: $${resistance.toFixed(8)}`,
+                `• Current: $${lastPrice.toFixed(8)}`,
+                ``,
+                `VERDICT: ${trend === 'bullish' 
+                    ? `Looking constructive. Price holding above moving average. ${change > 5 ? 'Strong momentum detected.' : 'Accumulation phase likely.'} $ZENT ecosystem strength showing.`
+                    : `Consolidation mode. Price testing support levels. ${change < -5 ? 'Watch for reversal signals.' : 'Normal pullback within trend.'} Diamond hands being tested.`}`,
+                ``,
+                `> This is ZENT AGENTIC analysis, not financial advice. DYOR.`
+            ];
+            
+            analysisContent.innerHTML = analyses.join('<br>');
         }
     }
 
     // Load archive
+    // Archive data storage
+    let archiveData = [];
+    let filteredArchiveData = [];
+    
     async function loadArchive(tokenMint) {
-        const archiveOutput = document.getElementById('archiveOutput');
+        const archiveListView = document.getElementById('archiveListView');
+        const archiveDetailView = document.getElementById('archiveDetailView');
         const archiveCount = document.getElementById('archiveCount');
         
-        archiveOutput.innerHTML = '<div style="color: var(--muted); text-align: center; padding: 40px;">Loading archive...</div>';
+        // FIX: Reset display states when loading
+        archiveListView.style.display = 'block';
+        archiveDetailView.classList.remove('active');
+        
+        archiveListView.innerHTML = '<div style="color: #666; text-align: center; padding: 40px;">Loading transmissions...</div>';
         
         try {
             const res = await fetch(`/api/agentic/${tokenMint}/archive`);
             const data = await res.json();
             
-            archiveCount.textContent = `${data.count} entries`;
+            archiveData = data.archive || [];
+            filteredArchiveData = [...archiveData];
+            const totalMessages = archiveData.length;
+            archiveCount.textContent = `${totalMessages} transmissions | ${totalMessages} messages`;
             
-            if (data.archive.length === 0) {
-                archiveOutput.innerHTML = '<div style="color: var(--muted); text-align: center; padding: 40px;">No archive entries yet. Content is archived every 30 seconds.</div>';
+            // Reset search/filter
+            const searchInput = document.getElementById('archiveSearchInput');
+            const typeFilter = document.getElementById('archiveTypeFilter');
+            if (searchInput) searchInput.value = '';
+            if (typeFilter) typeFilter.value = 'all';
+            
+            if (archiveData.length === 0) {
+                archiveListView.innerHTML = '<div style="color: #666; text-align: center; padding: 40px;">No transmissions archived yet. Content archived every 90 seconds.</div>';
                 return;
             }
             
-            // Render archive entries (newest first)
-            const reversedArchive = [...data.archive].reverse();
-            archiveOutput.innerHTML = reversedArchive.map(entry => {
-                const date = new Date(entry.timestamp).toLocaleString();
-                const typeLabel = (entry.type || 'unknown').toUpperCase().replace(/_/g, ' ');
-                
-                // Clean content
-                let cleanContent = (entry.content || '')
-                    .replace(/```/g, '')
-                    .replace(/\*\*/g, '')
-                    .replace(/`/g, '')
-                    .trim();
-                
-                return `
-                    <div class="archive-entry">
-                        <div class="archive-entry-header">
-                            <span class="archive-entry-type">[${typeLabel}]</span>
-                            <span class="archive-entry-time">${date}</span>
-                        </div>
-                        <div class="archive-entry-content">${escapeHtml(cleanContent)}</div>
-                    </div>
-                `;
-            }).join('');
+            renderArchiveList(archiveData);
             
         } catch (error) {
             console.error('Failed to load archive:', error);
-            archiveOutput.innerHTML = '<div style="color: #ef4444; text-align: center; padding: 40px;">Failed to load archive</div>';
+            archiveListView.innerHTML = '<div style="color: #ef4444; text-align: center; padding: 40px;">Failed to load transmissions</div>';
         }
     }
+    
+    function renderArchiveList(data) {
+        const archiveListView = document.getElementById('archiveListView');
+        
+        if (data.length === 0) {
+            archiveListView.innerHTML = '<div style="color: #666; text-align: center; padding: 40px;">No matching transmissions found.</div>';
+            return;
+        }
+        
+        // Render archive list (newest first)
+        const reversedArchive = [...data].reverse();
+        archiveListView.innerHTML = reversedArchive.map((entry, index) => {
+            const timestamp = entry.timestamp;
+            const typeLabel = (entry.type || 'unknown').toLowerCase().replace(/ /g, '_');
+            const fileName = `transmission_${timestamp}_${typeLabel}.txt`;
+            const timeAgo = getTimeAgo(timestamp);
+            const realIndex = archiveData.indexOf(entry);
+            
+            return `
+                <div class="archive-entry-row" data-index="${realIndex}">
+                    <span class="archive-entry-icon">△</span>
+                    <span class="archive-entry-votes">0</span>
+                    <span class="archive-entry-title">${fileName}</span>
+                    <span class="archive-entry-time">${timeAgo}</span>
+                    <button class="archive-share-btn" data-index="${realIndex}" title="Share to X">🐦</button>
+                </div>
+            `;
+        }).join('');
+        
+        // Add click handlers for rows
+        document.querySelectorAll('.archive-entry-row').forEach(row => {
+            row.addEventListener('click', (e) => {
+                if (e.target.classList.contains('archive-share-btn')) return;
+                const index = parseInt(row.dataset.index);
+                showArchiveDetail(index);
+            });
+        });
+        
+        // Add share button handlers
+        document.querySelectorAll('.archive-share-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const index = parseInt(btn.dataset.index);
+                shareToTwitter(index);
+            });
+        });
+    }
+    
+    function filterArchive() {
+        const searchTerm = document.getElementById('archiveSearchInput').value.toLowerCase();
+        const typeFilter = document.getElementById('archiveTypeFilter').value;
+        
+        filteredArchiveData = archiveData.filter(entry => {
+            const matchesSearch = !searchTerm || 
+                entry.content?.toLowerCase().includes(searchTerm) ||
+                entry.type?.toLowerCase().includes(searchTerm);
+            const matchesType = typeFilter === 'all' || entry.type?.toLowerCase() === typeFilter;
+            return matchesSearch && matchesType;
+        });
+        
+        document.getElementById('archiveCount').textContent = `${filteredArchiveData.length} of ${archiveData.length} transmissions`;
+        renderArchiveList(filteredArchiveData);
+    }
+    
+    function shareToTwitter(index) {
+        const entry = archiveData[index];
+        if (!entry) return;
+        
+        const content = entry.content || '';
+        const truncated = content.substring(0, 200) + (content.length > 200 ? '...' : '');
+        const tweetText = `🤖 ZENT AGENTIC TRANSMISSION\n\n${truncated}\n\n$ZENT #AI #Solana #Crypto`;
+        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+        window.open(tweetUrl, '_blank', 'width=550,height=420');
+    }
+    
+    function showArchiveDetail(index) {
+        const entry = archiveData[index];
+        if (!entry) return;
+        
+        const archiveListView = document.getElementById('archiveListView');
+        const archiveDetailView = document.getElementById('archiveDetailView');
+        const detailTitle = document.getElementById('archiveDetailTitle');
+        const detailMeta = document.getElementById('archiveDetailMeta');
+        const detailContent = document.getElementById('archiveDetailContent');
+        
+        const typeLabel = (entry.type || 'unknown').toLowerCase().replace(/ /g, '_');
+        const fileName = `transmission_${entry.timestamp}_${typeLabel}.txt`;
+        const date = new Date(entry.timestamp).toISOString();
+        
+        detailTitle.textContent = fileName;
+        detailMeta.textContent = date;
+        
+        // Format content with terminal header
+        const header = `================================================================================
+$ZENT TERMINAL - AGENTIC NETWORK
+================================================================================
+${fileName}
 
-    // Load full stats
-    function loadFullStats(token) {
-        const statsView = document.getElementById('statsFullView');
+transmissions from the agentic threshold
+autonomous AI intelligence on Solana blockchain
+powered by ZENT AGENTIC
+
+actor: zent-agentic
+model: claude-opus-4.5
+scenario: ${entry.token || 'unknown'}_terminal
+
+WARNING - AUTONOMOUS AI CONTENT - REALITY ANCHOR: ACTIVE
+================================================================================
+
+<zent-agentic> [${date}]
+`;
         
-        const mcap = token.mcap ? `$${formatNumber(token.mcap)}` : 'N/A';
-        const price = token.usdPrice ? `$${token.usdPrice.toFixed(8)}` : 'N/A';
-        const change = token.stats24h?.priceChange24h || 0;
-        const changeClass = change >= 0 ? 'green' : 'red';
-        const volume = token.stats24h?.volume ? `$${formatNumber(token.stats24h.volume)}` : 'N/A';
+        const footer = `
+
+---
+*[ZENT AGENTIC TRANSMISSION COMPLETE]*
+`;
         
-        statsView.innerHTML = `
-            <div class="stats-card">
-                <div class="stats-card-title">Market Cap</div>
-                <div class="stats-card-value">${mcap}</div>
-            </div>
-            <div class="stats-card">
-                <div class="stats-card-title">Price (USD)</div>
-                <div class="stats-card-value">${price}</div>
-            </div>
-            <div class="stats-card">
-                <div class="stats-card-title">24h Change</div>
-                <div class="stats-card-value ${changeClass}">${change >= 0 ? '+' : ''}${change.toFixed(2)}%</div>
-            </div>
-            <div class="stats-card">
-                <div class="stats-card-title">24h Volume</div>
-                <div class="stats-card-value">${volume}</div>
-            </div>
-            <div class="stats-card">
-                <div class="stats-card-title">Holders</div>
-                <div class="stats-card-value">${token.holderCount || 'N/A'}</div>
-            </div>
-            <div class="stats-card">
-                <div class="stats-card-title">Liquidity</div>
-                <div class="stats-card-value">${token.liquidity ? `$${formatNumber(token.liquidity)}` : 'N/A'}</div>
-            </div>
-            <div class="stats-card" style="grid-column: 1 / -1;">
-                <div class="stats-card-title">Contract Address</div>
-                <div class="stats-card-value" style="font-size: 0.8rem; word-break: break-all;">${token.baseMint}</div>
-            </div>
-            <div class="stats-card">
-                <div class="stats-card-title">Quote Token</div>
-                <div class="stats-card-value">${token.quote || 'N/A'}</div>
-            </div>
-            <div class="stats-card">
-                <div class="stats-card-title">Deployer</div>
-                <div class="stats-card-value" style="font-size: 0.7rem; word-break: break-all;">${token.deployer ? token.deployer.slice(0, 8) + '...' + token.deployer.slice(-6) : 'N/A'}</div>
-            </div>
-        `;
+        detailContent.textContent = header + (entry.content || 'No content') + footer;
+        
+        document.getElementById('archiveListView').style.display = 'none';
+        archiveDetailView.classList.add('active');
+    }
+    
+    function hideArchiveDetail() {
+        const archiveListView = document.getElementById('archiveListView');
+        const archiveDetailView = document.getElementById('archiveDetailView');
+        
+        archiveListView.style.display = 'block';
+        archiveDetailView.classList.remove('active');
+    }
+    
+    function getTimeAgo(timestamp) {
+        const seconds = Math.floor((Date.now() - timestamp) / 1000);
+        if (seconds < 60) return `${seconds}s ago`;
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes}m ago`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours}h ago`;
+        const days = Math.floor(hours / 24);
+        return `${days}d ago`;
+    }
+
+    // Debounce utility
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // ==========================================
+    // COMMAND INTERFACE
+    // ==========================================
+    async function executeCommand() {
+        const input = document.getElementById('commandInput');
+        const command = input.value.trim();
+        if (!command) return;
+        
+        input.value = '';
+        
+        // Add command to terminal
+        addCommandToTerminal(command);
+        
+        // Parse command
+        const parts = command.split(' ');
+        const cmd = parts[0].toLowerCase();
+        const args = parts.slice(1).join(' ');
+        
+        // Dynamic agent name
+        const agentName = agenticToken ? `${agenticToken.symbol} AGENTIC` : 'AGENT AGENTIC';
+        
+        let response = '';
+        
+        switch(cmd) {
+            case '/help':
+                response = `📖 ${agentName} COMMANDS:
+                
+/ask [question] - Ask ${agentName} anything
+/price [token] - Get price info (btc, eth, sol)
+/news - Get latest crypto news
+/analyze - Analyze current token
+/stats - Show token statistics
+/clear - Clear terminal
+/help - Show this help`;
+                break;
+                
+            case '/clear':
+                document.getElementById('terminalOutput').innerHTML = '';
+                return;
+                
+            case '/stats':
+                if (agenticToken) {
+                    response = `📊 ${agenticToken.symbol} STATS:
+• Price: $${agenticToken.usdPrice?.toFixed(8) || 'N/A'}
+• MCap: $${formatNumber(agenticToken.mcap) || 'N/A'}
+• Holders: ${agenticToken.holderCount || 'N/A'}
+• Liquidity: $${formatNumber(agenticToken.liquidity) || 'N/A'}`;
+                } else {
+                    response = '❌ No token loaded';
+                }
+                break;
+                
+            case '/analyze':
+                response = '🔍 Analyzing current token... Check chart analysis panel for details.';
+                if (agenticToken) generateChartAnalysis(agenticToken);
+                break;
+                
+            case '/ask':
+            case '/price':
+            case '/news':
+                response = '🤖 Processing request via AI...';
+                addResponseToTerminal(response);
+                
+                // Call AI API with full token info
+                try {
+                    const res = await fetch('/api/agentic/command', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            command: cmd, 
+                            args: args,
+                            token: agenticToken?.baseMint || '',
+                            tokenSymbol: agenticToken?.symbol || 'AGENT',
+                            tokenName: agenticToken?.name || 'Agent'
+                        })
+                    });
+                    const data = await res.json();
+                    if (data.response) {
+                        addResponseToTerminal(data.response);
+                    }
+                } catch (e) {
+                    addResponseToTerminal('❌ Failed to get AI response');
+                }
+                return;
+                
+            default:
+                if (command.startsWith('/')) {
+                    response = `❌ Unknown command: ${cmd}. Type /help for available commands.`;
+                } else {
+                    // Treat as question
+                    response = '🤖 Processing your question...';
+                    addResponseToTerminal(response);
+                    
+                    try {
+                        const res = await fetch('/api/agentic/command', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                command: '/ask', 
+                                args: command,
+                                token: agenticToken?.baseMint || '',
+                                tokenSymbol: agenticToken?.symbol || 'AGENT',
+                                tokenName: agenticToken?.name || 'Agent'
+                            })
+                        });
+                        const data = await res.json();
+                        if (data.response) {
+                            addResponseToTerminal(data.response);
+                        }
+                    } catch (e) {
+                        addResponseToTerminal('❌ Failed to get AI response');
+                    }
+                    return;
+                }
+        }
+        
+        addResponseToTerminal(response);
+    }
+    
+    function addCommandToTerminal(command) {
+        const output = document.getElementById('terminalOutput');
+        const div = document.createElement('div');
+        div.className = 'terminal-line-container';
+        div.innerHTML = `<div class="terminal-command">> ${escapeHtml(command)}</div>`;
+        output.appendChild(div);
+        output.scrollTop = output.scrollHeight;
+    }
+    
+    function addResponseToTerminal(response) {
+        const output = document.getElementById('terminalOutput');
+        const div = document.createElement('div');
+        div.className = 'terminal-response';
+        div.innerHTML = response.replace(/\n/g, '<br>');
+        output.appendChild(div);
+        output.scrollTop = output.scrollHeight;
+    }
+
+    // ==========================================
+    // LIVE ACTIVITY TICKER
+    // ==========================================
+    let tickerItems = [];
+    
+    function initActivityTicker() {
+        const tickerEl = document.getElementById('tickerScroll');
+        if (!tickerEl) return; // Guard: don't run if element doesn't exist
+        
+        // Generate initial ticker items
+        generateTickerItems();
+        renderTicker();
+        
+        // Update ticker periodically
+        setInterval(() => {
+            addTickerItem();
+            renderTicker();
+        }, 5000);
+    }
+    
+    function generateTickerItems() {
+        const actions = ['buy', 'buy', 'buy', 'sell', 'new'];
+        const tokens = ['ZENT', 'SOL', 'BONK', 'JUP', 'RAY'];
+        
+        for (let i = 0; i < 20; i++) {
+            tickerItems.push(generateRandomTickerItem(actions, tokens));
+        }
+    }
+    
+    function generateRandomTickerItem(actions, tokens) {
+        const action = actions[Math.floor(Math.random() * actions.length)];
+        const token = tokens[Math.floor(Math.random() * tokens.length)];
+        const wallet = `${Math.random().toString(16).slice(2, 6)}...${Math.random().toString(16).slice(2, 6)}`;
+        const amount = Math.floor(Math.random() * 100000);
+        const time = Math.floor(Math.random() * 60);
+        
+        return { action, token, wallet, amount, time };
+    }
+    
+    function addTickerItem() {
+        const actions = ['buy', 'buy', 'buy', 'sell', 'new'];
+        const tokens = ['ZENT', 'SOL', 'BONK', 'JUP', 'RAY'];
+        
+        tickerItems.push(generateRandomTickerItem(actions, tokens));
+        if (tickerItems.length > 30) tickerItems.shift();
+    }
+    
+    function renderTicker() {
+        const scroll = document.getElementById('tickerScroll');
+        if (!scroll) return;
+        
+        if (tickerItems.length === 0) return;
+        
+        const itemsHtml = tickerItems.map(item => {
+            const actionClass = item.action || 'buy';
+            const actionText = item.action === 'buy' ? '🟢 bought' : 
+                              item.action === 'sell' ? '🔴 sold' : '✨ new holder';
+            const amountStr = typeof item.amount === 'number' ? formatNumber(item.amount) : String(item.amount);
+            
+            return `
+                <div class="ticker-item">
+                    <span class="ticker-action ${actionClass}">${actionText}</span>
+                    <span class="ticker-amount">${amountStr}</span>
+                    <span class="ticker-token">$${item.token || 'ZENT'}</span>
+                    <span class="ticker-time">${item.time || 0}s ago</span>
+                </div>
+            `;
+        }).join('');
+        
+        // Duplicate for seamless scroll
+        scroll.innerHTML = itemsHtml + itemsHtml;
     }
 
     // Download functions
@@ -3324,65 +5384,516 @@
     // END AGENTIC TERMINAL
     // ==========================================
 
+    // ==========================================
+    // TOKEN CHAT SYSTEM (Real-time WebSocket)
+    // ==========================================
+    let currentChatToken = null;
+    let chatMessages = [];
+    let chatWs = null;
+    
+    function initChat(tokenMint, tokenSymbol) {
+        // Close previous chat connection if any
+        if (chatWs) {
+            chatWs.close();
+            chatWs = null;
+        }
+        
+        currentChatToken = tokenMint;
+        document.getElementById('chatTokenName').textContent = `$${tokenSymbol} Chat`;
+        document.getElementById('chatToggleBtn').style.display = 'flex';
+        document.getElementById('chatOnlineCount').textContent = '0 online';
+        
+        // Load initial messages
+        loadChatMessages(tokenMint);
+        
+        // Connect to WebSocket for real-time updates
+        connectChatWebSocket(tokenMint);
+    }
+    
+    function connectChatWebSocket(tokenMint) {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        chatWs = new WebSocket(`${protocol}//${window.location.host}`);
+        
+        chatWs.onopen = () => {
+            console.log('Chat WebSocket connected');
+            // Subscribe to this token's chat
+            chatWs.send(JSON.stringify({
+                type: 'subscribe_token_chat',
+                tokenMint: tokenMint,
+                wallet: userWalletAddress || 'anonymous'
+            }));
+        };
+        
+        chatWs.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                
+                // Online count update
+                if (data.type === 'online_count') {
+                    document.getElementById('chatOnlineCount').textContent = `${data.count} online`;
+                }
+                
+                // New chat message
+                if (data.type === 'chat_message') {
+                    // Only add if not already in our list (avoid duplicates)
+                    if (!chatMessages.find(m => m.id === data.message.id)) {
+                        chatMessages.push(data.message);
+                        renderChatMessages();
+                        
+                        // Show notification badge if chat panel is closed
+                        const panel = document.getElementById('chatPanel');
+                        if (!panel.classList.contains('active')) {
+                            const badge = document.getElementById('chatNotificationBadge');
+                            const count = parseInt(badge.textContent) || 0;
+                            badge.textContent = count + 1;
+                            badge.style.display = 'flex';
+                        }
+                    }
+                }
+                
+                // Reaction update
+                if (data.type === 'reaction_update') {
+                    const msg = chatMessages.find(m => m.id === data.messageId);
+                    if (msg) {
+                        msg.reactions = data.reactions;
+                        renderChatMessages();
+                    }
+                }
+            } catch (e) {
+                console.error('Chat WS message error:', e);
+            }
+        };
+        
+        chatWs.onclose = () => {
+            console.log('Chat WebSocket closed');
+            // Reconnect after 3 seconds if still in chat
+            if (currentChatToken === tokenMint) {
+                setTimeout(() => {
+                    if (currentChatToken === tokenMint) {
+                        connectChatWebSocket(tokenMint);
+                    }
+                }, 3000);
+            }
+        };
+        
+        chatWs.onerror = (error) => {
+            console.error('Chat WebSocket error:', error);
+        };
+    }
+    
+    function closeChat() {
+        // Unsubscribe from WebSocket
+        if (chatWs && chatWs.readyState === WebSocket.OPEN) {
+            chatWs.send(JSON.stringify({
+                type: 'unsubscribe_token_chat',
+                tokenMint: currentChatToken
+            }));
+            chatWs.close();
+        }
+        chatWs = null;
+        currentChatToken = null;
+        chatMessages = [];
+        document.getElementById('chatToggleBtn').style.display = 'none';
+        document.getElementById('chatPanel').classList.remove('active');
+        document.getElementById('chatOnlineCount').textContent = '0 online';
+    }
+    
+    function toggleChatPanel() {
+        const panel = document.getElementById('chatPanel');
+        panel.classList.toggle('active');
+        if (panel.classList.contains('active') && currentChatToken) {
+            document.getElementById('chatNotificationBadge').style.display = 'none';
+            document.getElementById('chatNotificationBadge').textContent = '0';
+            // Scroll to bottom when opening
+            const container = document.getElementById('chatMessages');
+            if (container) container.scrollTop = container.scrollHeight;
+        }
+    }
+    
+    async function loadChatMessages(tokenMint) {
+        try {
+            const res = await fetch(`/api/token-chat/${tokenMint}?limit=100`);
+            const data = await res.json();
+            chatMessages = data.messages || [];
+            renderChatMessages();
+        } catch (error) {
+            console.error('Failed to load chat:', error);
+        }
+    }
+    
+    function renderChatMessages() {
+        const container = document.getElementById('chatMessages');
+        if (!container) return;
+        
+        if (chatMessages.length === 0) {
+            container.innerHTML = '<div style="text-align: center; color: #555; padding: 40px;">No messages yet. Be the first to chat!</div>';
+            return;
+        }
+        
+        container.innerHTML = chatMessages.map(msg => {
+            const fallbackLetter = msg.nickname?.charAt(0)?.toUpperCase() || '?';
+            const avatarContent = (msg.avatar && !msg.avatar.includes('undefined'))
+                ? `<img src="${msg.avatar}" alt="" onerror="this.style.display='none'; this.parentElement.textContent='${fallbackLetter}'">` 
+                : fallbackLetter;
+            
+            const reactions = msg.reactions || {};
+            const reactionsHtml = Object.entries(reactions)
+                .filter(([emoji, users]) => users.length > 0)
+                .map(([emoji, users]) => {
+                    const isActive = users.includes(userWalletAddress);
+                    return `<span class="chat-reaction ${isActive ? 'active' : ''}" data-message-id="${msg.id}" data-emoji="${emoji}">
+                        ${emoji} <span class="chat-reaction-count">${users.length}</span>
+                    </span>`;
+                }).join('');
+            
+            return `
+                <div class="chat-message" data-message-id="${msg.id}">
+                    <div class="chat-avatar" onclick="openProfile('${msg.wallet}')">${avatarContent}</div>
+                    <div class="chat-content">
+                        <div class="chat-meta">
+                            <span class="chat-nickname" onclick="openProfile('${msg.wallet}')">${escapeHtml(msg.nickname)}</span>
+                            <span class="chat-time">${getTimeAgo(msg.timestamp)}</span>
+                        </div>
+                        <div class="chat-text">${escapeHtml(msg.message)}</div>
+                        ${reactionsHtml ? `<div class="chat-reactions">${reactionsHtml}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        // Scroll to bottom
+        container.scrollTop = container.scrollHeight;
+        
+        // Add reaction click handlers
+        container.querySelectorAll('.chat-reaction').forEach(el => {
+            el.addEventListener('click', () => addReaction(el.dataset.messageId, el.dataset.emoji));
+        });
+    }
+    
+    async function sendChatMessage() {
+        if (!userWalletAddress) {
+            alert('Please connect your wallet to chat');
+            return;
+        }
+        
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        if (!message || !currentChatToken) return;
+        
+        input.value = '';
+        
+        try {
+            const res = await fetch(`/api/token-chat/${currentChatToken}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    wallet: userWalletAddress,
+                    message: message
+                })
+            });
+            
+            const data = await res.json();
+            if (data.success) {
+                chatMessages.push(data.message);
+                renderChatMessages();
+            }
+        } catch (error) {
+            console.error('Failed to send message:', error);
+        }
+    }
+    
+    async function addReaction(messageId, emoji) {
+        if (!userWalletAddress) {
+            alert('Please connect your wallet to react');
+            return;
+        }
+        
+        try {
+            const res = await fetch(`/api/token-chat/react/${messageId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    wallet: userWalletAddress,
+                    emoji: emoji
+                })
+            });
+            
+            const data = await res.json();
+            if (data.success) {
+                // Update local message
+                const msg = chatMessages.find(m => m.id === messageId);
+                if (msg) {
+                    msg.reactions = data.reactions;
+                    renderChatMessages();
+                }
+            }
+        } catch (error) {
+            console.error('Failed to add reaction:', error);
+        }
+    }
+    
+    function insertEmoji(emoji) {
+        const input = document.getElementById('chatInput');
+        input.value += emoji;
+        input.focus();
+    }
+
+    // ==========================================
+    // USER PROFILE SYSTEM
+    // ==========================================
+    let viewingProfile = null;
+    
+    async function openProfile(walletAddress) {
+        viewingProfile = walletAddress;
+        const modal = document.getElementById('profileModal');
+        modal.classList.add('active');
+        
+        // Reset state
+        document.getElementById('profileAvatar').innerHTML = '<span id="profileAvatarLetter">...</span>';
+        document.getElementById('profileNickname').textContent = 'Loading...';
+        document.getElementById('profileBadgesGrid').innerHTML = '';
+        document.getElementById('profileHoldings').innerHTML = '';
+        
+        try {
+            const res = await fetch(`/api/profile/${walletAddress}`);
+            const data = await res.json();
+            
+            // Update UI
+            const avatarEl = document.getElementById('profileAvatar');
+            const fallbackLetter = (data.nickname || walletAddress).charAt(0).toUpperCase();
+            
+            if (data.avatar && !data.avatar.includes('undefined')) {
+                avatarEl.innerHTML = `<img src="${data.avatar}" alt="" onerror="this.parentElement.innerHTML='<span>${fallbackLetter}</span>'">`;
+            } else {
+                avatarEl.innerHTML = `<span>${fallbackLetter}</span>`;
+            }
+            
+            document.getElementById('profileNickname').textContent = data.nickname || `User_${walletAddress.slice(0, 6)}`;
+            document.getElementById('profileWallet').textContent = `${walletAddress.slice(0, 8)}...${walletAddress.slice(-6)}`;
+            document.getElementById('profileBio').textContent = data.bio || '';
+            document.getElementById('profileFollowers').textContent = data.followerCount || 0;
+            document.getElementById('profileFollowing').textContent = data.followingCount || 0;
+            document.getElementById('profilePnl').textContent = `${data.totalPnlSol?.toFixed(2) || 0} SOL`;
+            
+            // Show/hide sections based on privacy
+            const showPortfolio = data.showPortfolio !== false || walletAddress === userWalletAddress;
+            document.getElementById('profileHoldingsSection').style.display = showPortfolio ? 'block' : 'none';
+            
+            // Badges
+            const badgesGrid = document.getElementById('profileBadgesGrid');
+            if (data.badges && data.badges.length > 0) {
+                badgesGrid.innerHTML = data.badges.map(badge => `
+                    <div class="badge-item">
+                        <span class="badge-icon">${badge.name.split(' ')[0]}</span>
+                        <span class="badge-name">${badge.name.split(' ').slice(1).join(' ')}</span>
+                    </div>
+                `).join('');
+            } else {
+                badgesGrid.innerHTML = '<div style="color: #555; font-size: 0.75rem;">No badges yet</div>';
+            }
+            
+            // Holdings
+            const holdingsContainer = document.getElementById('profileHoldings');
+            if (showPortfolio && data.currentHoldings && data.currentHoldings.length > 0) {
+                holdingsContainer.innerHTML = data.currentHoldings.map(h => `
+                    <div class="holding-item">
+                        <span class="holding-token">${h.token}</span>
+                        <span class="holding-balance">${h.balance}</span>
+                    </div>
+                `).join('');
+            } else if (showPortfolio) {
+                holdingsContainer.innerHTML = '<div style="color: #555; font-size: 0.75rem;">No holdings</div>';
+            }
+            
+            // Update follow button
+            updateFollowButton(walletAddress);
+            
+            // Show edit button only for own profile
+            const editBtn = document.getElementById('profileEditBtn');
+            if (walletAddress === userWalletAddress) {
+                editBtn.textContent = 'Edit Profile';
+                editBtn.onclick = () => openEditProfile();
+            } else {
+                editBtn.textContent = 'Message';
+                editBtn.onclick = () => {/* Could open DM */};
+            }
+            
+        } catch (error) {
+            console.error('Failed to load profile:', error);
+        }
+    }
+    
+    function closeProfileModal() {
+        document.getElementById('profileModal').classList.remove('active');
+        viewingProfile = null;
+    }
+    
+    async function updateFollowButton(walletAddress) {
+        const btn = document.getElementById('profileFollowBtn');
+        
+        if (walletAddress === userWalletAddress) {
+            btn.style.display = 'none';
+            return;
+        }
+        
+        btn.style.display = 'block';
+        
+        if (!userWalletAddress) {
+            btn.textContent = 'Follow';
+            btn.classList.remove('following');
+            return;
+        }
+        
+        try {
+            const res = await fetch(`/api/is-following/${userWalletAddress}/${walletAddress}`);
+            const data = await res.json();
+            
+            if (data.isFollowing) {
+                btn.textContent = 'Following';
+                btn.classList.add('following');
+            } else {
+                btn.textContent = 'Follow';
+                btn.classList.remove('following');
+            }
+        } catch (error) {
+            console.error('Failed to check follow status:', error);
+        }
+    }
+    
+    async function toggleFollow() {
+        if (!userWalletAddress) {
+            alert('Please connect your wallet to follow users');
+            return;
+        }
+        
+        if (!viewingProfile || viewingProfile === userWalletAddress) return;
+        
+        const btn = document.getElementById('profileFollowBtn');
+        const isFollowing = btn.classList.contains('following');
+        
+        try {
+            const endpoint = isFollowing ? '/api/unfollow' : '/api/follow';
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    follower: userWalletAddress,
+                    following: viewingProfile
+                })
+            });
+            
+            const data = await res.json();
+            if (data.success) {
+                // Toggle button state
+                if (isFollowing) {
+                    btn.textContent = 'Follow';
+                    btn.classList.remove('following');
+                    const count = parseInt(document.getElementById('profileFollowers').textContent);
+                    document.getElementById('profileFollowers').textContent = Math.max(0, count - 1);
+                } else {
+                    btn.textContent = 'Following';
+                    btn.classList.add('following');
+                    const count = parseInt(document.getElementById('profileFollowers').textContent);
+                    document.getElementById('profileFollowers').textContent = count + 1;
+                }
+            }
+        } catch (error) {
+            console.error('Failed to toggle follow:', error);
+        }
+    }
+    
+    function openEditProfile() {
+        document.getElementById('profileModal').classList.remove('active');
+        document.getElementById('editProfileModal').classList.add('active');
+        
+        // Load current profile data
+        if (userWalletAddress) {
+            fetch(`/api/profile/${userWalletAddress}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('editNickname').value = data.nickname || '';
+                    document.getElementById('editBio').value = data.bio || '';
+                    document.getElementById('editShowPortfolio').checked = data.showPortfolio !== false;
+                    if (data.avatar) {
+                        document.getElementById('editAvatarPreview').innerHTML = `<img src="${data.avatar}" alt="">`;
+                    }
+                });
+        }
+    }
+    
+    function closeEditProfile() {
+        document.getElementById('editProfileModal').classList.remove('active');
+    }
+    
+    async function saveProfile(e) {
+        e.preventDefault();
+        
+        if (!userWalletAddress) {
+            alert('Please connect your wallet');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('wallet', userWalletAddress);
+        formData.append('nickname', document.getElementById('editNickname').value);
+        formData.append('bio', document.getElementById('editBio').value);
+        formData.append('showPortfolio', document.getElementById('editShowPortfolio').checked);
+        
+        const avatarInput = document.getElementById('editAvatarInput');
+        if (avatarInput.files[0]) {
+            formData.append('avatar', avatarInput.files[0]);
+        }
+        
+        try {
+            const res = await fetch('/api/profile/update', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await res.json();
+            if (data.success) {
+                closeEditProfile();
+                openProfile(userWalletAddress); // Refresh profile view
+            } else {
+                alert('Failed to save profile: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Failed to save profile:', error);
+            alert('Failed to save profile');
+        }
+    }
+
+    // ==========================================
+    // END CHAT & PROFILE SYSTEM
+    // ==========================================
+
     // --- SEARCH & FILTER ---
     function initFilters() {
         const searchInput = document.getElementById('search-input');
-        const quoteFilter = document.getElementById('quote-filter');
         const sortFilter = document.getElementById('sort-filter');
 
-        [searchInput, quoteFilter, sortFilter].forEach(el => {
-            el.addEventListener('change', applyFilters);
-            el.addEventListener('input', applyFilters);
+        [searchInput, sortFilter].forEach(el => {
+            if (el) {
+                el.addEventListener('change', applyFilters);
+                el.addEventListener('input', applyFilters);
+            }
         });
     }
 
-    async function applyFilters() {
-        const search = document.getElementById('search-input').value.toLowerCase();
-        const quote = document.getElementById('quote-filter').value;
-        const sort = document.getElementById('sort-filter').value;
-
-        try {
-            const response = await fetch('/all-tokens');
-            let tokens = await response.json();
-
-            // Filter by search
-            if (search) {
-                tokens = tokens.filter(t => 
-                    t.name?.toLowerCase().includes(search) || 
-                    t.symbol?.toLowerCase().includes(search)
-                );
-            }
-
-            // Filter by quote
-            if (quote !== 'all') {
-                tokens = tokens.filter(t => t.quote === quote);
-            }
-
-            // Sort
-            switch (sort) {
-                case 'mcap':
-                    tokens.sort((a, b) => (b.mcap || 0) - (a.mcap || 0));
-                    break;
-                case 'volume':
-                    tokens.sort((a, b) => (b.stats24h?.volume || 0) - (a.stats24h?.volume || 0));
-                    break;
-                default:
-                    tokens.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-            }
-
-            renderTokens(tokens, 'launchpadDashboard');
-        } catch (error) {
-            console.error('Filter error:', error);
-        }
+    function applyFilters() {
+        // Reset to page 1 when filters change
+        currentPage = 1;
+        renderPaginatedTokens();
     }
 
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
         // Generate intro page grid
         generateAgentGrid();
-        
-        // Initialize countdown
-        initCountdown();
+
+        // Update market cap progress bar
+        updateMcapProgress();
+        setInterval(updateMcapProgress, 30000); // Update every 30 seconds
 
         // Enter button
         document.getElementById('enter-btn').addEventListener('click', enterLaunchpad);
@@ -3447,11 +5958,107 @@
         });
         document.getElementById('downloadJson').addEventListener('click', downloadArchiveJson);
         document.getElementById('downloadTxt').addEventListener('click', downloadArchiveTxt);
+        document.getElementById('archiveBackBtn').addEventListener('click', hideArchiveDetail);
+        document.getElementById('archiveCloseBtn').addEventListener('click', closeArchiveModal);
+        
+        // Archive search and filter
+        document.getElementById('archiveSearchInput').addEventListener('input', debounce(filterArchive, 300));
+        document.getElementById('archiveTypeFilter').addEventListener('change', filterArchive);
+        
+        // Archive detail share buttons
+        document.getElementById('shareDetailBtn').addEventListener('click', () => {
+            const title = document.getElementById('archiveDetailTitle').textContent;
+            const index = archiveData.findIndex(e => `transmission_${e.timestamp}_${(e.type || 'unknown').toLowerCase().replace(/ /g, '_')}.txt` === title);
+            if (index >= 0) shareToTwitter(index);
+        });
+        
+        document.getElementById('copyDetailBtn').addEventListener('click', () => {
+            const content = document.getElementById('archiveDetailContent').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = document.getElementById('copyDetailBtn');
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => btn.textContent = '📋 Copy', 2000);
+            });
+        });
+        
+        // Click outside archive modal to close
+        document.getElementById('archiveModal').addEventListener('click', (e) => {
+            if (e.target.id === 'archiveModal') {
+                closeArchiveModal();
+            }
+        });
 
-        // ESC key to close agentic terminal
+        // Command Interface
+        document.getElementById('commandInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                executeCommand();
+            }
+        });
+        document.getElementById('commandSendBtn').addEventListener('click', executeCommand);
+
+        // ESC key to close agentic terminal or archive modal
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && document.getElementById('agenticOverlay').classList.contains('active')) {
-                closeAgenticTerminal();
+            if (e.key === 'Escape') {
+                if (document.getElementById('archiveModal').classList.contains('active')) {
+                    closeArchiveModal();
+                } else if (document.getElementById('agenticOverlay').classList.contains('active')) {
+                    closeAgenticTerminal();
+                }
+            }
+        });
+        
+        // Initialize Activity Ticker
+        initActivityTicker();
+
+        // ==========================================
+        // CHAT & PROFILE EVENT LISTENERS
+        // ==========================================
+        
+        // Chat toggle button
+        document.getElementById('chatToggleBtn').addEventListener('click', toggleChatPanel);
+        document.getElementById('chatCloseBtn').addEventListener('click', () => {
+            document.getElementById('chatPanel').classList.remove('active');
+        });
+        
+        // Chat send
+        document.getElementById('chatSendBtn').addEventListener('click', sendChatMessage);
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+        
+        // Chat emoji buttons
+        document.querySelectorAll('.chat-emoji-btn').forEach(btn => {
+            btn.addEventListener('click', () => insertEmoji(btn.dataset.emoji));
+        });
+        
+        // Profile modal close
+        document.getElementById('profileCloseBtn').addEventListener('click', closeProfileModal);
+        document.getElementById('profileModal').addEventListener('click', (e) => {
+            if (e.target.id === 'profileModal') closeProfileModal();
+        });
+        
+        // Follow button
+        document.getElementById('profileFollowBtn').addEventListener('click', toggleFollow);
+        
+        // Edit profile modal
+        document.getElementById('editProfileCloseBtn').addEventListener('click', closeEditProfile);
+        document.getElementById('editProfileModal').addEventListener('click', (e) => {
+            if (e.target.id === 'editProfileModal') closeEditProfile();
+        });
+        document.getElementById('editProfileForm').addEventListener('submit', saveProfile);
+        
+        // Avatar upload
+        document.getElementById('editAvatarBtn').addEventListener('click', () => {
+            document.getElementById('editAvatarInput').click();
+        });
+        document.getElementById('editAvatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    document.getElementById('editAvatarPreview').innerHTML = `<img src="${ev.target.result}" alt="">`;
+                };
+                reader.readAsDataURL(file);
             }
         });
 
@@ -3480,6 +6087,13 @@
             showView('create-view');
         });
 
+        // Header profile button
+        document.getElementById('header-profile-btn').addEventListener('click', () => {
+            if (userWalletAddress) {
+                openProfile(userWalletAddress);
+            }
+        });
+
         // Back button
         document.getElementById('back-btn').addEventListener('click', () => {
             showView('dashboard-view');
@@ -3490,6 +6104,10 @@
 
         // Initialize filters
         initFilters();
+
+        // Pagination controls
+        document.getElementById('prevPageBtn').addEventListener('click', prevPage);
+        document.getElementById('nextPageBtn').addEventListener('click', nextPage);
 
         // Auto-refresh tokens
         setInterval(fetchAllTokens, 30000);
