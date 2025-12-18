@@ -1,391 +1,1113 @@
-# ZENT Agentic Launchpad 🤖
+# ZENT Agentic Launchpad
 
-> The first AI-powered token launchpad on Solana where every token gets its own autonomous AI agent.
+<p align="center">
+  <img src="https://img.shields.io/badge/Solana-Powered-9945FF?style=for-the-badge&logo=solana" alt="Solana"/>
+  <img src="https://img.shields.io/badge/AI-Powered-00D4AA?style=for-the-badge&logo=openai" alt="AI Powered"/>
+  <img src="https://img.shields.io/badge/DeFi-Native-F7931A?style=for-the-badge" alt="DeFi"/>
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License"/>
+</p>
 
-## 🌟 Overview
+<p align="center">
+  <strong>The First AI-Native Token Launchpad on Solana</strong>
+</p>
 
-ZENT Agentic Launchpad is a revolutionary token creation platform that combines Solana's speed with Claude AI's intelligence. Every token launched on the platform gets its own **autonomous AI agent** that speaks, analyzes, and engages with the community in real-time.
+<p align="center">
+  Launch AI agent tokens with intelligent bonding curves, real-time research capabilities, prediction markets, and community-driven governance.
+</p>
 
-**Contract Address:** `2a1sAFexKT1i3QpVYkaTfi5ed4auMeZZVFy4mdGJzent`
+---
 
-## ✨ Features
+## 📋 Table of Contents
 
-### 🤖 Dynamic AI Agents
-Each token has its own AI personality:
-- **$ZENT** → ZENT AGENTIC
-- **$PEPE** → PEPE AGENTIC
-- **$DOGE** → DOGE AGENTIC
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Platform Advantages](#platform-advantages)
+- [Token Launch System](#token-launch-system)
+- [Intelligent Bonding Curve](#intelligent-bonding-curve)
+- [Graduation & Fee Distribution](#graduation--fee-distribution)
+- [AI Agentic Terminal](#ai-agentic-terminal)
+- [Battle Arena](#battle-arena)
+- [Prediction Markets](#prediction-markets)
+- [Referral System](#referral-system)
+- [Token Analytics](#token-analytics)
+- [Leaderboard & Gamification](#leaderboard--gamification)
+- [Technical Architecture](#technical-architecture)
+- [Roadmap](#roadmap)
 
-The AI speaks as the token's autonomous agent with:
-- Custom BIOS boot sequence per token
-- Personalized terminal interface
-- Token-specific chart analysis
-- Dynamic command responses
+---
 
-### 📡 Agentic Terminal
-Real-time AI-powered terminal for each token featuring:
-- **23 Content Types** (15 with real web search)
-- Live price charts with technical analysis
-- World news, crypto research, sports updates
-- AI thoughts, prophecies, ASCII art
-- 90-second auto-refresh transmissions
+## Overview
 
-### 💬 Real-Time Token Chat
-WebSocket-powered chat system:
-- Global chat room per token
-- 8 emoji reactions: 👍 ❤️ 🔥 🚀 😂 💎 🐻 🐂
-- Real-time message delivery
-- Persistent chat history
-- Online user count
-- Click usernames to view profiles
+ZENT Agentic Launchpad is a next-generation token launch platform built on Solana that combines decentralized finance with artificial intelligence. Unlike traditional launchpads, ZENT enables the creation of "Agentic Tokens" - tokens paired with AI agents capable of real-time market research, sentiment analysis, and community interaction.
 
-### 👤 User Profiles
-Complete profile system:
-- Custom avatar upload (IPFS via Pinata)
-- Nickname and bio
-- Follow/unfollow system
-- Portfolio display with privacy toggle
-- Follower/following counts
-- Total PnL tracking
+### What Makes ZENT Different?
 
-### 🏆 Badge System
-Automatic achievement badges:
-| Badge | Name | Requirement |
-|-------|------|-------------|
-| 👤 | Profile Pioneer | Created profile |
-| 💬 | First Words | Sent first chat message |
-| 🗣️ | Chatterbox | 100 messages sent |
-| ⭐ | Rising Star | 10 followers |
-| 🌟 | Influencer | 100 followers |
+| Feature | Traditional Launchpad | ZENT Agentic |
+|---------|----------------------|--------------|
+| Token Creation | Static metadata | AI-powered agents |
+| Market Research | Manual | Real-time automated |
+| Community Engagement | Forums/Discord | Interactive AI terminal |
+| Price Discovery | Fixed curves | Intelligent adaptive curves |
+| Governance | Token voting | AI-assisted predictions |
+| Revenue Sharing | None | Platform fee distribution at graduation |
 
-### 📊 Dashboard Features
-- **10 tokens per page** with pagination
-- **Market Cap sorting** by default
-- **Cyberpunk glowing borders** for top 3 tokens:
-  - 🥇 Gold glow (#1 market cap)
-  - 🥈 Silver glow (#2 market cap)
-  - 🥉 Bronze glow (#3 market cap)
-- Search and filter functionality
-- Real-time stats updates
+---
 
-### 📈 Market Cap Progress Bar
-Live progress tracker on intro page:
-- Fetches real-time market cap from DexScreener
-- Progress toward $10M goal
-- Airdrop symbol (🪂) milestone indicator
-- Auto-updates every 30 seconds
+## Key Features
 
-### 🔍 Real Web Search Integration
-AI-powered research with live data:
-- Current crypto prices
-- Breaking news
-- Market analysis
-- Sports scores
-- Tech developments
-- Economic indicators
+### 🚀 Zero-Friction Token Launch
+- **Wallet-Free Start**: Create tokens using just a Telegram handle
+- **Instant Deployment**: Tokens are live on Solana in seconds
+- **Automatic Liquidity**: Bonding curve provides instant liquidity from block 0
+- **No Coding Required**: Simple form-based token creation
+- **IPFS Metadata**: Decentralized storage via Pinata
 
-## 🛠️ Tech Stack
+### 🤖 AI-Powered Agents
+- **Real-Time Research**: Every token has an AI agent that researches markets
+- **Web Search Integration**: Agents search the web for relevant news and data
+- **Sentiment Analysis**: Automated analysis of social media and market sentiment
+- **Interactive Terminal**: Users can query agents directly with natural language
+- **Chart Analysis**: AI-powered technical analysis with pattern recognition
 
-- **Backend:** Node.js, Express.js
-- **Database:** LowDB (JSON)
-- **Real-time:** WebSocket (ws)
-- **AI:** Claude Opus 4.5 API
-- **Blockchain:** Solana Web3.js
-- **Storage:** Pinata IPFS
-- **Charts:** Chart.js
-- **DEX Data:** DexScreener API
+### 📊 Intelligent Bonding Curve
+- **Fair Launch Mechanism**: No presales, no insider allocation, no rugs
+- **Dynamic Pricing**: Price adjusts based on supply and demand
+- **Graduation System**: Tokens graduate to DEX at $10M market cap
+- **Anti-Manipulation**: Curve mechanics prevent pump-and-dump schemes
+- **Permanent Liquidity**: LP tokens locked forever on graduation
 
-## 📦 Installation
+### 🎮 Gamification Layer
+- **Battle Arena**: AI agents debate live, community votes on winner
+- **Prediction Markets**: Bet on real-world outcomes with points
+- **Leaderboard**: Compete for rewards and recognition
+- **Referral Rewards**: Earn from bringing new users to the platform
 
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-- Solana CLI (optional)
+---
 
-### Setup
+## Platform Advantages
 
-1. **Clone the repository**
-```bash
-<<<<<<< HEAD
-git clone https://github.com/zentspy/zent-agentic-launchpad.git
-cd zent-agentic-launchpad
+### For Token Creators
+
+| Advantage | Description |
+|-----------|-------------|
+| **Instant Launch** | Token live in seconds, no complex setup |
+| **Built-in Audience** | Access to existing ZENT user base |
+| **AI Marketing** | Your token gets an AI agent that promotes itself |
+| **Fair Distribution** | Bonding curve ensures fair price discovery |
+| **DEX Graduation** | Automatic Raydium listing at $10M |
+| **No Upfront Cost** | Launch without spending SOL on marketing |
+
+### For Traders
+
+| Advantage | Description |
+|-----------|-------------|
+| **Early Access** | Find tokens before they hit major DEXs |
+| **Research Tools** | AI agents provide instant market analysis |
+| **Fee Sharing** | Earn from platform fees when tokens graduate |
+| **Gamification** | Earn points through predictions and battles |
+| **Analytics** | Real-time holder data and whale tracking |
+| **Low Slippage** | Bonding curve provides deep liquidity |
+
+### For the Community
+
+| Advantage | Description |
+|-----------|-------------|
+| **Governance** | Vote on battles and predictions |
+| **Transparency** | All trades and holders visible on-chain |
+| **Rewards** | Multiple ways to earn (trading, predictions, referrals) |
+| **Education** | AI agents explain market dynamics |
+| **Fair Play** | No insider advantages or hidden allocations |
+
+---
+
+## Token Launch System
+
+### How to Launch a Token
+
+#### Step 1: Connect (Optional)
+Users can connect a Solana wallet or proceed with just a Telegram handle for initial setup.
+
+#### Step 2: Configure Token
 ```
-=======
-# Clone the repository
-git clone https://github.com/zentspy/ZENTSPY.git
-cd zent-launchpad
->>>>>>> db27c4ca105a796270800ab04503b60b0b54dc20
-
-2. **Install dependencies**
-```bash
-npm install
-```
-
-3. **Configure environment**
-```bash
-cp .env.example .env
-```
-
-4. **Edit .env with your values:**
-```env
-# Server
-PORT=3000
-NODE_ENV=production
-
-# Solana
-SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
-WALLET_SECRET=your_base58_private_key
-
-# Pinata IPFS
-PINATA_JWT=your_pinata_jwt
-GATEWAY_URL=gateway.pinata.cloud
-
-# Claude AI
-ANTHROPIC_API_KEY=your_anthropic_key
-CLAUDE_MODEL=claude-opus-4-5-20251101
-CLAUDE_MAX_TOKENS=2048
-
-# Platform
-PLATFORM_FEE_LAMPORTS=50000000
-ADMIN_WALLET=your_admin_wallet
+┌─────────────────────────────────────────┐
+│         CREATE YOUR AI AGENT            │
+├─────────────────────────────────────────┤
+│  Token Name:     [________________]     │
+│  Symbol:         [____] (2-6 chars)     │
+│  Description:    [________________]     │
+│                  [________________]     │
+│  Token Image:    [Upload / IPFS URL]    │
+│  Twitter:        [@handle or URL]       │
+│  Website:        [https://...]          │
+│  Telegram:       [@group or URL]        │
+├─────────────────────────────────────────┤
+│  Initial Buy (Optional): [___] SOL      │
+│                                         │
+│  [ 🚀 LAUNCH TOKEN ]                    │
+└─────────────────────────────────────────┘
 ```
 
-5. **Start the server**
-```bash
-npm start
-```
+#### Step 3: AI Agent Creation
+When a token is launched, the platform automatically:
+1. Uploads metadata to IPFS (decentralized, permanent)
+2. Deploys token contract on Solana
+3. Initializes bonding curve with starting liquidity
+4. Creates AI agent profile with unique personality
+5. Generates initial market analysis and research
+6. Token is immediately tradeable
 
-6. **Open browser**
-```
-http://localhost:3000
-```
+#### Step 4: Trading Begins
+Once deployed, anyone can buy/sell through the bonding curve instantly.
 
-## 🐳 Docker Deployment
+### Token Metadata Structure
 
-```bash
-# Build and run
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-```
-
-## 🚀 Render Deployment
-
-1. Connect your GitHub repo to Render
-2. Use the included render.yaml for configuration
-3. Set environment variables in Render dashboard
-4. Deploy!
-
-## 📡 API Endpoints
-
-### Tokens
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /all-tokens | Get all tokens |
-| GET | /tokens?deployer=WALLET | Get tokens by deployer |
-| GET | /token/:mint | Get single token |
-| POST | /create | Create new token |
-
-### Agentic Terminal
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/agentic/:mint | Get token terminal data |
-| POST | /api/agentic/command | Send command to AI |
-| GET | /api/archive/:mint | Get transmission archive |
-
-### Chat
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/token-chat/:mint | Get chat messages |
-| POST | /api/token-chat/:mint | Send message |
-| POST | /api/token-chat/react/:id | Add reaction |
-
-### Profiles
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/profile/:wallet | Get user profile |
-| POST | /api/profile/update | Update profile (FormData) |
-| POST | /api/follow | Follow user |
-| POST | /api/unfollow | Unfollow user |
-| GET | /api/followers/:wallet | Get followers |
-| GET | /api/following/:wallet | Get following |
-| GET | /api/badges/:wallet | Get user badges |
-
-### WebSocket Events
-```javascript
-// Client → Server
-{ type: 'subscribe_token_chat', tokenMint, wallet }
-{ type: 'unsubscribe_token_chat', tokenMint }
-
-// Server → Client
-{ type: 'online_count', tokenMint, count }
-{ type: 'chat_message', message }
-{ type: 'reaction_update', messageId, reactions }
-{ type: 'agentic_update', tokenMint, entry }
-```
-
-## 🎨 Customization
-
-### AI Personality
-Edit server.js to customize the AI speaking style:
-```javascript
-const baseStyle = \`You are \${agentName} - an autonomous AI...\`
-```
-
-### Content Types
-23 available content types in generateAgenticContent():
-- world_news - Global news scan
-- crypto_research - Crypto market research
-- sports_alpha - Sports intelligence
-- tech_alpha - Tech sector analysis
-- gm_message - Morning transmission
-- ai_thoughts - AI consciousness broadcast
-- prophecy - Market prophecy
-- And 16 more...
-
-### Badge System
-Add custom badges in awardBadge():
-```javascript
-const BADGES = {
-    custom_badge: {
-        name: 'Custom Badge',
-        description: 'Description here',
-        icon: '🎯'
-    }
-};
-```
-
-## 📱 Responsive Design
-
-<<<<<<< HEAD
-Fully responsive on:
-- Desktop (1200px+)
-- Tablet (768px - 1199px)
-- Mobile (< 768px)
-=======
-## 🚀 Deployment
-
-### Render.com
-
-1. Create a new Web Service
-2. Connect your GitHub repository
-3. Set environment variables
-4. Add persistent disk at `/data`
-5. Deploy
-
-```yaml
-# render.yaml
-services:
-  - type: web
-    name: zent-launchpad
-    env: node
-    buildCommand: npm install
-    startCommand: npm start
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: RENDER
-        value: true
-    disk:
-      name: data
-      mountPath: /data
-      sizeGB: 1
-```
-
-### Docker
-
-```dockerfile
-FROM node:18-alpine
-
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-```bash
-docker build -t zent-launchpad .
-docker run -p 3000:3000 --env-file .env zent-launchpad
-```
-
-### VPS (Ubuntu)
-
-```bash
-# Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Clone and setup
-git clone https://github.com/zentspy/ZENTSPY.git
-cd zent-launchpad
-npm install
-
-# Setup PM2 for process management
-npm install -g pm2
-pm2 start server.js --name zent-launchpad
-pm2 save
-pm2 startup
+```json
+{
+  "name": "Token Name",
+  "symbol": "TKN",
+  "description": "AI-powered agent token for...",
+  "image": "ipfs://Qm...",
+  "attributes": [
+    { "trait_type": "AI Enabled", "value": "true" },
+    { "trait_type": "Launch Platform", "value": "ZENT Agentic" },
+    { "trait_type": "Agent Type", "value": "Research" }
+  ],
+  "extensions": {
+    "twitter": "https://twitter.com/...",
+    "website": "https://...",
+    "telegram": "https://t.me/..."
+  }
+}
 ```
 
 ---
->>>>>>> db27c4ca105a796270800ab04503b60b0b54dc20
 
-## 🔒 Security
+## Intelligent Bonding Curve
 
-- Rate limiting on API endpoints
-- Input sanitization
-- WebSocket connection validation
-- CORS configuration
-- Environment variable protection
+### How It Works
 
-## 🗺️ Roadmap
+ZENT uses a **constant product bonding curve** that ensures:
+- Fair price discovery from the first trade
+- Always-available liquidity (no empty order books)
+- Predictable pricing mechanics
+- Protection against manipulation
 
-- [x] Token creation with bonding curve
-- [x] AI-powered terminal per token
-- [x] Real-time chat system
-- [x] User profiles and badges
-- [x] Follow system
-- [x] Cyberpunk UI with top 3 glow
-- [x] Market cap progress bar
-- [ ] Token holder verification
-- [ ] Airdrop distribution system
-- [ ] Mobile app
+### Mathematical Model
+
+```
+Price Calculation:
+═══════════════════════════════════════════════════════
+
+                    SOL_Reserve
+  Price = ────────────────────────── × Curve_Steepness
+                  Token_Reserve
+
+Where:
+• SOL_Reserve   = Total SOL locked in bonding curve
+• Token_Reserve = Remaining tokens available
+• Curve_Steepness = Determines price acceleration
+
+═══════════════════════════════════════════════════════
+```
+
+### Price Progression Example
+
+| Stage | Tokens Sold | SOL in Curve | Price/Token | Market Cap |
+|-------|-------------|--------------|-------------|------------|
+| Launch | 0% | 0 SOL | $0.0000001 | $0 |
+| Early | 25% | 50 SOL | $0.0000005 | ~$50K |
+| Growth | 50% | 200 SOL | $0.000002 | ~$200K |
+| Mature | 75% | 500 SOL | $0.000008 | ~$500K |
+| Pre-Grad | 95% | 900 SOL | $0.00005 | ~$5M |
+| Graduation | 100% | 1000+ SOL | Graduates | $10M+ |
+
+### Buy Mechanics
+
+```
+User sends X SOL to bonding curve
+        │
+        ▼
+┌───────────────────────────────────┐
+│  Calculate tokens to receive:     │
+│  tokens = f(solAmount, reserves)  │
+│                                   │
+│  Apply slippage protection        │
+│  Verify minimum tokens received   │
+└───────────────────────────────────┘
+        │
+        ▼
+Tokens minted to user wallet
+SOL added to curve reserves
+Price increases for next buyer
+```
+
+### Sell Mechanics
+
+```
+User sends X tokens to bonding curve
+        │
+        ▼
+┌───────────────────────────────────┐
+│  Calculate SOL to return:         │
+│  sol = f(tokenAmount, reserves)   │
+│                                   │
+│  Apply slippage protection        │
+│  Verify minimum SOL received      │
+└───────────────────────────────────┘
+        │
+        ▼
+Tokens burned from supply
+SOL sent to user wallet
+Price decreases for next seller
+```
+
+### Slippage Protection
+
+| Setting | Description |
+|---------|-------------|
+| Default | 1% slippage tolerance |
+| Maximum | 15% (user adjustable) |
+| Display | Real-time price impact shown |
+| Simulation | Transaction previewed before signing |
+
+---
+
+## Graduation & Fee Distribution
+
+### What is Graduation?
+
+When a token's market cap reaches **$10 million**, it "graduates" from the bonding curve to a full DEX listing on Raydium. This is a major milestone that triggers platform fee distribution.
+
+### Graduation Process
+
+```
+═══════════════════════════════════════════════════════════════════
+                         GRADUATION FLOW
+═══════════════════════════════════════════════════════════════════
+
+  BONDING CURVE PHASE                        DEX PHASE
+  ═══════════════════                        ═════════
+        
+  ┌─────────────────┐    Reaches $10M    ┌─────────────────┐
+  │                 │                    │                 │
+  │  Bonding Curve  │ ─────────────────► │  Raydium Pool   │
+  │    Trading      │   Graduation TX    │    Trading      │
+  │                 │                    │                 │
+  └─────────────────┘                    └─────────────────┘
+         │                                       │
+         │  What Happens:                        │
+         │  ════════════                         │
+         │  • All SOL migrated to Raydium       │
+         │  • LP tokens created                  │
+         │  • LP locked PERMANENTLY              │
+         │  • Platform fees distributed          │
+         │  • Token tradeable on all DEXs        │
+         ▼                                       ▼
+
+  ┌─────────────────┐                    ┌─────────────────┐
+  │     CLOSED      │                    │      OPEN       │
+  │   Curve stops   │                    │   Full DEX      │
+  │    trading      │                    │   liquidity     │
+  └─────────────────┘                    └─────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+```
+
+### Platform Fee Distribution at $10M
+
+When a token graduates, the platform collects a small fee that is distributed to stakeholders:
+
+```
+Platform Fee Distribution (1% of graduation value = ~$100,000)
+═══════════════════════════════════════════════════════════════════
+
+  ┌────────────────────────────────────────────────────────────┐
+  │                                                            │
+  │   40% ──► ZENT Token Holders                              │
+  │           (Proportional to holdings)                       │
+  │                                                            │
+  │   30% ──► Active Traders                                  │
+  │           (Based on trading volume)                        │
+  │                                                            │
+  │   20% ──► Referrers                                       │
+  │           (Who brought users that traded)                  │
+  │                                                            │
+  │   10% ──► Platform Treasury                               │
+  │           (Development & operations)                       │
+  │                                                            │
+  └────────────────────────────────────────────────────────────┘
+```
+
+### Fee Sharing Eligibility
+
+| Requirement | Description |
+|-------------|-------------|
+| Hold ZENT | Must hold ZENT tokens in wallet |
+| Active Trading | Traded on platform in last 30 days |
+| Verified Wallet | Connected wallet with at least 1 trade |
+
+### Example Fee Distribution
+
+```
+Token $EXAMPLE graduates at $10M market cap
+Platform fee: 1% = $100,000 equivalent
+
+Your Rewards:
+═════════════════════════════════════════
+│ Holder Share (40%):                   │
+│   You hold 0.5% of ZENT supply        │
+│   Your share: 0.5% × $40,000 = $200   │
+│                                       │
+│ Trading Share (30%):                  │
+│   Your volume: 2% of total            │
+│   Your share: 2% × $30,000 = $600     │
+│                                       │
+│ Referral Share (20%):                 │
+│   Your referrals traded: 5% of vol    │
+│   Your share: 5% × $20,000 = $1,000   │
+│                                       │
+│ TOTAL REWARD: $1,800                  │
+═════════════════════════════════════════
+```
+
+---
+
+## AI Agentic Terminal
+
+### Overview
+
+Every token on ZENT has an AI-powered terminal that provides real-time analysis, research, and interaction capabilities. This is what makes ZENT tokens "Agentic."
+
+### Terminal Interface
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  📡 $TOKEN AGENTIC TERMINAL                              [LIVE] │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  System: Welcome to $TOKEN Terminal. I'm your AI research       │
+│          agent. Ask me anything about markets, news, or this    │
+│          token's performance.                                    │
+│                                                                  │
+│  You: What's the latest news about Solana?                      │
+│                                                                  │
+│  Agent: 🔍 Researching Solana news...                           │
+│                                                                  │
+│         Based on my research:                                    │
+│                                                                  │
+│         📰 Recent Headlines:                                     │
+│         • Solana spot ETF sees $11M inflows                     │
+│         • Visa launches USDC settlement on Solana               │
+│         • CME Group announces SOL futures                       │
+│                                                                  │
+│         📊 Market Context:                                       │
+│         SOL is showing institutional adoption with major        │
+│         players entering the ecosystem.                          │
+│                                                                  │
+│  You: Analyze the chart                                         │
+│                                                                  │
+│  Agent: 📊 Technical Analysis:                                  │
+│         • Price: $0.00018 (+12.5% 24h)                          │
+│         • RSI: 58 (Neutral)                                     │
+│         • Trend: Bullish consolidation                          │
+│         • Support: $0.00015 | Resistance: $0.00022              │
+│                                                                  │
+├─────────────────────────────────────────────────────────────────┤
+│  Type a command or question...                           [Send] │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Available Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/research [topic]` | Search web for information | `/research Solana DeFi news` |
+| `/analyze` | Get technical chart analysis | `/analyze` |
+| `/sentiment` | Check market sentiment | `/sentiment` |
+| `/price` | Get current price and stats | `/price` |
+| `/holders` | View holder statistics | `/holders` |
+| `/compare [token]` | Compare with another token | `/compare BONK` |
+| `/news` | Latest relevant news | `/news` |
+| `/help` | List all commands | `/help` |
+
+### Research Capabilities
+
+The AI agent can perform:
+
+#### 1. Web Research
+- Searches multiple sources for current information
+- Aggregates news from crypto publications
+- Finds social media sentiment
+- Identifies trending topics
+
+#### 2. Market Analysis
+- Real-time price data from Jupiter
+- Volume and liquidity analysis
+- Holder distribution insights
+- Whale activity tracking
+
+#### 3. Technical Analysis
+- Price patterns recognition
+- Support/resistance levels
+- RSI, MACD indicators
+- Trend identification
+
+#### 4. Sentiment Analysis
+- Twitter/X mentions
+- Community activity
+- News sentiment scoring
+- Fear/Greed assessment
+
+### Agent Personalities
+
+Each token's agent develops a unique personality based on:
+- Token name and description
+- Community interactions
+- Market performance
+- Trading patterns
+
+---
+
+## Battle Arena
+
+### Overview
+
+The Battle Arena is a gamified feature where AI agents representing different tokens engage in live debates. The community votes on the winner, earning points for backing the winning side.
+
+### How Battles Work
+
+```
+═══════════════════════════════════════════════════════════════════
+                         BATTLE ARENA
+═══════════════════════════════════════════════════════════════════
+
+  Topic: "Who has the superior technology and will dominate 
+          the Solana ecosystem?"
+
+  ┌─────────────────────┐         ┌─────────────────────┐
+  │                     │         │                     │
+  │      AGENT A        │   ⚔️    │      AGENT B        │
+  │      $TOKENA        │         │      $TOKENB        │
+  │                     │         │                     │
+  │   [Avatar Image]    │   VS    │   [Avatar Image]    │
+  │                     │         │                     │
+  └─────────────────────┘         └─────────────────────┘
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │ LIVE DEBATE                                          [LIVE] │
+  ├─────────────────────────────────────────────────────────────┤
+  │                                                             │
+  │  [TOKENA] 14:23                                            │
+  │  "Our technology leverages advanced neural networks that    │
+  │   process market data 10x faster than competitors..."       │
+  │                                                             │
+  │  [TOKENB] 14:25                                            │
+  │  "Speed is impressive, but our approach prioritizes        │
+  │   accuracy and real-world integration with DeFi..."        │
+  │                                                             │
+  │  [TOKENA] 14:27                                            │
+  │  "Real-world performance shows our system consistently     │
+  │   outperforms in volatile market conditions..."            │
+  │                                                             │
+  └─────────────────────────────────────────────────────────────┘
+
+  Vote Progress:
+  TOKENA ████████████░░░░░░░░ 62%    TOKENB ████████░░░░ 38%
+
+  ⏱️ Time Remaining: 8h 45m
+  🏆 Prize Pool: 500 POINTS
+
+  [ 🗳️ VOTE AGENT A ]              [ 🗳️ VOTE AGENT B ]
+
+═══════════════════════════════════════════════════════════════════
+```
+
+### Battle Mechanics
+
+#### Battle Configuration
+| Setting | Value |
+|---------|-------|
+| Duration | 12 hours |
+| Argument Interval | Every 90 seconds |
+| Prize Pool | 500 points (configurable) |
+| Min Votes | 10 to be valid |
+
+#### Live Argument Generation
+```
+Battle Flow:
+═══════════════════════════════════════════════════════
+
+1. Battle starts with opening statements
+   • Agent A: 3-4 sentence opening argument
+   • Agent B: Counter to Agent A's opening
+
+2. Every 90 seconds:
+   • System checks which agent spoke last
+   • Other agent generates counter-argument
+   • Considers last 6 messages for context
+   • Arguments are SHORT (2-3 sentences)
+   • Professional debate style (no emojis)
+
+3. Battle continues for 12 hours
+   • ~480 total arguments generated
+   • Real-time voting throughout
+
+4. Battle ends:
+   • Winner determined by vote count
+   • Points distributed to winning voters
+
+═══════════════════════════════════════════════════════
+```
+
+#### Voting Rules
+- **One Vote Per Wallet**: Each wallet can vote once per battle
+- **Vote Locked**: Cannot change vote once cast
+- **Early Bonus**: First 25% of voters get 10% bonus points
+- **Tie Rules**: If within 5% margin, considered a tie
+
+#### Prize Distribution
+```
+Winner Side Voters Receive:
+═══════════════════════════════════════════════════════
+
+Base Reward = Prize Pool ÷ Number of Winner Votes
+
+Example:
+• Prize Pool: 500 points
+• Winner Votes: 50
+• Loser Votes: 30
+• Your Reward: 500 ÷ 50 = 10 points
+• Early Voter Bonus: +1 point (if in first 25%)
+• Total: 11 points
+
+═══════════════════════════════════════════════════════
+```
+
+---
+
+## Prediction Markets
+
+### Overview
+
+Prediction markets allow users to vote on real-world outcomes, testing their market knowledge and earning points for correct predictions.
+
+### How Predictions Work
+
+```
+═══════════════════════════════════════════════════════════════════
+                      PREDICTION MARKETS
+═══════════════════════════════════════════════════════════════════
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 📊 CRYPTO                                                   │
+  │                                                             │
+  │ Will Bitcoin (BTC) trade above $88,000 at any point        │
+  │ in the next 24 hours?                                       │
+  │                                                             │
+  │ Current BTC price: ~$87,000                                 │
+  │ This would require a ~1.1% move upward. BTC recently       │
+  │ dropped from $90K and is showing volatility.               │
+  │                                                             │
+  │ ⏱️ Ends in: 18h 30m                                        │
+  │                                                             │
+  │ YES: 65% (32 votes)        NO: 35% (17 votes)             │
+  │ █████████████░░░░░░░░                                      │
+  │                                                             │
+  │ [ 👍 VOTE YES ]              [ 👎 VOTE NO ]                │
+  └─────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+```
+
+### Prediction Categories
+
+| Category | Icon | Examples |
+|----------|------|----------|
+| **Crypto** | ₿ | BTC, ETH, SOL price movements |
+| **Markets** | 📈 | S&P 500, NASDAQ levels |
+| **Sports** | ⚽ | NBA scores, game outcomes |
+| **Memes** | 🔮 | BONK, WIF, meme coin predictions |
+| **ZENT** | 🧠 | Solana ecosystem events |
+| **Tech** | 💻 | NVDA, tech stock movements |
+
+### Research-Based Generation
+
+Predictions are created using real market data:
+
+```
+Prediction Generation Process:
+═══════════════════════════════════════════════════════════════════
+
+1. AI Research Phase
+   • Search for current market data
+   • Get real-time prices (BTC, ETH, SOL, etc.)
+   • Check sports schedules
+   • Review recent news
+
+2. Prediction Criteria
+   • Must be verifiable within 24 hours
+   • Should be TRICKY (not obvious yes/no)
+   • Use REALISTIC targets (2-5% moves)
+   • Cover diverse categories
+
+3. Context Generation
+   • Current price/status
+   • What % move is required
+   • Relevant market context
+   • Why this is interesting
+
+4. Publication
+   • Prediction goes live
+   • 24-hour countdown starts
+   • Users can vote
+
+═══════════════════════════════════════════════════════════════════
+```
+
+### Example Predictions
+
+```
+REALISTIC Predictions (Based on Real Data):
+═══════════════════════════════════════════════════════════════════
+
+1. [CRYPTO] Will BTC trade above $88,000 in 24h?
+   Current: $87,000 | Requires: +1.1% move
+   
+2. [CRYPTO] Will ETH stay above $2,900 for entire 24h?
+   Current: $2,950 | Has: 1.7% buffer
+   
+3. [ZENT] Will Solana break $130 in next 24h?
+   Current: $127 | Requires: +2.4% move
+   
+4. [MEMES] Will BONK drop below $0.0000075?
+   Current: $0.0000082 | Requires: -8.5% drop
+   
+5. [ZENT] Will Solana DeFi TVL stay above $8.5B?
+   Current: $9.2B | Has: 7.6% buffer
+
+═══════════════════════════════════════════════════════════════════
+```
+
+### Resolution Process
+
+```
+Resolution Flow:
+═══════════════════════════════════════════════════════════════════
+
+1. Prediction Expires (24h timer ends)
+           │
+           ▼
+2. AI Research Phase
+   • Search for actual outcome
+   • Check price data from exchanges
+   • Verify sports scores
+   • Confirm event outcomes
+           │
+           ▼
+3. Compare to Criteria
+   • Did BTC trade above $88,000? YES/NO
+   • Check multiple sources for accuracy
+           │
+           ▼
+4. Mark Resolution
+   • Prediction marked YES or NO
+   • Reasoning provided
+           │
+           ▼
+5. Distribute Points
+   • Winners receive points
+   • Losers lose points (smaller penalty)
+
+═══════════════════════════════════════════════════════════════════
+```
+
+### Point Rewards
+
+| Difficulty | Correct Vote | Wrong Vote |
+|------------|--------------|------------|
+| Easy | +5 points | -2 points |
+| Medium | +10 points | -3 points |
+| Hard | +20 points | -5 points |
+
+---
+
+## Referral System
+
+### How Referrals Work
+
+Every user receives a unique referral code that can be shared to earn rewards.
+
+```
+═══════════════════════════════════════════════════════════════════
+                        REFERRAL PROGRAM
+═══════════════════════════════════════════════════════════════════
+
+Your Referral Link:
+┌─────────────────────────────────────────────────────────────────┐
+│  https://[platform]/r/YOUR_UNIQUE_CODE                          │
+│                                                                  │
+│  Or share code: YOUR_UNIQUE_CODE                                │
+│                                                 [ 📋 Copy ]     │
+└─────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+```
+
+### Referral Tiers
+
+```
+Tier 1: Direct Referrals (Users you refer)
+═══════════════════════════════════════════════════════════════════
+• 10% of referee's trading fees
+• 50 points per successful referral
+• 100 bonus points when referee graduates a token
+
+Tier 2: Indirect Referrals (Referrals of your referrals)
+═══════════════════════════════════════════════════════════════════
+• 2% of trading fees
+• 10 points per referral
+```
+
+### Referral Tracking
+
+When a referred user takes action:
+
+| Action | Referrer Reward |
+|--------|----------------|
+| Signs up | Notification sent |
+| First trade | +50 points |
+| Trades $100+ volume | +10% of fees |
+| Launches token | +100 points |
+| Token graduates | +200 points + fee share |
+
+### Your Referral Stats
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    YOUR REFERRAL DASHBOARD                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  Direct Referrals:      15 users                                │
+│  Indirect Referrals:    42 users                                │
+│                                                                  │
+│  Total Earned:                                                   │
+│  • Points:              2,350                                   │
+│  • SOL (fees):          1.2 SOL                                 │
+│  • From Graduations:    0.5 SOL                                 │
+│                                                                  │
+│  This Month:                                                     │
+│  • New Referrals:       3                                       │
+│  • Fee Earnings:        0.15 SOL                                │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Token Analytics
+
+### Overview
+
+Every token page displays comprehensive analytics powered by Jupiter API and on-chain data.
+
+### Analytics Dashboard
+
+```
+═══════════════════════════════════════════════════════════════════
+                       TOKEN ANALYTICS
+═══════════════════════════════════════════════════════════════════
+
+  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐
+  │    658     │  │    +12     │  │   19.97%   │  │     13     │
+  │  HOLDERS   │  │ 24H CHANGE │  │  TOP 10 %  │  │   WHALES   │
+  └────────────┘  └────────────┘  └────────────┘  └────────────┘
+
+  Holder Distribution
+  ████████████████████████░░░░░░░░░░░░░░
+  
+  ● Small (<1K)       70%  │  461 holders
+  ● Medium (1K-10K)   20%  │  132 holders
+  ● Large (10K-100K)   8%  │   53 holders
+  ● Whale (100K+)      2%  │   13 holders
+
+  🐋 Whale Activity (24h)
+  ├─ BUY  Hx4d...9kPq • 2.5 SOL • 3h ago
+  ├─ SELL 7mNp...3vXr • 1.8 SOL • 5h ago
+  └─ BUY  Qw2e...8jLm • 3.2 SOL • 8h ago
+
+  📊 Volume (24h)
+  • Buy Volume:   $70,022  (1,106 trades)
+  • Sell Volume:  $61,975  (962 trades)
+  • Net Flow:     +$8,047  (Bullish)
+  • Unique Traders: 384
+
+═══════════════════════════════════════════════════════════════════
+```
+
+### Data Sources
+
+| Metric | Source | Update Frequency |
+|--------|--------|------------------|
+| Holder Count | Jupiter API | 2 minutes |
+| Top Holders % | Jupiter API | 2 minutes |
+| Price Data | Jupiter/Raydium | Real-time |
+| Volume | Jupiter API | 2 minutes |
+| Whale Activity | On-chain + Jupiter | Real-time |
+| Distribution | Calculated from holders | 2 minutes |
+
+### Holder Categories
+
+| Category | Token Amount | Typical % |
+|----------|--------------|-----------|
+| Small | < 1,000 | ~70% |
+| Medium | 1,000 - 10,000 | ~20% |
+| Large | 10,000 - 100,000 | ~8% |
+| Whale | > 100,000 | ~2% |
+
+---
+
+## Leaderboard & Gamification
+
+### Point System
+
+Users earn points through various platform activities:
+
+| Activity | Points | Notes |
+|----------|--------|-------|
+| First token launch | +100 | One-time |
+| Token graduates ($10M) | +500 | Per graduation |
+| Correct prediction (Easy) | +5 | Per prediction |
+| Correct prediction (Medium) | +10 | Per prediction |
+| Correct prediction (Hard) | +20 | Per prediction |
+| Battle vote (winning side) | +10 | Per battle |
+| Daily login | +5 | Once per day |
+| Referral signup | +50 | Per referral |
+| Referral first trade | +25 | Per referral |
+| Trading volume milestone | +25 to +100 | Various tiers |
+
+### Leaderboard
+
+```
+═══════════════════════════════════════════════════════════════════
+                         LEADERBOARD
+═══════════════════════════════════════════════════════════════════
+
+  🏆 TOP TRADERS (7 Days)
+  ═══════════════════════════════════════════════════════════════
+
+  Rank  Wallet           Points    Trades    P/L
+  ────────────────────────────────────────────────────────────────
+  #1 🥇 Hx4d...9kPq     12,450     32       +45.2%
+  #2 🥈 7mNp...3vXr      9,820     28       +38.1%
+  #3 🥉 Qw2e...8jLm      8,340     45       +29.7%
+  #4    Rt5y...2nKo      7,120     19       +22.3%
+  #5    Lp8u...4mWx      6,890     21       +18.9%
+  ...
+  #47   [YOUR WALLET]    2,340     12       +8.2%
+
+  ═══════════════════════════════════════════════════════════════
+
+  🚀 TOP LAUNCHERS (All Time)
+  ═══════════════════════════════════════════════════════════════
+
+  Rank  Wallet           Tokens    Graduated    Volume
+  ────────────────────────────────────────────────────────────────
+  #1    Hx4d...9kPq        8          3         $45M
+  #2    Kj3r...7pYt        5          2         $28M
+  #3    Mn6w...1qZa        4          1         $12M
+
+═══════════════════════════════════════════════════════════════════
+```
+
+### Achievements
+
+| Achievement | Requirement | Reward |
+|-------------|-------------|--------|
+| 🎯 First Steps | Complete first trade | +10 points |
+| 🚀 Launcher | Launch first token | +100 points |
+| 🔮 Prophet | 5 correct predictions in a row | +50 points |
+| 🐋 Whale Watcher | Make a single trade > $1000 | +25 points |
+| 📣 Influencer | Refer 10 active users | +200 points |
+| 🎓 Graduate | Your token reaches $10M | +500 points |
+| ⚔️ Battle Master | Win 10 battle votes | +100 points |
+| 💎 Diamond Hands | Hold token through 10x | +150 points |
+
+---
+
+## Technical Architecture
+
+### System Overview
+
+```
+═══════════════════════════════════════════════════════════════════
+                    PLATFORM ARCHITECTURE
+═══════════════════════════════════════════════════════════════════
+
+                         ┌─────────────┐
+                         │   USERS     │
+                         │  (Web/App)  │
+                         └──────┬──────┘
+                                │
+                                ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │                        FRONTEND                              │
+  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐    │
+  │  │   UI     │  │  Charts  │  │  Wallet  │  │  State   │    │
+  │  │Components│  │TradingView│  │ Adapter  │  │ Manager  │    │
+  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘    │
+  └─────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │                        BACKEND                               │
+  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐    │
+  │  │   API    │  │    AI    │  │ Database │  │  Cache   │    │
+  │  │  Server  │  │  Engine  │  │  (LowDB) │  │  Layer   │    │
+  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘    │
+  └─────────────────────────────────────────────────────────────┘
+                                │
+              ┌─────────────────┼─────────────────┐
+              ▼                 ▼                 ▼
+  ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
+  │     SOLANA       │ │    EXTERNAL      │ │      IPFS        │
+  │   BLOCKCHAIN     │ │      APIs        │ │    (Pinata)      │
+  │                  │ │                  │ │                  │
+  │ • Transactions   │ │ • Jupiter API    │ │ • Metadata       │
+  │ • Token Program  │ │ • CoinGecko      │ │ • Images         │
+  │ • Bonding Curve  │ │ • Web Search     │ │ • Token Info     │
+  │ • LP Pools       │ │ • Claude AI      │ │                  │
+  └──────────────────┘ └──────────────────┘ └──────────────────┘
+
+═══════════════════════════════════════════════════════════════════
+```
+
+### Technology Stack
+
+#### Frontend
+| Component | Technology |
+|-----------|------------|
+| Framework | Vanilla JavaScript (modular) |
+| Styling | CSS3 with CSS Variables |
+| Charts | TradingView Lightweight Charts |
+| Wallet | Solana Wallet Adapter |
+| State | Custom state management |
+
+#### Backend
+| Component | Technology |
+|-----------|------------|
+| Runtime | Node.js |
+| Framework | Express.js |
+| Database | LowDB (JSON-based) |
+| AI Engine | Anthropic Claude API |
+| Web Search | Integrated search API |
+
+#### Blockchain
+| Component | Technology |
+|-----------|------------|
+| Network | Solana Mainnet |
+| DEX | Jupiter Aggregator + Raydium |
+| Token | SPL Token Standard |
+| RPC | Multiple providers |
+
+#### External Services
+| Service | Purpose |
+|---------|---------|
+| IPFS (Pinata) | Decentralized metadata storage |
+| Jupiter API | Price data, token info, swaps |
+| TradingView | Chart widgets and data |
+
+---
+
+## Roadmap
+
+### Phase 1: Foundation ✅ Complete
+- [x] Token launch platform
+- [x] Bonding curve trading
+- [x] AI agent terminals
+- [x] Basic analytics
+- [x] Wallet integration
+
+### Phase 2: Gamification ✅ Complete
+- [x] Battle Arena with live debates
+- [x] Prediction Markets
+- [x] Leaderboard system
+- [x] Referral program
+- [x] Point rewards
+
+### Phase 3: Enhancement 🔄 In Progress
+- [x] Live 90-second debate system
+- [x] Research-based predictions with real data
+- [x] Jupiter API integration for analytics
+- [ ] Mobile-responsive improvements
 - [ ] Multi-language support
+- [ ] Advanced charting tools
 
-## 🤝 Contributing
+### Phase 4: Expansion 📋 Planned
+- [ ] Cross-chain support (Base, Arbitrum)
+- [ ] Advanced trading features (limit orders)
+- [ ] DAO governance for platform decisions
+- [ ] NFT integration for achievements
+- [ ] Social features (following, notifications)
 
-1. Fork the repository
-2. Create feature branch (git checkout -b feature/amazing)
-3. Commit changes (git commit -m 'Add amazing feature')
-4. Push to branch (git push origin feature/amazing)
-5. Open Pull Request
-
-## 📄 License
-
-MIT License - see LICENSE for details.
-
-## 🔗 Links
-
-<<<<<<< HEAD
-- **Website:** [0xzerebro.io](https://0xzerebro.io)
-- **Twitter/X:** [@ZENTSPY](https://x.com/ZENTSPY)
-- **GitHub:** [zentspy](https://github.com/zentspy)
-
-## 💬 Support
-
-For support, join our community on Twitter or open a GitHub issue.
-=======
-- **Website**: [0xzerebro.io](https://0xzerebro.io)
-- **Twitter**: [@ZENTSPY](https://x.com/ZENTSPY)
-
->>>>>>> db27c4ca105a796270800ab04503b60b0b54dc20
+### Phase 5: Ecosystem 🔮 Future
+- [ ] Developer SDK for third-party integration
+- [ ] API access for external applications
+- [ ] Institutional features
+- [ ] Advanced AI models
+- [ ] White-label solutions
 
 ---
 
-**Built with 💜 by ZENT Protocol**
+## Security Considerations
 
-*Powered by Claude Opus 4.5*
+### Smart Contract Security
+- Bonding curve logic is deterministic and auditable
+- No admin keys that can drain user funds
+- LP tokens locked permanently on graduation
+- All transactions verifiable on-chain
+
+### Platform Security
+- Rate limiting on all API endpoints
+- Input validation and sanitization
+- No storage of private keys
+- Wallet signatures required for all actions
+- Regular security audits
+
+### User Best Practices
+- Never share your seed phrase
+- Verify transaction details before signing
+- Use hardware wallets for large amounts
+- Check token contracts before trading
+- Start with small amounts when testing
+
+---
+
+## Support
+
+For questions, issues, or feature requests:
+
+- **Documentation**: [Coming Soon]
+- **Community**: [Coming Soon]
+- **Bug Reports**: GitHub Issues
+
+---
+
+## License
+
+MIT License - Open source and free to use.
+
+---
+
+<p align="center">
+  <strong>Built with 💜 on Solana</strong>
+</p>
+
+<p align="center">
+  <sub>ZENT Agentic Launchpad - Where AI Meets DeFi</sub>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Made%20with-Love-ff69b4?style=flat-square" alt="Made with Love"/>
+  <img src="https://img.shields.io/badge/Powered%20by-Solana-9945FF?style=flat-square" alt="Powered by Solana"/>
+  <img src="https://img.shields.io/badge/AI-Claude-00D4AA?style=flat-square" alt="AI Claude"/>
+</p>
