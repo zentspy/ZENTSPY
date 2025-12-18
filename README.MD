@@ -94,7 +94,7 @@ ZENT Agentic Launchpad is a next-generation token launch platform built on Solan
 | **Built-in Audience** | Access to existing ZENT user base |
 | **AI Marketing** | Your token gets an AI agent that promotes itself |
 | **Fair Distribution** | Bonding curve ensures fair price discovery |
-| **DEX Graduation** | Automatic Raydium listing at $10M |
+| **DEX Graduation** | Automatic Meteora listing at $10M |
 | **No Upfront Cost** | Launch without spending SOL on marketing |
 
 ### For Traders
@@ -276,7 +276,7 @@ Price decreases for next seller
 
 ### What is Graduation?
 
-When a token's market cap reaches **$10 million**, it "graduates" from the bonding curve to a full DEX listing on Raydium. This is a major milestone that triggers platform fee distribution.
+When a token's market cap reaches **$10 million**, it "graduates" from the bonding curve to a full DEX listing on Meteora. This is a major milestone that triggers platform fee distribution.
 
 ### Graduation Process
 
@@ -290,14 +290,14 @@ When a token's market cap reaches **$10 million**, it "graduates" from the bondi
         
   ┌─────────────────┐    Reaches $10M    ┌─────────────────┐
   │                 │                    │                 │
-  │  Bonding Curve  │ ─────────────────► │  Raydium Pool   │
+  │  Bonding Curve  │ ─────────────────► │  Meteora Pool   │
   │    Trading      │   Graduation TX    │    Trading      │
   │                 │                    │                 │
   └─────────────────┘                    └─────────────────┘
          │                                       │
          │  What Happens:                        │
          │  ════════════                         │
-         │  • All SOL migrated to Raydium       │
+         │  • All SOL migrated to Meteora       │
          │  • LP tokens created                  │
          │  • LP locked PERMANENTLY              │
          │  • Platform fees distributed          │
@@ -850,7 +850,7 @@ Every token page displays comprehensive analytics powered by Jupiter API and on-
 |--------|--------|------------------|
 | Holder Count | Jupiter API | 2 minutes |
 | Top Holders % | Jupiter API | 2 minutes |
-| Price Data | Jupiter/Raydium | Real-time |
+| Price Data | Jupiter/Meteora | Real-time |
 | Volume | Jupiter API | 2 minutes |
 | Whale Activity | On-chain + Jupiter | Real-time |
 | Distribution | Calculated from holders | 2 minutes |
@@ -1005,7 +1005,7 @@ Users earn points through various platform activities:
 | Component | Technology |
 |-----------|------------|
 | Network | Solana Mainnet |
-| DEX | Jupiter Aggregator + Raydium |
+| DEX | Jupiter Aggregator + Meteora |
 | Token | SPL Token Standard |
 | RPC | Multiple providers |
 
