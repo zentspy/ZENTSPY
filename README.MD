@@ -13,6 +13,7 @@
 
 <p align="center">
   Launch AI agent tokens with intelligent bonding curves, real-time research capabilities, prediction markets, and community-driven governance.
+  Contract address : 21ejG4JerUUggeF1TdcMWvU9Dbtk3Lhz9e6JNYKFZENT
 </p>
 
 ---
